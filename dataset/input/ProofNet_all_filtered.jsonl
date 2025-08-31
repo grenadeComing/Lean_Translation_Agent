@@ -1,0 +1,371 @@
+{"name": "Rudin|exercise_1_1b", "nl_statement": "If $r$ is rational $(r \\neq 0)$ and $x$ is irrational, prove that $rx$ is irrational."}
+{"name": "Rudin|exercise_1_4", "nl_statement": "Let $E$ be a nonempty subset of an ordered set; suppose $\\alpha$ is a lower bound of $E$ and $\\beta$ is an upper bound of $E$. Prove that $\\alpha \\leq \\beta$."}
+{"name": "Rudin|exercise_1_8", "nl_statement": "Prove that no order can be defined in the complex field that turns it into an ordered field."}
+{"name": "Rudin|exercise_1_12", "nl_statement": "If $z_1, \\ldots, z_n$ are complex, prove that $|z_1 + z_2 + \\ldots + z_n| \\leq |z_1| + |z_2| + \\cdots + |z_n|$."}
+{"name": "Rudin|exercise_1_14", "nl_statement": "If $z$ is a complex number such that $|z|=1$, that is, such that $z \\bar{z}=1$, compute $|1+z|^{2}+|1-z|^{2}$."}
+{"name": "Rudin|exercise_1_17", "nl_statement": "Prove that $|\\mathbf{x}+\\mathbf{y}|^{2}+|\\mathbf{x}-\\mathbf{y}|^{2}=2|\\mathbf{x}|^{2}+2|\\mathbf{y}|^{2}$ if $\\mathbf{x} \\in R^{k}$ and $\\mathbf{y} \\in R^{k}$."}
+{"name": "Rudin|exercise_1_18b", "nl_statement": "If $k = 1$ and $\\mathbf{x} \\in R^{k}$, prove that there does not exist $\\mathbf{y} \\in R^{k}$ such that $\\mathbf{y} \\neq 0$ but $\\mathbf{x} \\cdot \\mathbf{y}=0$"}
+{"name": "Rudin|exercise_2_19a", "nl_statement": "If $A$ and $B$ are disjoint closed sets in some metric space $X$, prove that they are separated."}
+{"name": "Rudin|exercise_2_25", "nl_statement": "Prove that every compact metric space $K$ has a countable base."}
+{"name": "Rudin|exercise_2_27b", "nl_statement": "Suppose $E\\subset\\mathbb{R}^k$ is uncountable, and let $P$ be the set of condensation points of $E$. Prove that at most countably many points of $E$ are not in $P$."}
+{"name": "Rudin|exercise_2_29", "nl_statement": "Prove that every open set in $\\mathbb{R}$ is the union of an at most countable collection of disjoint segments."}
+{"name": "Rudin|exercise_3_2a", "nl_statement": "Prove that $\\lim_{n \\rightarrow \\infty}\\sqrt{n^2 + n} -n = 1/2$."}
+{"name": "Rudin|exercise_3_5", "nl_statement": "For any two real sequences $\\left\\{a_{n}\\right\\},\\left\\{b_{n}\\right\\}$, prove that $\\limsup _{n \\rightarrow \\infty}\\left(a_{n}+b_{n}\\right) \\leq \\limsup _{n \\rightarrow \\infty} a_{n}+\\limsup _{n \\rightarrow \\infty} b_{n},$ provided the sum on the right is not of the form $\\infty-\\infty$."}
+{"name": "Rudin|exercise_3_7", "nl_statement": "Prove that the convergence of $\\Sigma a_{n}$ implies the convergence of $\\sum \\frac{\\sqrt{a_{n}}}{n}$ if $a_n\\geq 0$."}
+{"name": "Rudin|exercise_3_13", "nl_statement": "Prove that the Cauchy product of two absolutely convergent series converges absolutely."}
+{"name": "Rudin|exercise_3_21", "nl_statement": "If $\\left\\{E_{n}\\right\\}$ is a sequence of closed nonempty and bounded sets in a complete metric space $X$, if $E_{n} \\supset E_{n+1}$, and if $\\lim _{n \\rightarrow \\infty} \\operatorname{diam} E_{n}=0,$ then $\\bigcap_{1}^{\\infty} E_{n}$ consists of exactly one point."}
+{"name": "Rudin|exercise_4_1a", "nl_statement": "Suppose $f$ is a real function defined on $\\mathbb{R}$ which satisfies $\\lim_{h \\rightarrow 0} f(x + h) - f(x - h) = 0$ for every $x \\in \\mathbb{R}$. Show that $f$ does not need to be continuous."}
+{"name": "Rudin|exercise_4_3", "nl_statement": "Let $f$ be a continuous real function on a metric space $X$. Let $Z(f)$ (the zero set of $f$ ) be the set of all $p \\in X$ at which $f(p)=0$. Prove that $Z(f)$ is closed."}
+{"name": "Rudin|exercise_4_4b", "nl_statement": "Let $f$ and $g$ be continuous mappings of a metric space $X$ into a metric space $Y$, and let $E$ be a dense subset of $X$. Prove that if $g(p) = f(p)$ for all $p \\in P$ then $g(p) = f(p)$ for all $p \\in X$."}
+{"name": "Rudin|exercise_4_5b", "nl_statement": "Show that there exist a set $E \\subset \\mathbb{R}$ and a real continuous function $f$ defined on $E$, such that there does not exist a continuous real function $g$ on $\\mathbb{R}$ such that $g(x)=f(x)$ for all $x \\in E$."}
+{"name": "Rudin|exercise_4_8a", "nl_statement": "Let $f$ be a real uniformly continuous function on the bounded set $E$ in $R^{1}$. Prove that $f$ is bounded on $E$."}
+{"name": "Rudin|exercise_4_11a", "nl_statement": "Suppose $f$ is a uniformly continuous mapping of a metric space $X$ into a metric space $Y$ and prove that $\\left\\{f\\left(x_{n}\\right)\\right\\}$ is a Cauchy sequence in $Y$ for every Cauchy sequence $\\{x_n\\}$ in $X$."}
+{"name": "Rudin|exercise_4_15", "nl_statement": "Prove that every continuous open mapping of $R^{1}$ into $R^{1}$ is monotonic."}
+{"name": "Rudin|exercise_4_21a", "nl_statement": "Suppose $K$ and $F$ are disjoint sets in a metric space $X, K$ is compact, $F$ is closed. Prove that there exists $\\delta>0$ such that $d(p, q)>\\delta$ if $p \\in K, q \\in F$."}
+{"name": "Rudin|exercise_5_1", "nl_statement": "Let $f$ be defined for all real $x$, and suppose that $|f(x)-f(y)| \\leq (x-y)^{2}$ for all real $x$ and $y$. Prove that $f$ is constant."}
+{"name": "Rudin|exercise_5_3", "nl_statement": "Suppose $g$ is a real function on $R^{1}$, with bounded derivative (say $\\left|g^{\\prime}\\right| \\leq M$ ). Fix $\\varepsilon>0$, and define $f(x)=x+\\varepsilon g(x)$. Prove that $f$ is one-to-one if $\\varepsilon$ is small enough."}
+{"name": "Rudin|exercise_5_5", "nl_statement": "Suppose $f$ is defined and differentiable for every $x>0$, and $f^{\\prime}(x) \\rightarrow 0$ as $x \\rightarrow+\\infty$. Put $g(x)=f(x+1)-f(x)$. Prove that $g(x) \\rightarrow 0$ as $x \\rightarrow+\\infty$."}
+{"name": "Rudin|exercise_5_7", "nl_statement": "Suppose $f^{\\prime}(x), g^{\\prime}(x)$ exist, $g^{\\prime}(x) \\neq 0$, and $f(x)=g(x)=0$. Prove that $\\lim _{t \\rightarrow x} \\frac{f(t)}{g(t)}=\\frac{f^{\\prime}(x)}{g^{\\prime}(x)}.$"}
+{"name": "Rudin|exercise_5_17", "nl_statement": "Suppose $f$ is a real, three times differentiable function on $[-1,1]$, such that $f(-1)=0, \\quad f(0)=0, \\quad f(1)=1, \\quad f^{\\prime}(0)=0 .$ Prove that $f^{(3)}(x) \\geq 3$ for some $x \\in(-1,1)$."}
+{"name": "Munkres|exercise_13_3b", "nl_statement": "Show that the collection $$\\mathcal{T}_\\infty = \\{U | X - U \\text{ is infinite or empty or all of X}\\}$$ does not need to be a topology on the set $X$."}
+{"name": "Munkres|exercise_13_4a2", "nl_statement": "If $\\mathcal{T}_\\alpha$ is a family of topologies on $X$, show that $\\bigcup \\mathcal{T}_\\alpha$ does not need to be a topology on $X$."}
+{"name": "Munkres|exercise_13_4b2", "nl_statement": "Let $\\mathcal{T}_\\alpha$ be a family of topologies on $X$. Show that there is a unique largest topology on $X$ contained in all the collections $\\mathcal{T}_\\alpha$."}
+{"name": "Munkres|exercise_13_5b", "nl_statement": "Show that if $\\mathcal{A}$ is a subbasis for a topology on $X$, then the topology generated by $\\mathcal{A}$ equals the intersection of all topologies on $X$ that contain $\\mathcal{A}$."}
+{"name": "Munkres|exercise_13_8a", "nl_statement": "Show that the collection $\\{(a,b) \\mid a < b, a \\text{ and } b \\text{ rational}\\}$ is a basis that generates the standard topology on $\\mathbb{R}$."}
+{"name": "Munkres|exercise_16_1", "nl_statement": "Show that if $Y$ is a subspace of $X$, and $A$ is a subset of $Y$, then the topology $A$ inherits as a subspace of $Y$ is the same as the topology it inherits as a subspace of $X$."}
+{"name": "Munkres|exercise_16_6", "nl_statement": "Show that the countable collection \\[\\{(a, b) \\times (c, d) \\mid a < b \\text{ and } c < d, \\text{ and } a, b, c, d \\text{ are rational}\\}\\] is a basis for $\\mathbb{R}^2$."}
+{"name": "Munkres|exercise_18_8a", "nl_statement": "Let $Y$ be an ordered set in the order topology. Let $f, g: X \\rightarrow Y$ be continuous. Show that the set $\\{x \\mid f(x) \\leq g(x)\\}$ is closed in $X$."}
+{"name": "Munkres|exercise_18_13", "nl_statement": "Let $A \\subset X$; let $f: A \\rightarrow Y$ be continuous; let $Y$ be Hausdorff. Show that if $f$ may be extended to a continuous function $g: \\bar{A} \\rightarrow Y$, then $g$ is uniquely determined by $f$."}
+{"name": "Munkres|exercise_20_2", "nl_statement": "Show that $\\mathbb{R} \\times \\mathbb{R}$ in the dictionary order topology is metrizable."}
+{"name": "Munkres|exercise_21_6b", "nl_statement": "Define $f_{n}:[0,1] \\rightarrow \\mathbb{R}$ by the equation $f_{n}(x)=x^{n}$. Show that the sequence $\\left(f_{n}\\right)$ does not converge uniformly."}
+{"name": "Munkres|exercise_22_2a", "nl_statement": "Let $p: X \\rightarrow Y$ be a continuous map. Show that if there is a continuous map $f: Y \\rightarrow X$ such that $p \\circ f$ equals the identity map of $Y$, then $p$ is a quotient map."}
+{"name": "Munkres|exercise_22_5", "nl_statement": "Let $p \\colon X \\rightarrow Y$ be an open map. Show that if $A$ is open in $X$, then the map $q \\colon A \\rightarrow p(A)$ obtained by restricting $p$ is an open map."}
+{"name": "Munkres|exercise_23_3", "nl_statement": "Let $\\left\\{A_{\\alpha}\\right\\}$ be a collection of connected subspaces of $X$; let $A$ be a connected subset of $X$. Show that if $A \\cap A_{\\alpha} \\neq \\varnothing$ for all $\\alpha$, then $A \\cup\\left(\\bigcup A_{\\alpha}\\right)$ is connected."}
+{"name": "Munkres|exercise_23_6", "nl_statement": "Let $A \\subset X$. Show that if $C$ is a connected subspace of $X$ that intersects both $A$ and $X-A$, then $C$ intersects $\\operatorname{Bd} A$."}
+{"name": "Munkres|exercise_23_11", "nl_statement": "Let $p: X \\rightarrow Y$ be a quotient map. Show that if each set $p^{-1}(\\{y\\})$ is connected, and if $Y$ is connected, then $X$ is connected."}
+{"name": "Munkres|exercise_24_3a", "nl_statement": "Let $f \\colon X \\rightarrow X$ be continuous. Show that if $X = [0, 1]$, there is a point $x$ such that $f(x) = x$. (The point $x$ is called a fixed point of $f$.)"}
+{"name": "Munkres|exercise_25_9", "nl_statement": "Let $G$ be a topological group; let $C$ be the component of $G$ containing the identity element $e$. Show that $C$ is a normal subgroup of $G$."}
+{"name": "Munkres|exercise_26_12", "nl_statement": "Let $p: X \\rightarrow Y$ be a closed continuous surjective map such that $p^{-1}(\\{y\\})$ is compact, for each $y \\in Y$. (Such a map is called a perfect map.) Show that if $Y$ is compact, then $X$ is compact."}
+{"name": "Munkres|exercise_28_4", "nl_statement": "A space $X$ is said to be countably compact if every countable open covering of $X$ contains a finite subcollection that covers $X$. Show that for a $T_1$ space $X$, countable compactness is equivalent to limit point compactness."}
+{"name": "Munkres|exercise_28_6", "nl_statement": "Let $(X, d)$ be a metric space. If $f: X \\rightarrow X$ satisfies the condition $d(f(x), f(y))=d(x, y)$ for all $x, y \\in X$, then $f$ is called an isometry of $X$. Show that if $f$ is an isometry and $X$ is compact, then $f$ is bijective and hence a homeomorphism."}
+{"name": "Munkres|exercise_29_4", "nl_statement": "Show that $[0, 1]^\\omega$ is not locally compact in the uniform topology."}
+{"name": "Munkres|exercise_30_10", "nl_statement": "Show that if $X$ is a countable product of spaces having countable dense subsets, then $X$ has a countable dense subset."}
+{"name": "Munkres|exercise_31_1", "nl_statement": "Show that if $X$ is regular, every pair of points of $X$ have neighborhoods whose closures are disjoint."}
+{"name": "Munkres|exercise_31_3", "nl_statement": "Show that every order topology is regular."}
+{"name": "Munkres|exercise_32_2a", "nl_statement": "Show that if $\\prod X_\\alpha$ is Hausdorff, then so is $X_\\alpha$. Assume that each $X_\\alpha$ is nonempty."}
+{"name": "Munkres|exercise_32_2c", "nl_statement": "Show that if $\\prod X_\\alpha$ is normal, then so is $X_\\alpha$. Assume that each $X_\\alpha$ is nonempty."}
+{"name": "Munkres|exercise_33_7", "nl_statement": "Show that every locally compact Hausdorff space is completely regular."}
+{"name": "Munkres|exercise_34_9", "nl_statement": "Let $X$ be a compact Hausdorff space that is the union of the closed subspaces $X_1$ and $X_2$. If $X_1$ and $X_2$ are metrizable, show that $X$ is metrizable."}
+{"name": "Munkres|exercise_43_2", "nl_statement": "Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces; let $Y$ be complete. Let $A \\subset X$. Show that if $f \\colon A \\rightarrow Y$ is uniformly continuous, then $f$ can be uniquely extended to a continuous function $g \\colon \\bar{A} \\rightarrow Y$, and $g$ is uniformly continuous."}
+{"name": "Axler|exercise_1_2", "nl_statement": "Show that $\\frac{-1 + \\sqrt{3}i}{2}$ is a cube root of 1 (meaning that its cube equals 1)."}
+{"name": "Axler|exercise_1_4", "nl_statement": "Prove that if $a \\in \\mathbf{F}$, $v \\in V$, and $av = 0$, then $a = 0$ or $v = 0$."}
+{"name": "Axler|exercise_1_7", "nl_statement": "Give an example of a nonempty subset $U$ of $\\mathbf{R}^2$ such that $U$ is closed under scalar multiplication, but $U$ is not a subspace of $\\mathbf{R}^2$."}
+{"name": "Axler|exercise_1_9", "nl_statement": "Prove that the union of two subspaces of $V$ is a subspace of $V$ if and only if one of the subspaces is contained in the other."}
+{"name": "Axler|exercise_3_8", "nl_statement": "Suppose that $V$ is finite dimensional and that $T \\in \\mathcal{L}(V, W)$. Prove that there exists a subspace $U$ of $V$ such that $U \\cap \\operatorname{null} T=\\{0\\}$ and range $T=\\{T u: u \\in U\\}$."}
+{"name": "Axler|exercise_5_1", "nl_statement": "Suppose $T \\in \\mathcal{L}(V)$. Prove that if $U_{1}, \\ldots, U_{m}$ are subspaces of $V$ invariant under $T$, then $U_{1}+\\cdots+U_{m}$ is invariant under $T$."}
+{"name": "Axler|exercise_5_11", "nl_statement": "Suppose $S, T \\in \\mathcal{L}(V)$. Prove that $S T$ and $T S$ have the same eigenvalues."}
+{"name": "Axler|exercise_5_13", "nl_statement": "Suppose $T \\in \\mathcal{L}(V)$ is such that every subspace of $V$ with dimension $\\operatorname{dim} V-1$ is invariant under $T$. Prove that $T$ is a scalar multiple of the identity operator."}
+{"name": "Axler|exercise_5_24", "nl_statement": "Suppose $V$ is a real vector space and $T \\in \\mathcal{L}(V)$ has no eigenvalues. Prove that every subspace of $V$ invariant under $T$ has even dimension."}
+{"name": "Axler|exercise_6_3", "nl_statement": "Prove that $\\left(\\sum_{j=1}^{n} a_{j} b_{j}\\right)^{2} \\leq\\left(\\sum_{j=1}^{n} j a_{j}{ }^{2}\\right)\\left(\\sum_{j=1}^{n} \\frac{b_{j}{ }^{2}}{j}\\right)$ for all real numbers $a_{1}, \\ldots, a_{n}$ and $b_{1}, \\ldots, b_{n}$."}
+{"name": "Axler|exercise_6_13", "nl_statement": "Suppose $\\left(e_{1}, \\ldots, e_{m}\\right)$ is an or thonormal list of vectors in $V$. Let $v \\in V$. Prove that $\\|v\\|^{2}=\\left|\\left\\langle v, e_{1}\\right\\rangle\\right|^{2}+\\cdots+\\left|\\left\\langle v, e_{m}\\right\\rangle\\right|^{2}$ if and only if $v \\in \\operatorname{span}\\left(e_{1}, \\ldots, e_{m}\\right)$."}
+{"name": "Axler|exercise_7_5", "nl_statement": "Show that if $\\operatorname{dim} V \\geq 2$, then the set of normal operators on $V$ is not a subspace of $\\mathcal{L}(V)$."}
+{"name": "Axler|exercise_7_9", "nl_statement": "Prove that a normal operator on a complex inner-product space is self-adjoint if and only if all its eigenvalues are real."}
+{"name": "Axler|exercise_7_11", "nl_statement": "Suppose $V$ is a complex inner-product space. Prove that every normal operator on $V$ has a square root. (An operator $S \\in \\mathcal{L}(V)$ is called a square root of $T \\in \\mathcal{L}(V)$ if $S^{2}=T$.)"}
+{"name": "Ireland-Rosen|exercise_1_30", "nl_statement": "Prove that $\\frac{1}{2}+\\frac{1}{3}+\\cdots+\\frac{1}{n}$ is not an integer."}
+{"name": "Ireland-Rosen|exercise_2_4", "nl_statement": "If $a$ is a nonzero integer, then for $n>m$ show that $\\left(a^{2^{n}}+1, a^{2^{m}}+1\\right)=1$ or 2 depending on whether $a$ is odd or even."}
+{"name": "Ireland-Rosen|exercise_2_27a", "nl_statement": "Show that $\\sum^{\\prime} 1 / n$, the sum being over square free integers, diverges."}
+{"name": "Ireland-Rosen|exercise_3_4", "nl_statement": "Show that the equation $3 x^{2}+2=y^{2}$ has no solution in integers."}
+{"name": "Ireland-Rosen|exercise_3_10", "nl_statement": "If $n$ is not a prime, show that $(n-1) ! \\equiv 0(n)$, except when $n=4$."}
+{"name": "Ireland-Rosen|exercise_4_4", "nl_statement": "Consider a prime $p$ of the form $4 t+1$. Show that $a$ is a primitive root modulo $p$ iff $-a$ is a primitive root modulo $p$."}
+{"name": "Ireland-Rosen|exercise_4_6", "nl_statement": "If $p=2^{n}+1$ is a Fermat prime, show that 3 is a primitive root modulo $p$."}
+{"name": "Ireland-Rosen|exercise_4_11", "nl_statement": "Prove that $1^{k}+2^{k}+\\cdots+(p-1)^{k} \\equiv 0(p)$ if $p-1 \\nmid k$ and $-1(p)$ if $p-1 \\mid k$."}
+{"name": "Ireland-Rosen|exercise_5_28", "nl_statement": "Show that $x^{4} \\equiv 2(p)$ has a solution for $p \\equiv 1(4)$ iff $p$ is of the form $A^{2}+64 B^{2}$."}
+{"name": "Ireland-Rosen|exercise_12_12", "nl_statement": "Show that $\\sin (\\pi / 12)$ is an algebraic number."}
+{"name": "Shakarchi|exercise_1_13b", "nl_statement": "Suppose that $f$ is holomorphic in an open set $\\Omega$. Prove that if $\\text{Im}(f)$ is constant, then $f$ is constant."}
+{"name": "Shakarchi|exercise_1_19a", "nl_statement": "Prove that the power series $\\sum nz^n$ does not converge on any point of the unit circle."}
+{"name": "Shakarchi|exercise_1_19c", "nl_statement": "Prove that the power series $\\sum zn/n$ converges at every point of the unit circle except $z = 1$."}
+{"name": "Shakarchi|exercise_2_2", "nl_statement": "Show that $\\int_{0}^{\\infty} \\frac{\\sin x}{x} d x=\\frac{\\pi}{2}$."}
+{"name": "Shakarchi|exercise_2_13", "nl_statement": "Suppose $f$ is an analytic function defined everywhere in $\\mathbb{C}$ and such that for each $z_0 \\in \\mathbb{C}$ at least one coefficient in the expansion $f(z) = \\sum_{n=0}^\\infty c_n(z - z_0)^n$ is equal to 0. Prove that $f$ is a polynomial."}
+{"name": "Shakarchi|exercise_3_4", "nl_statement": "Show that $ \\int_{-\\infty}^{\\infty} \\frac{x \\sin x}{x^2 + a^2} dx = \\pi e^{-a}$ for $a > 0$."}
+{"name": "Shakarchi|exercise_3_14", "nl_statement": "Prove that all entire functions that are also injective take the form $f(z) = az + b$, $a, b \\in \\mathbb{C}$ and $a \\neq 0$."}
+{"name": "Shakarchi|exercise_5_1", "nl_statement": "Prove that if $f$ is holomorphic in the unit disc, bounded and not identically zero, and $z_{1}, z_{2}, \\ldots, z_{n}, \\ldots$ are its zeros $\\left(\\left|z_{k}\\right|<1\\right)$, then $\\sum_{n}\\left(1-\\left|z_{n}\\right|\\right)<\\infty$."}
+{"name": "Putnam|exercise_2018_a5", "nl_statement": "Let $f: \\mathbb{R} \\rightarrow \\mathbb{R}$ be an infinitely differentiable function satisfying $f(0)=0, f(1)=1$, and $f(x) \\geq 0$ for all $x \\in$ $\\mathbb{R}$. Show that there exist a positive integer $n$ and a real number $x$ such that $f^{(n)}(x)<0$."}
+{"name": "Putnam|exercise_2018_b4", "nl_statement": "Given a real number $a$, we define a sequence by $x_{0}=1$, $x_{1}=x_{2}=a$, and $x_{n+1}=2 x_{n} x_{n-1}-x_{n-2}$ for $n \\geq 2$. Prove that if $x_{n}=0$ for some $n$, then the sequence is periodic."}
+{"name": "Putnam|exercise_2014_a5", "nl_statement": "Let"}
+{"name": "Putnam|exercise_2001_a5", "nl_statement": "Prove that there are unique positive integers $a, n$ such that $a^{n+1}-(a+1)^n=2001$."}
+{"name": "Putnam|exercise_1999_b4", "nl_statement": "Let $f$ be a real function with a continuous third derivative such that $f(x), f^{\\prime}(x), f^{\\prime \\prime}(x), f^{\\prime \\prime \\prime}(x)$ are positive for all $x$. Suppose that $f^{\\prime \\prime \\prime}(x) \\leq f(x)$ for all $x$. Show that $f^{\\prime}(x)<2 f(x)$ for all $x$."}
+{"name": "Putnam|exercise_1998_b6", "nl_statement": "Prove that, for any integers $a, b, c$, there exists a positive integer $n$ such that $\\sqrt{n^3+a n^2+b n+c}$ is not an integer."}
+{"name": "Pugh|exercise_2_26", "nl_statement": "Prove that a set $U \\subset M$ is open if and only if none of its points are limits of its complement."}
+{"name": "Pugh|exercise_2_32a", "nl_statement": "Show that every subset of $\\mathbb{N}$ is clopen."}
+{"name": "Pugh|exercise_2_46", "nl_statement": "Assume that $A, B$ are compact, disjoint, nonempty subsets of $M$. Prove that there are $a_0 \\in A$ and $b_0 \\in B$ such that for all $a \\in A$ and $b \\in B$ we have $d(a_0, b_0) \\leq d(a, b)$."}
+{"name": "Pugh|exercise_2_92", "nl_statement": "Give a direct proof that the nested decreasing intersection of nonempty covering compact sets is nonempty."}
+{"name": "Pugh|exercise_3_1", "nl_statement": "Assume that $f \\colon \\mathbb{R} \\rightarrow \\mathbb{R}$ satisfies $|f(t)-f(x)| \\leq|t-x|^{2}$ for all $t, x$. Prove that $f$ is constant."}
+{"name": "Pugh|exercise_3_63a", "nl_statement": "Prove that $\\sum 1/k(\\log(k))^p$ converges when $p > 1$."}
+{"name": "Pugh|exercise_4_15a", "nl_statement": "A continuous, strictly increasing function $\\mu \\colon (0, \\infty) \\rightarrow (0, \\infty)$ is a modulus of continuity if $\\mu(s) \\rightarrow 0$ as $s \\rightarrow 0$. A function $f \\colon [a, b] \\rightarrow \\mathbb{R}$ has modulus of continuity $\\mu$ if $|f(s) - f(t)| \\leq \\mu(|s - t|)$ for all $s, t \\in [a, b]$. Prove that a function is uniformly continuous if and only if it has a modulus of continuity."}
+{"name": "Herstein|exercise_2_1_18", "nl_statement": "If $G$ is a finite group of even order, show that there must be an element $a \\neq e$ such that $a=a^{-1}$."}
+{"name": "Herstein|exercise_2_1_26", "nl_statement": "If $G$ is a finite group, prove that, given $a \\in G$, there is a positive integer $n$, depending on $a$, such that $a^n = e$."}
+{"name": "Herstein|exercise_2_2_3", "nl_statement": "If $G$ is a group in which $(a b)^{i}=a^{i} b^{i}$ for three consecutive integers $i$, prove that $G$ is abelian."}
+{"name": "Herstein|exercise_2_2_6c", "nl_statement": "Let $G$ be a group in which $(a b)^{n}=a^{n} b^{n}$ for some fixed integer $n>1$ for all $a, b \\in G$. For all $a, b \\in G$, prove that $\\left(a b a^{-1} b^{-1}\\right)^{n(n-1)}=e$."}
+{"name": "Herstein|exercise_2_3_16", "nl_statement": "If a group $G$ has no proper subgroups, prove that $G$ is cyclic of order $p$, where $p$ is a prime number."}
+{"name": "Herstein|exercise_2_5_23", "nl_statement": "Let $G$ be a group such that all subgroups of $G$ are normal in $G$. If $a, b \\in G$, prove that $ba = a^jb$ for some $j$."}
+{"name": "Herstein|exercise_2_5_31", "nl_statement": "Suppose that $G$ is an abelian group of order $p^nm$ where $p \\nmid m$ is a prime.  If $H$ is a subgroup of $G$ of order $p^n$, prove that $H$ is a characteristic subgroup of $G$."}
+{"name": "Herstein|exercise_2_5_43", "nl_statement": "Prove that a group of order 9 must be abelian."}
+{"name": "Herstein|exercise_2_5_52", "nl_statement": "Let $G$ be a finite group and $\\varphi$ an automorphism of $G$ such that $\\varphi(x) = x^{-1}$ for more than three-fourths of the elements of $G$. Prove that $\\varphi(y) = y^{-1}$ for all $y \\in G$, and so $G$ is abelian."}
+{"name": "Herstein|exercise_2_7_7", "nl_statement": "If $\\varphi$ is a homomorphism of $G$ onto $G'$ and $N \\triangleleft G$, show that $\\varphi(N) \\triangleleft G'$."}
+{"name": "Herstein|exercise_2_8_15", "nl_statement": "Prove that if $p > q$ are two primes such that $q \\mid p - 1$, then any two nonabelian groups of order $pq$ are isomorphic."}
+{"name": "Herstein|exercise_2_10_1", "nl_statement": "Let $A$ be a normal subgroup of a group $G$, and suppose that $b \\in G$ is an element of prime order $p$, and that $b \\not\\in A$. Show that $A \\cap (b) = (e)$."}
+{"name": "Herstein|exercise_2_11_7", "nl_statement": "If $P \\triangleleft G$, $P$ a $p$-Sylow subgroup of $G$, prove that $\\varphi(P) = P$ for every automorphism $\\varphi$ of $G$."}
+{"name": "Herstein|exercise_3_2_21", "nl_statement": "If $\\sigma, \\tau$ are two permutations that disturb no common element and $\\sigma \\tau = e$, prove that $\\sigma = \\tau = e$."}
+{"name": "Herstein|exercise_4_1_34", "nl_statement": "Let $T$ be the group of $2\\times 2$ matrices $A$ with entries in the field $\\mathbb{Z}_2$ such that $\\det A$ is not equal to 0. Prove that $T$ is isomorphic to $S_3$, the symmetric group of degree 3."}
+{"name": "Herstein|exercise_4_2_6", "nl_statement": "If $a^2 = 0$ in $R$, show that $ax + xa$ commutes with $a$."}
+{"name": "Herstein|exercise_4_3_1", "nl_statement": "If $R$ is a commutative ring and $a \\in R$, let $L(a) = \\{x \\in R \\mid xa = 0\\}$. Prove that $L(a)$ is an ideal of $R$."}
+{"name": "Herstein|exercise_4_4_9", "nl_statement": "Show that $(p - 1)/2$ of the numbers $1, 2, \\ldots, p - 1$ are quadratic residues and $(p - 1)/2$ are quadratic nonresidues $\\mod p$."}
+{"name": "Herstein|exercise_4_5_23", "nl_statement": "Let $F = \\mathbb{Z}_7$ and let $p(x) = x^3 - 2$ and $q(x) = x^3 + 2$ be in $F[x]$. Show that $p(x)$ and $q(x)$ are irreducible in $F[x]$ and that the fields $F[x]/(p(x))$ and $F[x]/(q(x))$ are isomorphic."}
+{"name": "Herstein|exercise_4_6_2", "nl_statement": "Prove that $f(x) = x^3 + 3x + 2$ is irreducible in $Q[x]$."}
+{"name": "Herstein|exercise_5_1_8", "nl_statement": "If $F$ is a field of characteristic $p \\neq 0$, show that $(a + b)^m = a^m + b^m$, where $m = p^n$, for all $a, b \\in F$ and any positive integer $n$."}
+{"name": "Herstein|exercise_5_3_7", "nl_statement": "If $a \\in K$ is such that $a^2$ is algebraic over the subfield $F$ of $K$, show that a is algebraic over $F$."}
+{"name": "Herstein|exercise_5_4_3", "nl_statement": "If $a \\in C$ is such that $p(a) = 0$, where $p(x) = x^5 + \\sqrt{2}x^3 + \\sqrt{5}x^2 + \\sqrt{7}x + \\sqrt{11}$, show that $a$ is algebraic over $\\mathbb{Q}$ of degree at most 80."}
+{"name": "Herstein|exercise_5_6_14", "nl_statement": "If $F$ is of characteristic $p \\neq 0$, show that all the roots of $x^m - x$, where $m = p^n$, are distinct."}
+{"name": "Artin|exercise_2_3_2", "nl_statement": "Prove that the products $a b$ and $b a$ are conjugate elements in a group."}
+{"name": "Artin|exercise_2_8_6", "nl_statement": "Prove that the center of the product of two groups is the product of their centers."}
+{"name": "Artin|exercise_3_2_7", "nl_statement": "Prove that every homomorphism of fields is injective."}
+{"name": "Artin|exercise_3_7_2", "nl_statement": "Let $V$ be a vector space over an infinite field $F$. Prove that $V$ is not the union of finitely many proper subspaces."}
+{"name": "Artin|exercise_6_4_2", "nl_statement": "Prove that no group of order $p q$, where $p$ and $q$ are prime, is simple."}
+{"name": "Artin|exercise_6_4_12", "nl_statement": "Prove that no group of order 224 is simple."}
+{"name": "Artin|exercise_10_1_13", "nl_statement": "An element $x$ of a ring $R$ is called nilpotent if some power of $x$ is zero. Prove that if $x$ is nilpotent, then $1+x$ is a unit in $R$."}
+{"name": "Artin|exercise_10_6_7", "nl_statement": "Prove that every nonzero ideal in the ring of Gauss integers contains a nonzero integer."}
+{"name": "Artin|exercise_10_4_7a", "nl_statement": "Let $I, J$ be ideals of a ring $R$ such that $I+J=R$. Prove that $I J=I \\cap J$."}
+{"name": "Artin|exercise_11_2_13", "nl_statement": "If $a, b$ are integers and if $a$ divides $b$ in the ring of Gauss integers, then $a$ divides $b$ in $\\mathbb{Z}$."}
+{"name": "Artin|exercise_11_4_6a", "nl_statement": "Prove that $x^2+x+1$ is irreducible in the field $\\mathbb{F}_2$."}
+{"name": "Artin|exercise_11_4_6c", "nl_statement": "Prove that $x^3 - 9$ is irreducible in $\\mathbb{F}_{31}$."}
+{"name": "Artin|exercise_11_13_3", "nl_statement": "Prove that there are infinitely many primes congruent to $-1$ (modulo $4$)."}
+{"name": "Artin|exercise_13_6_10", "nl_statement": "Let $K$ be a finite field. Prove that the product of the nonzero elements of $K$ is $-1$."}
+{"name": "Dummit-Foote|exercise_1_1_2a", "nl_statement": "Prove the the operation $\\star$ on $\\mathbb{Z}$ defined by $a\\star b=a-b$ is not commutative."}
+{"name": "Dummit-Foote|exercise_1_1_4", "nl_statement": "Prove that the multiplication of residue class $\\mathbb{Z}/n\\mathbb{Z}$ is associative."}
+{"name": "Dummit-Foote|exercise_1_1_15", "nl_statement": "Prove that $(a_1a_2\\dots a_n)^{-1} = a_n^{-1}a_{n-1}^{-1}\\dots a_1^{-1}$ for all $a_1, a_2, \\dots, a_n\\in G$."}
+{"name": "Dummit-Foote|exercise_1_1_17", "nl_statement": "Let $x$ be an element of $G$. Prove that if $|x|=n$ for some positive integer $n$ then $x^{-1}=x^{n-1}$."}
+{"name": "Dummit-Foote|exercise_1_1_20", "nl_statement": "For $x$ an element in $G$ show that $x$ and $x^{-1}$ have the same order."}
+{"name": "Dummit-Foote|exercise_1_1_22b", "nl_statement": "Deduce that $|a b|=|b a|$ for all $a, b \\in G$."}
+{"name": "Dummit-Foote|exercise_1_1_29", "nl_statement": "Prove that $A \\times B$ is an abelian group if and only if both $A$ and $B$ are abelian."}
+{"name": "Dummit-Foote|exercise_1_3_8", "nl_statement": "Prove that if $\\Omega=\\{1,2,3, \\ldots\\}$ then $S_{\\Omega}$ is an infinite group"}
+{"name": "Dummit-Foote|exercise_1_6_11", "nl_statement": "Let $A$ and $B$ be groups. Prove that $A \\times B \\cong B \\times A$."}
+{"name": "Dummit-Foote|exercise_1_6_23", "nl_statement": "Let $G$ be a finite group which possesses an automorphism $\\sigma$ such that $\\sigma(g)=g$ if and only if $g=1$. If $\\sigma^{2}$ is the identity map from $G$ to $G$, prove that $G$ is abelian."}
+{"name": "Dummit-Foote|exercise_2_1_13", "nl_statement": "Let $H$ be a subgroup of the additive group of rational numbers with the property that $1 / x \\in H$ for every nonzero element $x$ of $H$. Prove that $H=0$ or $\\mathbb{Q}$."}
+{"name": "Dummit-Foote|exercise_2_4_16a", "nl_statement": "A subgroup $M$ of a group $G$ is called a maximal subgroup if $M \\neq G$ and the only subgroups of $G$ which contain $M$ are $M$ and $G$. Prove that if $H$ is a proper subgroup of the finite group $G$ then there is a maximal subgroup of $G$ containing $H$."}
+{"name": "Dummit-Foote|exercise_2_4_16c", "nl_statement": "Show that if $G=\\langle x\\rangle$ is a cyclic group of order $n \\geq 1$ then a subgroup $H$ is maximal if and only $H=\\left\\langle x^{p}\\right\\rangle$ for some prime $p$ dividing $n$."}
+{"name": "Dummit-Foote|exercise_3_1_22a", "nl_statement": "Prove that if $H$ and $K$ are normal subgroups of a group $G$ then their intersection $H \\cap K$ is also a normal subgroup of $G$."}
+{"name": "Dummit-Foote|exercise_3_2_8", "nl_statement": "Prove that if $H$ and $K$ are finite subgroups of $G$ whose orders are relatively prime then $H \\cap K=1$."}
+{"name": "Dummit-Foote|exercise_3_2_16", "nl_statement": "Use Lagrange's Theorem in the multiplicative group $(\\mathbb{Z} / p \\mathbb{Z})^{\\times}$to prove Fermat's Little Theorem: if $p$ is a prime then $a^{p} \\equiv a(\\bmod p)$ for all $a \\in \\mathbb{Z}$."}
+{"name": "Dummit-Foote|exercise_3_3_3", "nl_statement": "Prove that if $H$ is a normal subgroup of $G$ of prime index $p$ then for all $K \\leq G$ either $K \\leq H$, or $G=H K$ and $|K: K \\cap H|=p$."}
+{"name": "Dummit-Foote|exercise_3_4_4", "nl_statement": "Use Cauchy's Theorem and induction to show that a finite abelian group has a subgroup of order $n$ for each positive divisor $n$ of its order."}
+{"name": "Dummit-Foote|exercise_3_4_5b", "nl_statement": "Prove that quotient groups of a solvable group are solvable."}
+{"name": "Dummit-Foote|exercise_4_2_8", "nl_statement": "Prove that if $H$ has finite index $n$ then there is a normal subgroup $K$ of $G$ with $K \\leq H$ and $|G: K| \\leq n!$."}
+{"name": "Dummit-Foote|exercise_4_2_9a", "nl_statement": "Prove that if $p$ is a prime and $G$ is a group of order $p^{\\alpha}$ for some $\\alpha \\in \\mathbb{Z}^{+}$, then every subgroup of index $p$ is normal in $G$."}
+{"name": "Dummit-Foote|exercise_4_4_2", "nl_statement": "Prove that if $G$ is an abelian group of order $p q$, where $p$ and $q$ are distinct primes, then $G$ is cyclic."}
+{"name": "Dummit-Foote|exercise_4_4_6b", "nl_statement": "Prove that there exists a normal subgroup that is not characteristic."}
+{"name": "Dummit-Foote|exercise_4_4_8a", "nl_statement": "Let $G$ be a group with subgroups $H$ and $K$ with $H \\leq K$. Prove that if $H$ is characteristic in $K$ and $K$ is normal in $G$ then $H$ is normal in $G$."}
+{"name": "Dummit-Foote|exercise_4_5_13", "nl_statement": "Prove that a group of order 56 has a normal Sylow $p$-subgroup for some prime $p$ dividing its order."}
+{"name": "Dummit-Foote|exercise_4_5_15", "nl_statement": "Prove that a group of order 351 has a normal Sylow $p$-subgroup for some prime $p$ dividing its order."}
+{"name": "Dummit-Foote|exercise_4_5_17", "nl_statement": "Prove that if $|G|=105$ then $G$ has a normal Sylow 5 -subgroup and a normal Sylow 7-subgroup."}
+{"name": "Dummit-Foote|exercise_4_5_19", "nl_statement": "Prove that if $|G|=6545$ then $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_5_21", "nl_statement": "Prove that if $|G|=2907$ then $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_5_23", "nl_statement": "Prove that if $|G|=462$ then $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_5_33", "nl_statement": "Let $P$ be a normal Sylow $p$-subgroup of $G$ and let $H$ be any subgroup of $G$. Prove that $P \\cap H$ is the unique Sylow $p$-subgroup of $H$."}
+{"name": "Dummit-Foote|exercise_7_1_2", "nl_statement": "Prove that if $u$ is a unit in $R$ then so is $-u$."}
+{"name": "Dummit-Foote|exercise_7_1_12", "nl_statement": "Prove that any subring of a field which contains the identity is an integral domain."}
+{"name": "Dummit-Foote|exercise_7_2_2", "nl_statement": "Let $p(x)=a_{n} x^{n}+a_{n-1} x^{n-1}+\\cdots+a_{1} x+a_{0}$ be an element of the polynomial ring $R[x]$. Prove that $p(x)$ is a zero divisor in $R[x]$ if and only if there is a nonzero $b \\in R$ such that $b p(x)=0$."}
+{"name": "Dummit-Foote|exercise_7_3_16", "nl_statement": "Let $\\varphi: R \\rightarrow S$ be a surjective homomorphism of rings. Prove that the image of the center of $R$ is contained in the center of $S$."}
+{"name": "Dummit-Foote|exercise_7_4_27", "nl_statement": "Let $R$ be a commutative ring with $1 \\neq 0$. Prove that if $a$ is a nilpotent element of $R$ then $1-a b$ is a unit for all $b \\in R$."}
+{"name": "Dummit-Foote|exercise_8_2_4", "nl_statement": "Let $R$ be an integral domain. Prove that if the following two conditions hold then $R$ is a Principal Ideal Domain: (i) any two nonzero elements $a$ and $b$ in $R$ have a greatest common divisor which can be written in the form $r a+s b$ for some $r, s \\in R$, and (ii) if $a_{1}, a_{2}, a_{3}, \\ldots$ are nonzero elements of $R$ such that $a_{i+1} \\mid a_{i}$ for all $i$, then there is a positive integer $N$ such that $a_{n}$ is a unit times $a_{N}$ for all $n \\geq N$."}
+{"name": "Dummit-Foote|exercise_8_3_5a", "nl_statement": "Let $R=\\mathbb{Z}[\\sqrt{-n}]$ where $n$ is a squarefree integer greater than 3. Prove that $2, \\sqrt{-n}$ and $1+\\sqrt{-n}$ are irreducibles in $R$."}
+{"name": "Dummit-Foote|exercise_8_3_6b", "nl_statement": "Let $q \\in \\mathbb{Z}$ be a prime with $q \\equiv 3 \\bmod 4$. Prove that the quotient ring $\\mathbb{Z}[i] /(q)$ is a field with $q^{2}$ elements."}
+{"name": "Dummit-Foote|exercise_9_1_10", "nl_statement": "Prove that the ring $\\mathbb{Z}\\left[x_{1}, x_{2}, x_{3}, \\ldots\\right] /\\left(x_{1} x_{2}, x_{3} x_{4}, x_{5} x_{6}, \\ldots\\right)$ contains infinitely many minimal prime ideals."}
+{"name": "Dummit-Foote|exercise_9_4_2a", "nl_statement": "Prove that $x^4-4x^3+6$ is irreducible in $\\mathbb{Z}[x]$."}
+{"name": "Dummit-Foote|exercise_9_4_2c", "nl_statement": "Prove that $x^4+4x^3+6x^2+2x+1$ is irreducible in $\\mathbb{Z}[x]$."}
+{"name": "Dummit-Foote|exercise_9_4_9", "nl_statement": "Prove that the polynomial $x^{2}-\\sqrt{2}$ is irreducible over $\\mathbb{Z}[\\sqrt{2}]$. You may assume that $\\mathbb{Z}[\\sqrt{2}]$ is a U.F.D."}
+{"name": "Dummit-Foote|exercise_11_1_13", "nl_statement": "Prove that as vector spaces over $\\mathbb{Q}, \\mathbb{R}^n \\cong \\mathbb{R}$, for all $n \\in \\mathbb{Z}^{+}$."}
+{"name": "Rudin|exercise_1_1a", "nl_statement": "If $r$ is rational $(r \\neq 0)$ and $x$ is irrational, prove that $r+x$ is irrational."}
+{"name": "Rudin|exercise_1_2", "nl_statement": "Prove that there is no rational number whose square is $12$."}
+{"name": "Rudin|exercise_1_5", "nl_statement": "Let $A$ be a nonempty set of real numbers which is bounded below. Let $-A$ be the set of all numbers $-x$, where $x \\in A$. Prove that $\\inf A=-\\sup (-A)$."}
+{"name": "Rudin|exercise_1_11a", "nl_statement": "If $z$ is a complex number, prove that there exists an $r\\geq 0$ and a complex number $w$ with $| w | = 1$ such that $z = rw$."}
+{"name": "Rudin|exercise_1_13", "nl_statement": "If $x, y$ are complex, prove that $||x|-|y|| \\leq |x-y|$."}
+{"name": "Rudin|exercise_1_16a", "nl_statement": "Suppose $k \\geq 3, x, y \\in \\mathbb{R}^k, |x - y| = d > 0$, and $r > 0$. Prove that if $2r > d$, there are infinitely many $z \\in \\mathbb{R}^k$ such that $|z-x|=|z-y|=r$."}
+{"name": "Rudin|exercise_1_18a", "nl_statement": "If $k \\geq 2$ and $\\mathbf{x} \\in R^{k}$, prove that there exists $\\mathbf{y} \\in R^{k}$ such that $\\mathbf{y} \\neq 0$ but $\\mathbf{x} \\cdot \\mathbf{y}=0$"}
+{"name": "Rudin|exercise_1_19", "nl_statement": "Suppose $a, b \\in R^k$. Find $c \\in R^k$ and $r > 0$ such that $|x-a|=2|x-b|$ if and only if $| x - c | = r$. Prove that $3c = 4b - a$ and $3r = 2 |b - a|$."}
+{"name": "Rudin|exercise_2_24", "nl_statement": "Let $X$ be a metric space in which every infinite subset has a limit point. Prove that $X$ is separable."}
+{"name": "Rudin|exercise_2_27a", "nl_statement": "Suppose $E\\subset\\mathbb{R}^k$ is uncountable, and let $P$ be the set of condensation points of $E$. Prove that $P$ is perfect."}
+{"name": "Rudin|exercise_2_28", "nl_statement": "Prove that every closed set in a separable metric space is the union of a (possibly empty) perfect set and a set which is at most countable."}
+{"name": "Rudin|exercise_3_1a", "nl_statement": "Prove that convergence of $\\left\\{s_{n}\\right\\}$ implies convergence of $\\left\\{\\left|s_{n}\\right|\\right\\}$."}
+{"name": "Rudin|exercise_3_3", "nl_statement": "If $s_{1}=\\sqrt{2}$, and $s_{n+1}=\\sqrt{2+\\sqrt{s_{n}}} \\quad(n=1,2,3, \\ldots),$ prove that $\\left\\{s_{n}\\right\\}$ converges, and that $s_{n}<2$ for $n=1,2,3, \\ldots$."}
+{"name": "Rudin|exercise_3_6a", "nl_statement": "Prove that $\\lim_{n \\rightarrow \\infty} \\sum_{i<n} a_i = \\infty$, where $a_i = \\sqrt{i + 1} -\\sqrt{i}$."}
+{"name": "Rudin|exercise_3_8", "nl_statement": "If $\\Sigma a_{n}$ converges, and if $\\left\\{b_{n}\\right\\}$ is monotonic and bounded, prove that $\\Sigma a_{n} b_{n}$ converges."}
+{"name": "Rudin|exercise_3_20", "nl_statement": "Suppose $\\left\\{p_{n}\\right\\}$ is a Cauchy sequence in a metric space $X$, and some sequence $\\left\\{p_{n l}\\right\\}$ converges to a point $p \\in X$. Prove that the full sequence $\\left\\{p_{n}\\right\\}$ converges to $p$."}
+{"name": "Rudin|exercise_3_22", "nl_statement": "Suppose $X$ is a nonempty complete metric space, and $\\left\\{G_{n}\\right\\}$ is a sequence of dense open sets of $X$. Prove Baire's theorem, namely, that $\\bigcap_{1}^{\\infty} G_{n}$ is not empty."}
+{"name": "Rudin|exercise_4_2a", "nl_statement": "If $f$ is a continuous mapping of a metric space $X$ into a metric space $Y$, prove that $f(\\overline{E}) \\subset \\overline{f(E)}$ for every set $E \\subset X$. ($\\overline{E}$ denotes the closure of $E$)."}
+{"name": "Rudin|exercise_4_4a", "nl_statement": "Let $f$ and $g$ be continuous mappings of a metric space $X$ into a metric space $Y$, and let $E$ be a dense subset of $X$. Prove that $f(E)$ is dense in $f(X)$."}
+{"name": "Rudin|exercise_4_5a", "nl_statement": "If $f$ is a real continuous function defined on a closed set $E \\subset \\mathbb{R}$, prove that there exist continuous real functions $g$ on $\\mathbb{R}$ such that $g(x)=f(x)$ for all $x \\in E$."}
+{"name": "Rudin|exercise_4_6", "nl_statement": "If $f$ is defined on $E$, the graph of $f$ is the set of points $(x, f(x))$, for $x \\in E$. In particular, if $E$ is a set of real numbers, and $f$ is real-valued, the graph of $f$ is a subset of the plane. Suppose $E$ is compact, and prove that $f$ is continuous on $E$ if and only if its graph is compact."}
+{"name": "Rudin|exercise_4_8b", "nl_statement": "Let $E$ be a bounded set in $R^{1}$. Prove that there exists a real function $f$ such that $f$ is uniformly continuous and is not bounded on $E$."}
+{"name": "Rudin|exercise_4_12", "nl_statement": "A uniformly continuous function of a uniformly continuous function is uniformly continuous."}
+{"name": "Rudin|exercise_4_19", "nl_statement": "Suppose $f$ is a real function with domain $R^{1}$ which has the intermediate value property: if $f(a)<c<f(b)$, then $f(x)=c$ for some $x$ between $a$ and $b$. Suppose also, for every rational $r$, that the set of all $x$ with $f(x)=r$ is closed. Prove that $f$ is continuous."}
+{"name": "Rudin|exercise_4_24", "nl_statement": "Assume that $f$ is a continuous real function defined in $(a, b)$ such that $f\\left(\\frac{x+y}{2}\\right) \\leq \\frac{f(x)+f(y)}{2}$ for all $x, y \\in(a, b)$. Prove that $f$ is convex."}
+{"name": "Rudin|exercise_5_2", "nl_statement": "Suppose $f^{\\prime}(x)>0$ in $(a, b)$. Prove that $f$ is strictly increasing in $(a, b)$, and let $g$ be its inverse function. Prove that $g$ is differentiable, and that $g^{\\prime}(f(x))=\\frac{1}{f^{\\prime}(x)} \\quad(a<x<b)$."}
+{"name": "Rudin|exercise_5_4", "nl_statement": "If $C_{0}+\\frac{C_{1}}{2}+\\cdots+\\frac{C_{n-1}}{n}+\\frac{C_{n}}{n+1}=0,$ where $C_{0}, \\ldots, C_{n}$ are real constants, prove that the equation $C_{0}+C_{1} x+\\cdots+C_{n-1} x^{n-1}+C_{n} x^{n}=0$ has at least one real root between 0 and 1."}
+{"name": "Rudin|exercise_5_6", "nl_statement": "Suppose (a) $f$ is continuous for $x \\geq 0$, (b) $f^{\\prime}(x)$ exists for $x>0$, (c) $f(0)=0$, (d) $f^{\\prime}$ is monotonically increasing. Put $g(x)=\\frac{f(x)}{x} \\quad(x>0)$ and prove that $g$ is monotonically increasing."}
+{"name": "Rudin|exercise_5_15", "nl_statement": "Suppose $a \\in R^{1}, f$ is a twice-differentiable real function on $(a, \\infty)$, and $M_{0}, M_{1}, M_{2}$ are the least upper bounds of $|f(x)|,\\left|f^{\\prime}(x)\\right|,\\left|f^{\\prime \\prime}(x)\\right|$, respectively, on $(a, \\infty)$. Prove that $M_{1}^{2} \\leq 4 M_{0} M_{2} .$"}
+{"name": "Munkres|exercise_13_1", "nl_statement": "Let $X$ be a topological space; let $A$ be a subset of $X$. Suppose that for each $x \\in A$ there is an open set $U$ containing $x$ such that $U \\subset A$. Show that $A$ is open in $X$."}
+{"name": "Munkres|exercise_13_4a1", "nl_statement": "If $\\mathcal{T}_\\alpha$ is a family of topologies on $X$, show that $\\bigcap \\mathcal{T}_\\alpha$ is a topology on $X$."}
+{"name": "Munkres|exercise_13_4b1", "nl_statement": "Let $\\mathcal{T}_\\alpha$ be a family of topologies on $X$. Show that there is a unique smallest topology on $X$ containing all the collections $\\mathcal{T}_\\alpha$."}
+{"name": "Munkres|exercise_13_5a", "nl_statement": "Show that if $\\mathcal{A}$ is a basis for a topology on $X$, then the topology generated by $\\mathcal{A}$ equals the intersection of all topologies on $X$ that contain $\\mathcal{A}$."}
+{"name": "Munkres|exercise_13_6", "nl_statement": "Show that the lower limit topology $\\mathbb{R}_l$ and $K$-topology $\\mathbb{R}_K$ are not comparable."}
+{"name": "Munkres|exercise_13_8b", "nl_statement": "Show that the collection $\\{(a,b) \\mid a < b, a \\text{ and } b \\text{ rational}\\}$ is a basis that generates a topology different from the lower limit topology on $\\mathbb{R}$."}
+{"name": "Munkres|exercise_16_4", "nl_statement": "A map $f: X \\rightarrow Y$ is said to be an open map if for every open set $U$ of $X$, the set $f(U)$ is open in $Y$. Show that $\\pi_{1}: X \\times Y \\rightarrow X$ and $\\pi_{2}: X \\times Y \\rightarrow Y$ are open maps."}
+{"name": "Munkres|exercise_17_4", "nl_statement": "Show that if $U$ is open in $X$ and $A$ is closed in $X$, then $U-A$ is open in $X$, and $A-U$ is closed in $X$."}
+{"name": "Munkres|exercise_18_8b", "nl_statement": "Let $Y$ be an ordered set in the order topology. Let $f, g: X \\rightarrow Y$ be continuous. Let $h: X \\rightarrow Y$ be the function $h(x)=\\min \\{f(x), g(x)\\}.$ Show that $h$ is continuous."}
+{"name": "Munkres|exercise_19_6a", "nl_statement": "Let $\\mathbf{x}_1, \\mathbf{x}_2, \\ldots$ be a sequence of the points of the product space $\\prod X_\\alpha$.  Show that this sequence converges to the point $\\mathbf{x}$ if and only if the sequence $\\pi_\\alpha(\\mathbf{x}_i)$ converges to $\\pi_\\alpha(\\mathbf{x})$ for each $\\alpha$."}
+{"name": "Munkres|exercise_21_6a", "nl_statement": "Define $f_{n}:[0,1] \\rightarrow \\mathbb{R}$ by the equation $f_{n}(x)=x^{n}$. Show that the sequence $\\left(f_{n}(x)\\right)$ converges for each $x \\in[0,1]$."}
+{"name": "Munkres|exercise_21_8", "nl_statement": "Let $X$ be a topological space and let $Y$ be a metric space. Let $f_{n}: X \\rightarrow Y$ be a sequence of continuous functions. Let $x_{n}$ be a sequence of points of $X$ converging to $x$. Show that if the sequence $\\left(f_{n}\\right)$ converges uniformly to $f$, then $\\left(f_{n}\\left(x_{n}\\right)\\right)$ converges to $f(x)$."}
+{"name": "Munkres|exercise_22_2b", "nl_statement": "If $A \\subset X$, a retraction of $X$ onto $A$ is a continuous map $r: X \\rightarrow A$ such that $r(a)=a$ for each $a \\in A$. Show that a retraction is a quotient map."}
+{"name": "Munkres|exercise_23_2", "nl_statement": "Let $\\left\\{A_{n}\\right\\}$ be a sequence of connected subspaces of $X$, such that $A_{n} \\cap A_{n+1} \\neq \\varnothing$ for all $n$. Show that $\\bigcup A_{n}$ is connected."}
+{"name": "Munkres|exercise_23_4", "nl_statement": "Show that if $X$ is an infinite set, it is connected in the finite complement topology."}
+{"name": "Munkres|exercise_23_9", "nl_statement": "Let $A$ be a proper subset of $X$, and let $B$ be a proper subset of $Y$. If $X$ and $Y$ are connected, show that $(X \\times Y)-(A \\times B)$ is connected."}
+{"name": "Munkres|exercise_24_2", "nl_statement": "Let $f: S^{1} \\rightarrow \\mathbb{R}$ be a continuous map. Show there exists a point $x$ of $S^{1}$ such that $f(x)=f(-x)$."}
+{"name": "Munkres|exercise_25_4", "nl_statement": "Let $X$ be locally path connected. Show that every connected open set in $X$ is path connected."}
+{"name": "Munkres|exercise_26_11", "nl_statement": "Let $X$ be a compact Hausdorff space. Let $\\mathcal{A}$ be a collection of closed connected subsets of $X$ that is simply ordered by proper inclusion. Then $Y=\\bigcap_{A \\in \\mathcal{A}} A$ is connected."}
+{"name": "Munkres|exercise_27_4", "nl_statement": "Show that a connected metric space having more than one point is uncountable."}
+{"name": "Munkres|exercise_28_5", "nl_statement": "Show that X is countably compact if and only if every nested sequence $C_1 \\supset C_2 \\supset \\cdots$ of closed nonempty sets of X has a nonempty intersection."}
+{"name": "Munkres|exercise_29_1", "nl_statement": "Show that the rationals $\\mathbb{Q}$ are not locally compact."}
+{"name": "Munkres|exercise_29_10", "nl_statement": "Show that if $X$ is a Hausdorff space that is locally compact at the point $x$, then for each neighborhood $U$ of $x$, there is a neighborhood $V$ of $x$ such that $\\bar{V}$ is compact and $\\bar{V} \\subset U$."}
+{"name": "Munkres|exercise_30_13", "nl_statement": "Show that if $X$ has a countable dense subset, every collection of disjoint open sets in $X$ is countable."}
+{"name": "Munkres|exercise_31_2", "nl_statement": "Show that if $X$ is normal, every pair of disjoint closed sets have neighborhoods whose closures are disjoint."}
+{"name": "Munkres|exercise_32_1", "nl_statement": "Show that a closed subspace of a normal space is normal."}
+{"name": "Munkres|exercise_32_2b", "nl_statement": "Show that if $\\prod X_\\alpha$ is regular, then so is $X_\\alpha$. Assume that each $X_\\alpha$ is nonempty."}
+{"name": "Munkres|exercise_32_3", "nl_statement": "Show that every locally compact Hausdorff space is regular."}
+{"name": "Munkres|exercise_33_8", "nl_statement": "Let $X$ be completely regular, let $A$ and $B$ be disjoint closed subsets of $X$. Show that if $A$ is compact, there is a continuous function $f \\colon X \\rightarrow [0, 1]$ such that $f(A) = \\{0\\}$ and $f(B) = \\{1\\}$."}
+{"name": "Munkres|exercise_38_6", "nl_statement": "Let $X$ be completely regular. Show that $X$ is connected if and only if the Stone-Čech compactification of $X$ is connected."}
+{"name": "Axler|exercise_1_3", "nl_statement": "Prove that $-(-v) = v$ for every $v \\in V$."}
+{"name": "Axler|exercise_1_6", "nl_statement": "Give an example of a nonempty subset $U$ of $\\mathbf{R}^2$ such that $U$ is closed under addition and under taking additive inverses (meaning $-u \\in U$ whenever $u \\in U$), but $U$ is not a subspace of $\\mathbf{R}^2$."}
+{"name": "Axler|exercise_1_8", "nl_statement": "Prove that the intersection of any collection of subspaces of $V$ is a subspace of $V$."}
+{"name": "Axler|exercise_3_1", "nl_statement": "Show that every linear map from a one-dimensional vector space to itself is multiplication by some scalar. More precisely, prove that if $\\operatorname{dim} V=1$ and $T \\in \\mathcal{L}(V, V)$, then there exists $a \\in \\mathbf{F}$ such that $T v=a v$ for all $v \\in V$."}
+{"name": "Axler|exercise_4_4", "nl_statement": "Suppose $p \\in \\mathcal{P}(\\mathbf{C})$ has degree $m$. Prove that $p$ has $m$ distinct roots if and only if $p$ and its derivative $p^{\\prime}$ have no roots in common."}
+{"name": "Axler|exercise_5_4", "nl_statement": "Suppose that $S, T \\in \\mathcal{L}(V)$ are such that $S T=T S$. Prove that $\\operatorname{null} (T-\\lambda I)$ is invariant under $S$ for every $\\lambda \\in \\mathbf{F}$."}
+{"name": "Axler|exercise_5_12", "nl_statement": "Suppose $T \\in \\mathcal{L}(V)$ is such that every vector in $V$ is an eigenvector of $T$. Prove that $T$ is a scalar multiple of the identity operator."}
+{"name": "Axler|exercise_5_20", "nl_statement": "Suppose that $T \\in \\mathcal{L}(V)$ has $\\operatorname{dim} V$ distinct eigenvalues and that $S \\in \\mathcal{L}(V)$ has the same eigenvectors as $T$ (not necessarily with the same eigenvalues). Prove that $S T=T S$."}
+{"name": "Axler|exercise_6_2", "nl_statement": "Suppose $u, v \\in V$. Prove that $\\langle u, v\\rangle=0$ if and only if $\\|u\\| \\leq\\|u+a v\\|$ for all $a \\in \\mathbf{F}$."}
+{"name": "Axler|exercise_6_7", "nl_statement": "Prove that if $V$ is a complex inner-product space, then $\\langle u, v\\rangle=\\frac{\\|u+v\\|^{2}-\\|u-v\\|^{2}+\\|u+i v\\|^{2} i-\\|u-i v\\|^{2} i}{4}$ for all $u, v \\in V$."}
+{"name": "Axler|exercise_6_16", "nl_statement": "Suppose $U$ is a subspace of $V$. Prove that $U^{\\perp}=\\{0\\}$ if and only if $U=V$"}
+{"name": "Axler|exercise_7_6", "nl_statement": "Prove that if $T \\in \\mathcal{L}(V)$ is normal, then $\\operatorname{range} T=\\operatorname{range} T^{*}.$"}
+{"name": "Axler|exercise_7_10", "nl_statement": "Suppose $V$ is a complex inner-product space and $T \\in \\mathcal{L}(V)$ is a normal operator such that $T^{9}=T^{8}$. Prove that $T$ is self-adjoint and $T^{2}=T$."}
+{"name": "Axler|exercise_7_14", "nl_statement": "Suppose $T \\in \\mathcal{L}(V)$ is self-adjoint, $\\lambda \\in \\mathbf{F}$, and $\\epsilon>0$. Prove that if there exists $v \\in V$ such that $\\|v\\|=1$ and $\\|T v-\\lambda v\\|<\\epsilon,$ then $T$ has an eigenvalue $\\lambda^{\\prime}$ such that $\\left|\\lambda-\\lambda^{\\prime}\\right|<\\epsilon$."}
+{"name": "Ireland-Rosen|exercise_1_27", "nl_statement": "For all odd $n$ show that $8 \\mid n^{2}-1$."}
+{"name": "Ireland-Rosen|exercise_1_31", "nl_statement": "Show that 2 is divisible by $(1+i)^{2}$ in $\\mathbb{Z}[i]$."}
+{"name": "Ireland-Rosen|exercise_2_21", "nl_statement": "Define $\\wedge(n)=\\log p$ if $n$ is a power of $p$ and zero otherwise. Prove that $\\sum_{A \\mid n} \\mu(n / d) \\log d$ $=\\wedge(n)$."}
+{"name": "Ireland-Rosen|exercise_3_1", "nl_statement": "Show that there are infinitely many primes congruent to $-1$ modulo 6 ."}
+{"name": "Ireland-Rosen|exercise_3_5", "nl_statement": "Show that the equation $7 x^{3}+2=y^{3}$ has no solution in integers."}
+{"name": "Ireland-Rosen|exercise_3_14", "nl_statement": "Let $p$ and $q$ be distinct odd primes such that $p-1$ divides $q-1$. If $(n, p q)=1$, show that $n^{q-1} \\equiv 1(p q)$."}
+{"name": "Ireland-Rosen|exercise_4_5", "nl_statement": "Consider a prime $p$ of the form $4 t+3$. Show that $a$ is a primitive root modulo $p$ iff $-a$ has order $(p-1) / 2$."}
+{"name": "Ireland-Rosen|exercise_4_8", "nl_statement": "Let $p$ be an odd prime. Show that $a$ is a primitive root modulo $p$ iff $a^{(p-1) / q} \\not \\equiv 1(p)$ for all prime divisors $q$ of $p-1$."}
+{"name": "Ireland-Rosen|exercise_5_13", "nl_statement": "Show that any prime divisor of $x^{4}-x^{2}+1$ is congruent to 1 modulo 12 ."}
+{"name": "Ireland-Rosen|exercise_5_37", "nl_statement": "Show that if $a$ is negative then $p \\equiv q(4 a) together with p\\not | a$ imply $(a / p)=(a / q)$."}
+{"name": "Ireland-Rosen|exercise_18_4", "nl_statement": "Show that 1729 is the smallest positive integer expressible as the sum of two different integral cubes in two ways."}
+{"name": "Shakarchi|exercise_1_13a", "nl_statement": "Suppose that $f$ is holomorphic in an open set $\\Omega$. Prove that if $\\text{Re}(f)$ is constant, then $f$ is constant."}
+{"name": "Shakarchi|exercise_1_13c", "nl_statement": "Suppose that $f$ is holomorphic in an open set $\\Omega$. Prove that if $|f|$ is constant, then $f$ is constant."}
+{"name": "Shakarchi|exercise_1_19b", "nl_statement": "Prove that the power series $\\sum zn/n^2$ converges at every point of the unit circle."}
+{"name": "Shakarchi|exercise_1_26", "nl_statement": "Suppose $f$ is continuous in a region $\\Omega$. Prove that any two primitives of $f$ (if they exist) differ by a constant."}
+{"name": "Shakarchi|exercise_2_9", "nl_statement": "Let $\\Omega$ be a bounded open subset of $\\mathbb{C}$, and $\\varphi: \\Omega \\rightarrow \\Omega$ a holomorphic function. Prove that if there exists a point $z_{0} \\in \\Omega$ such that $\\varphi\\left(z_{0}\\right)=z_{0} \\quad \\text { and } \\quad \\varphi^{\\prime}\\left(z_{0}\\right)=1$ then $\\varphi$ is linear."}
+{"name": "Shakarchi|exercise_3_3", "nl_statement": "Show that $ \\int_{-\\infty}^{\\infty} \\frac{\\cos x}{x^2 + a^2} dx = \\pi \\frac{e^{-a}}{a}$ for $a > 0$."}
+{"name": "Shakarchi|exercise_3_9", "nl_statement": "Show that $\\int_0^1 \\log(\\sin \\pi x) dx = - \\log 2$."}
+{"name": "Shakarchi|exercise_3_22", "nl_statement": "Show that there is no holomorphic function $f$ in the unit disc $D$ that extends continuously to $\\partial D$ such that $f(z) = 1/z$ for $z \\in \\partial D$."}
+{"name": "Putnam|exercise_2020_b5", "nl_statement": "For $j \\in\\{1,2,3,4\\}$, let $z_{j}$ be a complex number with $\\left|z_{j}\\right|=1$ and $z_{j} \\neq 1$. Prove that $3-z_{1}-z_{2}-z_{3}-z_{4}+z_{1} z_{2} z_{3} z_{4} \\neq 0 .$"}
+{"name": "Putnam|exercise_2018_b2", "nl_statement": "Let $n$ be a positive integer, and let $f_{n}(z)=n+(n-1) z+$ $(n-2) z^{2}+\\cdots+z^{n-1}$. Prove that $f_{n}$ has no roots in the closed unit disk $\\{z \\in \\mathbb{C}:|z| \\leq 1\\}$."}
+{"name": "Putnam|exercise_2017_b3", "nl_statement": "Suppose that $f(x)=\\sum_{i=0}^{\\infty} c_{i} x^{i}$ is a power series for which each coefficient $c_{i}$ is 0 or 1 . Show that if $f(2 / 3)=3 / 2$, then $f(1 / 2)$ must be irrational."}
+{"name": "Putnam|exercise_2010_a4", "nl_statement": "Prove that for each positive integer $n$, the number $10^{10^{10^n}}+10^{10^n}+10^n-1$ is not prime."}
+{"name": "Putnam|exercise_2000_a2", "nl_statement": "Prove that there exist infinitely many integers $n$ such that $n, n+1, n+2$ are each the sum of the squares of two integers."}
+{"name": "Putnam|exercise_1998_a3", "nl_statement": "Let $f$ be a real function on the real line with continuous third derivative. Prove that there exists a point $a$ such that"}
+{"name": "Pugh|exercise_2_12a", "nl_statement": "Let $(p_n)$ be a sequence and $f:\\mathbb{N}\\to\\mathbb{N}$. The sequence $(q_k)_{k\\in\\mathbb{N}}$ with $q_k=p_{f(k)}$ is called a rearrangement of $(p_n)$. Show that if $f$ is an injection, the limit of a sequence is unaffected by rearrangement."}
+{"name": "Pugh|exercise_2_29", "nl_statement": "Let $\\mathcal{T}$ be the collection of open subsets of a metric space $\\mathrm{M}$, and $\\mathcal{K}$ the collection of closed subsets. Show that there is a bijection from $\\mathcal{T}$ onto $\\mathcal{K}$."}
+{"name": "Pugh|exercise_2_41", "nl_statement": "Let $\\|\\cdot\\|$ be any norm on $\\mathbb{R}^{m}$ and let $B=\\left\\{x \\in \\mathbb{R}^{m}:\\|x\\| \\leq 1\\right\\}$. Prove that $B$ is compact."}
+{"name": "Pugh|exercise_2_57", "nl_statement": "Show that if $S$ is connected, it is not true in general that its interior is connected."}
+{"name": "Pugh|exercise_2_126", "nl_statement": "Suppose that $E$ is an uncountable subset of $\\mathbb{R}$. Prove that there exists a point $p \\in \\mathbb{R}$ at which $E$ condenses."}
+{"name": "Pugh|exercise_3_4", "nl_statement": "Prove that $\\sqrt{n+1}-\\sqrt{n} \\rightarrow 0$ as $n \\rightarrow \\infty$."}
+{"name": "Pugh|exercise_3_63b", "nl_statement": "Prove that $\\sum 1/k(\\log(k))^p$ diverges when $p \\leq 1$."}
+{"name": "Herstein|exercise_2_1_21", "nl_statement": "Show that a group of order 5 must be abelian."}
+{"name": "Herstein|exercise_2_1_27", "nl_statement": "If $G$ is a finite group, prove that there is an integer $m > 0$ such that $a^m = e$ for all $a \\in G$."}
+{"name": "Herstein|exercise_2_2_5", "nl_statement": "Let $G$ be a group in which $(a b)^{3}=a^{3} b^{3}$ and $(a b)^{5}=a^{5} b^{5}$ for all $a, b \\in G$. Show that $G$ is abelian."}
+{"name": "Herstein|exercise_2_3_17", "nl_statement": "If $G$ is a group and $a, x \\in G$, prove that $C\\left(x^{-1} a x\\right)=x^{-1} C(a) x$"}
+{"name": "Herstein|exercise_2_4_36", "nl_statement": "If $a > 1$ is an integer, show that $n \\mid \\varphi(a^n - 1)$, where $\\phi$ is the Euler $\\varphi$-function."}
+{"name": "Herstein|exercise_2_5_30", "nl_statement": "Suppose that $|G| = pm$, where $p \\nmid m$ and $p$ is a prime. If $H$ is a normal subgroup of order $p$ in $G$, prove that $H$ is characteristic."}
+{"name": "Herstein|exercise_2_5_37", "nl_statement": "If $G$ is a nonabelian group of order 6, prove that $G \\simeq S_3$."}
+{"name": "Herstein|exercise_2_5_44", "nl_statement": "Prove that a group of order $p^2$, $p$ a prime, has a normal subgroup of order $p$."}
+{"name": "Herstein|exercise_2_6_15", "nl_statement": "If $G$ is an abelian group and if $G$ has an element of order $m$ and one of order $n$, where $m$ and $n$ are relatively prime, prove that $G$ has an element of order $mn$."}
+{"name": "Herstein|exercise_2_8_12", "nl_statement": "Prove that any two nonabelian groups of order 21 are isomorphic."}
+{"name": "Herstein|exercise_2_9_2", "nl_statement": "If $G_1$ and $G_2$ are cyclic groups of orders $m$ and $n$, respectively, prove that $G_1 \\times G_2$ is cyclic if and only if $m$ and $n$ are relatively prime."}
+{"name": "Herstein|exercise_2_11_6", "nl_statement": "If $P$ is a $p$-Sylow subgroup of $G$ and $P \\triangleleft G$, prove that $P$ is the only $p$-Sylow subgroup of $G$."}
+{"name": "Herstein|exercise_2_11_22", "nl_statement": "Show that any subgroup of order $p^{n-1}$ in a group $G$ of order $p^n$ is normal in $G$."}
+{"name": "Herstein|exercise_4_1_19", "nl_statement": "Show that there is an infinite number of solutions to $x^2 = -1$ in the quaternions."}
+{"name": "Herstein|exercise_4_2_5", "nl_statement": "Let $R$ be a ring in which $x^3 = x$ for every $x \\in R$. Prove that $R$ is commutative."}
+{"name": "Herstein|exercise_4_2_9", "nl_statement": "Let $p$ be an odd prime and let $1 + \\frac{1}{2} + ... + \\frac{1}{p - 1} = \\frac{a}{b}$, where $a, b$ are integers. Show that $p \\mid a$."}
+{"name": "Herstein|exercise_4_3_25", "nl_statement": "Let $R$ be the ring of $2 \\times 2$ matrices over the real numbers; suppose that $I$ is an ideal of $R$. Show that $I = (0)$ or $I = R$."}
+{"name": "Herstein|exercise_4_5_16", "nl_statement": "Let $F = \\mathbb{Z}_p$ be the field of integers $\\mod p$, where $p$ is a prime, and let $q(x) \\in F[x]$ be irreducible of degree $n$. Show that $F[x]/(q(x))$ is a field having at exactly $p^n$ elements."}
+{"name": "Herstein|exercise_4_5_25", "nl_statement": "If $p$ is a prime, show that $q(x) = 1 + x + x^2 + \\cdots x^{p - 1}$ is irreducible in $Q[x]$."}
+{"name": "Herstein|exercise_4_6_3", "nl_statement": "Show that there is an infinite number of integers a such that $f(x) = x^7 + 15x^2 - 30x + a$ is irreducible in $Q[x]$."}
+{"name": "Herstein|exercise_5_2_20", "nl_statement": "Let $V$ be a vector space over an infinite field $F$. Show that $V$ cannot be the set-theoretic union of a finite number of proper subspaces of $V$."}
+{"name": "Herstein|exercise_5_3_10", "nl_statement": "Prove that $\\cos 1^{\\circ}$  is algebraic over $\\mathbb{Q}$."}
+{"name": "Herstein|exercise_5_5_2", "nl_statement": "Prove that $x^3 - 3x - 1$ is irreducible over $\\mathbb{Q}$."}
+{"name": "Artin|exercise_2_2_9", "nl_statement": "Let $H$ be the subgroup generated by two elements $a, b$ of a group $G$. Prove that if $a b=b a$, then $H$ is an abelian group."}
+{"name": "Artin|exercise_2_4_19", "nl_statement": "Prove that if a group contains exactly one element of order 2 , then that element is in the center of the group."}
+{"name": "Artin|exercise_2_11_3", "nl_statement": "Prove that a group of even order contains an element of order $2 .$"}
+{"name": "Artin|exercise_3_5_6", "nl_statement": "Let $V$ be a vector space which is spanned by a countably infinite set. Prove that every linearly independent subset of $V$ is finite or countably infinite."}
+{"name": "Artin|exercise_6_1_14", "nl_statement": "Let $Z$ be the center of a group $G$. Prove that if $G / Z$ is a cyclic group, then $G$ is abelian and hence $G=Z$."}
+{"name": "Artin|exercise_6_4_3", "nl_statement": "Prove that no group of order $p^2 q$, where $p$ and $q$ are prime, is simple."}
+{"name": "Artin|exercise_6_8_1", "nl_statement": "Prove that two elements $a, b$ of a group generate the same subgroup as $b a b^2, b a b^3$."}
+{"name": "Artin|exercise_10_2_4", "nl_statement": "Prove that in the ring $\\mathbb{Z}[x],(2) \\cap(x)=(2 x)$."}
+{"name": "Artin|exercise_10_4_6", "nl_statement": "Let $I, J$ be ideals in a ring $R$. Prove that the residue of any element of $I \\cap J$ in $R / I J$ is nilpotent."}
+{"name": "Artin|exercise_10_7_10", "nl_statement": "Let $R$ be a ring, with $M$ an ideal of $R$. Suppose that every element of $R$ which is not in $M$ is a unit of $R$. Prove that $M$ is a maximal ideal and that moreover it is the only maximal ideal of $R$."}
+{"name": "Artin|exercise_11_4_1b", "nl_statement": "Prove that $x^3 + 6x + 12$ is irreducible in $\\mathbb{Q}$."}
+{"name": "Artin|exercise_11_4_6b", "nl_statement": "Prove that $x^2+1$ is irreducible in $\\mathbb{F}_7$"}
+{"name": "Artin|exercise_11_4_8", "nl_statement": "Let $p$ be a prime integer. Prove that the polynomial $x^n-p$ is irreducible in $\\mathbb{Q}[x]$."}
+{"name": "Artin|exercise_13_4_10", "nl_statement": "Prove that if a prime integer $p$ has the form $2^r+1$, then it actually has the form $2^{2^k}+1$."}
+{"name": "Dummit-Foote|exercise_1_1_3", "nl_statement": "Prove that the addition of residue classes $\\mathbb{Z}/n\\mathbb{Z}$ is associative."}
+{"name": "Dummit-Foote|exercise_1_1_5", "nl_statement": "Prove that for all $n>1$ that $\\mathbb{Z}/n\\mathbb{Z}$ is not a group under multiplication of residue classes."}
+{"name": "Dummit-Foote|exercise_1_1_16", "nl_statement": "Let $x$ be an element of $G$. Prove that $x^2=1$ if and only if $|x|$ is either $1$ or $2$."}
+{"name": "Dummit-Foote|exercise_1_1_18", "nl_statement": "Let $x$ and $y$ be elements of $G$. Prove that $xy=yx$ if and only if $y^{-1}xy=x$ if and only if $x^{-1}y^{-1}xy=1$."}
+{"name": "Dummit-Foote|exercise_1_1_22a", "nl_statement": "If $x$ and $g$ are elements of the group $G$, prove that $|x|=\\left|g^{-1} x g\\right|$."}
+{"name": "Dummit-Foote|exercise_1_1_25", "nl_statement": "Prove that if $x^{2}=1$ for all $x \\in G$ then $G$ is abelian."}
+{"name": "Dummit-Foote|exercise_1_1_34", "nl_statement": "If $x$ is an element of infinite order in $G$, prove that the elements $x^{n}, n \\in \\mathbb{Z}$ are all distinct."}
+{"name": "Dummit-Foote|exercise_1_6_4", "nl_statement": "Prove that the multiplicative groups $\\mathbb{R}-\\{0\\}$ and $\\mathbb{C}-\\{0\\}$ are not isomorphic."}
+{"name": "Dummit-Foote|exercise_1_6_17", "nl_statement": "Let $G$ be any group. Prove that the map from $G$ to itself defined by $g \\mapsto g^{-1}$ is a homomorphism if and only if $G$ is abelian."}
+{"name": "Dummit-Foote|exercise_2_1_5", "nl_statement": "Prove that $G$ cannot have a subgroup $H$ with $|H|=n-1$, where $n=|G|>2$."}
+{"name": "Dummit-Foote|exercise_2_4_4", "nl_statement": "Prove that if $H$ is a subgroup of $G$ then $H$ is generated by the set $H-\\{1\\}$."}
+{"name": "Dummit-Foote|exercise_2_4_16b", "nl_statement": "Show that the subgroup of all rotations in a dihedral group is a maximal subgroup."}
+{"name": "Dummit-Foote|exercise_3_1_3a", "nl_statement": "Let $A$ be an abelian group and let $B$ be a subgroup of $A$. Prove that $A / B$ is abelian."}
+{"name": "Dummit-Foote|exercise_3_1_22b", "nl_statement": "Prove that the intersection of an arbitrary nonempty collection of normal subgroups of a group is a normal subgroup (do not assume the collection is countable)."}
+{"name": "Dummit-Foote|exercise_3_2_11", "nl_statement": "Let $H \\leq K \\leq G$. Prove that $|G: H|=|G: K| \\cdot|K: H|$ (do not assume $G$ is finite)."}
+{"name": "Dummit-Foote|exercise_3_2_21a", "nl_statement": "Prove that $\\mathbb{Q}$ has no proper subgroups of finite index."}
+{"name": "Dummit-Foote|exercise_3_4_1", "nl_statement": "Prove that if $G$ is an abelian simple group then $G \\cong Z_{p}$ for some prime $p$ (do not assume $G$ is a finite group)."}
+{"name": "Dummit-Foote|exercise_3_4_5a", "nl_statement": "Prove that subgroups of a solvable group are solvable."}
+{"name": "Dummit-Foote|exercise_3_4_11", "nl_statement": "Prove that if $H$ is a nontrivial normal subgroup of the solvable group $G$ then there is a nontrivial subgroup $A$ of $H$ with $A \\unlhd G$ and $A$ abelian."}
+{"name": "Dummit-Foote|exercise_4_3_26", "nl_statement": "Let $G$ be a transitive permutation group on the finite set $A$ with $|A|>1$. Show that there is some $\\sigma \\in G$ such that $\\sigma(a) \\neq a$ for all $a \\in A$."}
+{"name": "Dummit-Foote|exercise_4_2_14", "nl_statement": "Let $G$ be a finite group of composite order $n$ with the property that $G$ has a subgroup of order $k$ for each positive integer $k$ dividing $n$. Prove that $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_4_6a", "nl_statement": "Prove that characteristic subgroups are normal."}
+{"name": "Dummit-Foote|exercise_4_4_7", "nl_statement": "If $H$ is the unique subgroup of a given order in a group $G$ prove $H$ is characteristic in $G$."}
+{"name": "Dummit-Foote|exercise_4_5_1a", "nl_statement": "Prove that if $P \\in \\operatorname{Syl}_{p}(G)$ and $H$ is a subgroup of $G$ containing $P$ then $P \\in \\operatorname{Syl}_{p}(H)$."}
+{"name": "Dummit-Foote|exercise_4_5_14", "nl_statement": "Prove that a group of order 312 has a normal Sylow $p$-subgroup for some prime $p$ dividing its order."}
+{"name": "Dummit-Foote|exercise_4_5_16", "nl_statement": "Let $|G|=p q r$, where $p, q$ and $r$ are primes with $p<q<r$. Prove that $G$ has a normal Sylow subgroup for either $p, q$ or $r$."}
+{"name": "Dummit-Foote|exercise_4_5_18", "nl_statement": "Prove that a group of order 200 has a normal Sylow 5-subgroup."}
+{"name": "Dummit-Foote|exercise_4_5_20", "nl_statement": "Prove that if $|G|=1365$ then $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_5_22", "nl_statement": "Prove that if $|G|=132$ then $G$ is not simple."}
+{"name": "Dummit-Foote|exercise_4_5_28", "nl_statement": "Let $G$ be a group of order 105. Prove that if a Sylow 3-subgroup of $G$ is normal then $G$ is abelian."}
+{"name": "Dummit-Foote|exercise_5_4_2", "nl_statement": "Prove that a subgroup $H$ of $G$ is normal if and only if $[G, H] \\leq H$."}
+{"name": "Dummit-Foote|exercise_7_1_11", "nl_statement": "Prove that if $R$ is an integral domain and $x^{2}=1$ for some $x \\in R$ then $x=\\pm 1$."}
+{"name": "Dummit-Foote|exercise_7_1_15", "nl_statement": "A ring $R$ is called a Boolean ring if $a^{2}=a$ for all $a \\in R$. Prove that every Boolean ring is commutative."}
+{"name": "Dummit-Foote|exercise_7_2_12", "nl_statement": "Let $G=\\left\\{g_{1}, \\ldots, g_{n}\\right\\}$ be a finite group. Prove that the element $N=g_{1}+g_{2}+\\ldots+g_{n}$ is in the center of the group ring $R G$."}
+{"name": "Dummit-Foote|exercise_7_3_37", "nl_statement": "An ideal $N$ is called nilpotent if $N^{n}$ is the zero ideal for some $n \\geq 1$. Prove that the ideal $p \\mathbb{Z} / p^{m} \\mathbb{Z}$ is a nilpotent ideal in the ring $\\mathbb{Z} / p^{m} \\mathbb{Z}$."}
+{"name": "Dummit-Foote|exercise_8_1_12", "nl_statement": "Let $N$ be a positive integer. Let $M$ be an integer relatively prime to $N$ and let $d$ be an integer relatively prime to $\\varphi(N)$, where $\\varphi$ denotes Euler's $\\varphi$-function. Prove that if $M_{1} \\equiv M^{d} \\pmod N$ then $M \\equiv M_{1}^{d^{\\prime}} \\pmod N$ where $d^{\\prime}$ is the inverse of $d \\bmod \\varphi(N)$: $d d^{\\prime} \\equiv 1 \\pmod {\\varphi(N)}$."}
+{"name": "Dummit-Foote|exercise_8_3_4", "nl_statement": "Prove that if an integer is the sum of two rational squares, then it is the sum of two integer squares."}
+{"name": "Dummit-Foote|exercise_8_3_6a", "nl_statement": "Prove that the quotient ring $\\mathbb{Z}[i] /(1+i)$ is a field of order 2."}
+{"name": "Dummit-Foote|exercise_9_1_6", "nl_statement": "Prove that $(x, y)$ is not a principal ideal in $\\mathbb{Q}[x, y]$."}
+{"name": "Dummit-Foote|exercise_9_3_2", "nl_statement": "Prove that if $f(x)$ and $g(x)$ are polynomials with rational coefficients whose product $f(x) g(x)$ has integer coefficients, then the product of any coefficient of $g(x)$ with any coefficient of $f(x)$ is an integer."}
+{"name": "Dummit-Foote|exercise_9_4_2b", "nl_statement": "Prove that $x^6+30x^5-15x^3 + 6x-120$ is irreducible in $\\mathbb{Z}[x]$."}
+{"name": "Dummit-Foote|exercise_9_4_2d", "nl_statement": "Prove that $\\frac{(x+2)^p-2^p}{x}$, where $p$ is an odd prime, is irreducible in $\\mathbb{Z}[x]$."}
+{"name": "Dummit-Foote|exercise_9_4_11", "nl_statement": "Prove that $x^2+y^2-1$ is irreducible in $\\mathbb{Q}[x,y]$."}
