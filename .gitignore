@@ -50,8 +50,6 @@ Thumbs.db
 .agent_logs/
 translation_agent.log
 
-# Results
-results/
 
 # API keys and secrets
 .env.local

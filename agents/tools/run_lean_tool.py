@@ -17,7 +17,7 @@ class LeanReplTool(BaseTool):
         "required": ["path"]
     }
 
-    REPL_DIR = "/Users/kezhang/Desktop/projects/repl"  # confirm this
+    REPL_DIR = "/Users/kezhang/Desktop/projects/repl"  # adjust if needed
 
     def run(self, path: str, **kwargs) -> Dict[str, Any]:
         try:
@@ -25,16 +25,14 @@ class LeanReplTool(BaseTool):
         except ValueError as e:
             return {"ok": False, "error": str(e)}
 
-        command = ["lake", "exe", "repl"]
+        payload = json.dumps({
+            "path": str(Path(full_path).resolve()),
+            "allTactics": True
+        }) + "\n\n"
 
         try:
-            payload = json.dumps({
-                "path": str(Path(full_path).resolve()),
-                "allTactics": True
-            })
-
-            process = subprocess.run(
-                command,
+            result = subprocess.run(
+                ["lake", "exe", "repl"],
                 input=payload,
                 capture_output=True,
                 text=True,
@@ -43,38 +41,34 @@ class LeanReplTool(BaseTool):
                 check=False
             )
 
-            stdout = process.stdout.strip()
-            stderr = process.stderr.strip()
+            stdout, stderr = result.stdout.strip(), result.stderr.strip()
 
-            # Only fail on explicit severity:"error" in the parsed JSON
-            has_severity_error = False
-            if stdout:
-                try:
-                    obj = json.loads(stdout)
-                    if isinstance(obj, dict):
-                        for t in obj.get("tactics", []):
-                            for m in t.get("messages", []):
-                                if str(m.get("severity", "")).lower() == "error":
-                                    has_severity_error = True
-                                    break
-                            if has_severity_error:
-                                break
-                except json.JSONDecodeError:
-                    # If we can't parse, treat as no severity error
-                    pass
+            repl_pass = 1
+            try:
+                obj = json.loads(stdout)
+                all_messages = []
 
-            repl_pass = 0 if has_severity_error else 1
+                # 👇 Collect from both "messages" and tactics[*].messages
+                if "messages" in obj:
+                    all_messages.extend(obj["messages"])
+                for tactic in obj.get("tactics", []):
+                    all_messages.extend(tactic.get("messages", []))
+
+                if any(msg.get("severity", "").lower() == "error" for msg in all_messages):
+                    repl_pass = 0
+            except json.JSONDecodeError:
+                pass  # Fail-safe: assume it's valid if no parsing errors
 
             return {
                 "ok": True,
                 "repl_pass": repl_pass,
-                "repl_output": stdout if stdout else "{}",
+                "repl_output": stdout or "{}",
                 "stdout": stdout,
                 "stderr": stderr
             }
 
         except subprocess.TimeoutExpired:
-            return {"ok": False, "error": "Lean process timed out."}
+            return {"ok": False, "error": "Lean REPL timed out."}
         except Exception as e:
-            logging.error(f"LeanReplTool failed: {e}")
+            logging.exception("LeanReplTool error")
             return {"ok": False, "error": str(e)}
