@@ -36,7 +36,7 @@ class LeanReplTool(BaseTool):
                 input=payload,
                 capture_output=True,
                 text=True,
-                timeout=60,
+                timeout=80,
                 cwd=self.REPL_DIR,
                 check=False
             )

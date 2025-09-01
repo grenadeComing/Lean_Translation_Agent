@@ -7,7 +7,8 @@ from .base_tool import BaseTool
 
 class LeanTranslationTool(BaseTool):
     name = "lean4_translation"
-    description = "Translate a natural language statement into Lean4 code or refine existing code based on a conversation history."
+    description = "Translate a natural language statement into Lean4 code or " \
+        "refine existing code based on a conversation history, remeber to tell it end with the Lean4 code statment by := by sorry."
 
     # Fixed schema structure
     parameters = {
@@ -46,7 +47,7 @@ class LeanTranslationTool(BaseTool):
     }
 
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
-    DEFAULT_API_URL = "https://marble-vietnam-expand-extras.trycloudflare.com/v1/chat/completions"
+    DEFAULT_API_URL = "https://davis-spotlight-stadium-insider.trycloudflare.com/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()

@@ -1,12 +1,17 @@
 import Mathlib
-open Set Filter Topology
 
-/-- If $\mathcal{T}_\alpha$ is a family of topologies on $X$, show that $\bigcap \mathcal{T}_\alpha$ is a topology on $X$. -/
-lemma isTopologicalSpace_sInf {X : Type*} (𝒯 : Set (TopologicalSpace X)) :
-  TopologicalSpace X :=
-  sInf 𝒯
+variable {X : Type _}
 
-/-- The intersection of a family of topologies is a topology. -/
-theorem intersection_of_topologies_is_topology {X : Type*} (𝒯 : Set (TopologicalSpace X)) :
-  TopologicalSpace X :=
-  sInf 𝒯
+/-- A set is open in the intersection topology iff it is open in every topology in `T`. -/
+def inter_isopen (T : Set (TopologicalSpace X)) (s : Set X) : Prop :=
+  ∀ τ ∈ T, @IsOpen X τ s
+
+/-- Given a family `T` of topologies on `X`, the intersection of `T` is a topology on `X`.
+    We define the candidate `IsOpen'` below; the proof that it satisfies the topology
+    axioms is omitted (use `sorry`). -/
+def intersection_of_topologies (T : Set (TopologicalSpace X)) : TopologicalSpace X := by
+  -- The intersection topology: opens are those sets open in every `τ ∈ T`.
+  let IsOpen' : Set X → Prop := fun s => ∀ τ ∈ T, @IsOpen X τ s
+  -- One can build the topology using `TopologicalSpace.mk IsOpen' ...`.
+  -- Proof of the three topology axioms for `IsOpen'` is omitted.
+  sorry
