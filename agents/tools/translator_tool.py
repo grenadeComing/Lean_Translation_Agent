@@ -47,7 +47,7 @@ class LeanTranslationTool(BaseTool):
     }
 
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
-    DEFAULT_API_URL = "https://davis-spotlight-stadium-insider.trycloudflare.com/v1/chat/completions"
+    DEFAULT_API_URL = "https://changed-rm-limitation-pairs.trycloudflare.com/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()

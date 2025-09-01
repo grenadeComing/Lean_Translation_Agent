@@ -52,11 +52,8 @@ def _tool_spec(tool_obj: Any) -> Dict[str, Any]:
         }
 
 def _repl_passed(result_str: str) -> bool:
-    """Check if lean4_repl_runner indicates success (flag=1)"""
-    # Look for success indicators in the REPL output
-    if "flag=1" in result_str or "flag: 1" in result_str:
-        return True
-    if "success" in result_str.lower() and "error" not in result_str.lower():
+    """Check if lean4_repl_runner indicates success"""
+    if "'repl_pass': 1" in result_str or '"repl_pass": 1' in result_str:
         return True
     return False
 
@@ -73,6 +70,7 @@ def call_openai_lean_agent(
     Orchestrates the Lean agent. Stops immediately when lean4_repl_runner reports a pass.
     Returns status, step count, log path, and history for auditing.
     """
+    #import pdb; pdb.set_trace()
     os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, f"log_{int(time.time())}_{Path(file_path).stem}.jsonl")
 
