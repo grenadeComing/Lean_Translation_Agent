@@ -136,8 +136,8 @@ def call_openai_lean_agent(
                 tools_requested=[tc.function.name for tc in msg.tool_calls or []])
         except Exception as e:
             log("api_error", step=step, error=str(e))
-            return {"status": "api_error", "step": step, "log_path": log_path}
-        
+            return {"status": "agent_API_error", "step": step, "log_path": log_path}
+
         # Check explicit success
         if msg.content and '"status": "success"' in msg.content:
             log("success", step=step, type="explicit")

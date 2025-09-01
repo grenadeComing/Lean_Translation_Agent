@@ -1,10 +1,7 @@
 # main.py
-
-import os
 import json
 import logging
 import csv
-import functools
 from pathlib import Path
 from typing import List, Dict, Any
 import numpy as np
@@ -32,17 +29,53 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
         )
         
         logging.info(f"Finished processing '{name}' with status: {result['status']} in {result['step']} steps.")
-        
+
+        lean4_code = ""
+
+        try:
+            if output_path.exists():
+                with open(output_path, "r", encoding="utf-8") as f:
+                    lean4_code = f.read()
+
+                # successful processing
+                return {
+                    "name": name,
+                    "status": result["status"],
+                    "steps": result["step"],
+                    "nl_statement": nl,
+                    "lean4_code": lean4_code
+                }
+
+            else:
+                logging.warning(f"Output file {output_path} does not exist.")
+                # output file not found
+                return {
+                    "name": name,
+                    "status": "N/A",
+                    "steps": 0,
+                    "nl_statement": nl,
+                    "lean4_code": "Lean4 code file not found"
+                }
+        except:
+            logging.error(f"Error reading output file {output_path}.")
+            # output file read error
+            return {
+                "name": name,
+                "status": "NA",
+                "steps": "NA",
+                "nl_statement": nl,
+                "lean4_code": "Error reading Lean4 code"
+            }
+
+    # agent error exception handling
+    except Exception as e:
+        logging.error(f"Agent loading error when processing {name}: {e}")
         return {
             "name": name,
-            "status": result["status"],
-            "steps": result["step"],
-            "log_path": result["log_path"]
-        }
-    except Exception as e:
-        logging.error(f"A critical error occurred while processing {name}: {e}")
-        return {
-            "name": name, "status": "crashed", "steps": 0, "log_path": "N/A"
+            "status": "agent_crashed",
+            "steps": 0,
+            "nl_statement": nl,
+            "lean4_code": ""
         }
 
 def setup_logging() -> None:
@@ -96,11 +129,11 @@ def print_and_save_stats(stats: List[Dict[str, Any]], output_dir: Path):
     stats_file = output_dir / "pass_rate_stats.csv"
     with open(stats_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["name", "status", "passed", "steps"])
+        writer.writerow(["name", "status", "passed", "steps","nl_statement","lean4_code"])
         for s in stats:
             passed = (s["status"] == "success")
-            writer.writerow([s["name"], s["status"], passed, s["steps"]])
-            
+            writer.writerow([s["name"], s["status"], passed, s["steps"], s["nl_statement"], s["lean4_code"]])
+
     logging.info(f"Simple pass/fail statistics saved to {stats_file}")
 
     total_runs = len(stats)
@@ -131,8 +164,8 @@ def main() -> None:
     """
     PROJECT_ROOT = Path(__file__).resolve().parent
     LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
-    INPUT_FILE = PROJECT_ROOT / "dataset/input/proofnet_sampled.jsonl"
-    #INPUT_FILE = PROJECT_ROOT / "dataset/input/test.jsonl"
+    #INPUT_FILE = PROJECT_ROOT / "dataset/input/proofnet_sampled.jsonl"
+    INPUT_FILE = PROJECT_ROOT / "dataset/input/test.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
 
     LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
