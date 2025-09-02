@@ -1,11 +1,11 @@
 import Mathlib
 
-variable {K : Type*} [Field K]
-variable {V : Type*} [AddCommGroup V] [Module K V]
-variable (T : V →ₗ[K] V)
+/-
+Suppose T ∈ L(V). Prove that if U1, …, Um are subspaces of V invariant under T,
+then U1 + … + Um is invariant under T.
+-/
 
-/-- If a finite family of submodules is invariant under a linear map T,
-then the span (sum) of the family is invariant under T. -/
-theorem Axler_exercise_5_1 {m : Nat} (Us : Fin m → Submodule K V)
-  (h : ∀ i (u : V), u ∈ Us i → T u ∈ Us i) :
-  ∀ x, x ∈ Submodule.span K (⋃ i, (Us i : Set V)) → T x ∈ Submodule.span K (⋃ i, (Us i : Set V)) := by sorry
+theorem Axler_exercise_5_1 {K V : Type*} [Field K] [AddCommMonoid V] [Module K V]
+  {m : Nat} (T : V →ₗ[K] V) (U : Fin m → Submodule K V)
+  (h : ∀ i, Submodule.map T (U i) ≤ U i) :
+  Submodule.map T (Finset.univ.sup U) ≤ Finset.univ.sup U := by sorry

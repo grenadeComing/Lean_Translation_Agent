@@ -1,5 +1,10 @@
 import Mathlib
 
-variable {M : Type _} [TopologicalSpace M] (U : Set M)
+/-- Exercise (Pugh 2.26)
 
-theorem Pugh_exercise_2_26 : IsOpen U ↔ ∀ x, x ∈ U → ¬ (x ∈ closure (Uᶜ) \ Uᶜ) := by sorry
+A set U in a topological space X is open iff none of its points are limits of its complement.
+Formally: IsOpen U ↔ ∀ x ∈ U, x ∉ closure (Uᶜ).
+-/
+theorem Pugh_exercise_2_26 {X : Type _} [TopologicalSpace X] (U : Set X) :
+  IsOpen U ↔ ∀ x ∈ U, x ∉ closure (Uᶜ) := by
+  sorry

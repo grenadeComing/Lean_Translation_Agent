@@ -1,7 +1,7 @@
 import Mathlib
 
-/-- Rudin exercise: Suppose g : ℝ → ℝ is differentiable with bounded derivative: |g'| ≤ M.
-    Show there exists δ > 0 such that for all ε with |ε| ≤ δ the map f(x) = x + ε g(x) is injective. -/
-theorem Rudin_exercise_5_3 (g : ℝ → ℝ) (hg : Differentiable ℝ g) (M : ℝ) (hM : 0 ≤ M)
-  (hbound : ∀ x, |deriv g x| ≤ M) :
-  ∃ δ, 0 < δ ∧ ∀ ε, |ε| ≤ δ → Function.Injective fun x => x + ε * g x := by sorry
+/-- Suppose g : ℝ → ℝ is differentiable with bounded derivative: there is M with
+    |deriv g x| ≤ M for all x. Then there exists ε0 > 0 such that for all ε with
+    |ε| < ε0 the map f(x) = x + ε * g(x) is injective. -/
+theorem rudin_exercise_5_3 (g : ℝ → ℝ) (hg : Differentiable ℝ g) (M : ℝ) (hM : ∀ x, |deriv g x| ≤ M) :
+  ∃ ε0 > 0, ∀ ε, |ε| < ε0 → Function.Injective (fun x => x + ε * g x) := by sorry

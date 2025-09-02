@@ -165,7 +165,7 @@ def main() -> None:
     PROJECT_ROOT = Path(__file__).resolve().parent
     LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
     #INPUT_FILE = PROJECT_ROOT / "dataset/input/proofnet_sampled.jsonl"
-    INPUT_FILE = PROJECT_ROOT / "dataset/input/test_data_one_third.jsonl"
+    INPUT_FILE = PROJECT_ROOT / "dataset/input/filtered.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
 
     LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)

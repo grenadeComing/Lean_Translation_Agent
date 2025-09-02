@@ -62,7 +62,7 @@ def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
     model: str = "gpt-5-mini",   # manager model
-    max_steps: int = 6,
+    max_steps: int = 24,
     timeout_sec: float = 180.0,
     log_dir: str = "agent_logs",
 ) -> Dict[str, Any]:

@@ -1,8 +1,8 @@
 import Mathlib
-
 open Finset
 
-/-- Exercise 4.11 (Ireland & Rosen).
-For a prime p and k : ℕ, the sum 1^k + 2^k + ... + (p-1)^k in Z/pZ is 0 if (p-1) ∤ k and -1 if (p-1) ∣ k. -/
-theorem ireland_rosen_exercise_4_11 (p k : ℕ) (hp : p.Prime) :
-  (∑ i in (Finset.range p).erase 0, (i : ZMod p) ^ k) = if (p - 1) ∣ k then (-1 : ZMod p) else 0 := by sorry
+/-- Exercise: For a prime p and k : ℕ,
+    ∑_{a=1}^{p-1} a^k ≡ 0 (mod p) if (p-1) ∤ k, and ≡ -1 (mod p) if (p-1) ∣ k. -/
+theorem Ireland_Rosen_exercise_4_11 (p k : ℕ) (hp : p.Prime) :
+  Finset.sum (Finset.range (p - 1)) (fun a => (↑(a+1) : ZMod p) ^ k) = if (p - 1) ∣ k then (-1 : ZMod p) else 0 := by
+  sorry
