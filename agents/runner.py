@@ -62,7 +62,7 @@ def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
     model: str = "gpt-5-mini",   # manager model
-    max_steps: int = 24,
+    max_steps: int = 6,
     timeout_sec: float = 180.0,
     log_dir: str = "agent_logs",
 ) -> Dict[str, Any]:
@@ -70,9 +70,8 @@ def call_openai_lean_agent(
     Orchestrates the Lean agent. Stops immediately when lean4_repl_runner reports a pass.
     Returns status, step count, log path, and history for auditing.
     """
-    #import pdb; pdb.set_trace()
     os.makedirs(log_dir, exist_ok=True)
-    log_path = os.path.join(log_dir, f"log_{int(time.time())}_{Path(file_path).stem}.jsonl")
+    log_path = os.path.join(log_dir, f"{Path(file_path).stem}.jsonl")
 
     def log(action, **kwargs):
         event = {"action": action, **kwargs}
@@ -130,12 +129,29 @@ def call_openai_lean_agent(
                 messages=messages, timeout=timeout_sec
             )
             msg = response.choices[0].message
-            messages.append(msg)
-            log("model_call", step=step, has_tools=bool(msg.tool_calls), 
+
+            # append the message accordingly
+            messages.append({
+                "role": "assistant",
+                "content": msg.content or "",
+                "tool_calls": [
+                    {
+                        "id": msg.tool_calls[0].id,
+                        "type": "function",
+                        "function": {
+                            "name": msg.tool_calls[0].function.name,
+                            "arguments": msg.tool_calls[0].function.arguments
+                        }
+                    }
+                ] if msg.tool_calls else None
+            })
+
+            log("model_call", step=step, has_tools=bool(msg.tool_calls),
                 content=msg.content[:200] if msg.content else None,
                 tools_requested=[tc.function.name for tc in msg.tool_calls or []])
+            
         except Exception as e:
-            log("api_error", step=step, error=str(e))
+            log("agent_API_error", step=step, error=str(e))
             return {"status": "agent_API_error", "step": step, "log_path": log_path}
 
         # Check explicit success
@@ -143,25 +159,27 @@ def call_openai_lean_agent(
             log("success", step=step, type="explicit")
             return {"status": "success", "step": step, "log_path": log_path}
         
-        # Run tools
-        for tc in msg.tool_calls or []:
+        if msg.tool_calls:
+            tc = msg.tool_calls[0]   # Only use the first tool call
             try:
-                args = json.loads(tc.function.arguments)
-                result = str(TOOLS[tc.function.name].run(**args))[:50000]
-                log("tool_run", step=step, tool=tc.function.name, ok=True, 
-                    args=args, result=result[:500])
+                args = json.loads(tc.function.arguments or "{}")
+                result_obj = TOOLS[tc.function.name].run(**args)
+                result_str = (result_obj if isinstance(result_obj, str)
+                            else json.dumps(result_obj, ensure_ascii=False))
+                log("tool_run", step=step, tool=tc.function.name, ok=True,
+                    args=args, result=result_str[:500])
             except Exception as e:
-                result = f"ERROR: {e}"
-                log("tool_run", step=step, tool=tc.function.name, ok=False, 
-                    args=tc.function.arguments, result=result)
-            
-            messages.append({"role": "tool", "tool_call_id": tc.id, "content": result})
-            
+                result_str = f"ERROR: {e}"
+                log("tool_run", step=step, tool=tc.function.name, ok=False,
+                    args=tc.function.arguments, result=result_str)
+
+            messages.append({"role": "tool", "tool_call_id": tc.id, "content": result_str})
+
             # Auto-success on REPL pass
-            if tc.function.name == "lean4_repl_runner" and _repl_passed(result):
-                messages.append({"role": "assistant", "content": '{"status": "success"}'})
+            if tc.function.name == "lean4_repl_runner" and _repl_passed(result_str):
                 log("success", step=step, type="repl_pass")
                 return {"status": "success", "step": step, "log_path": log_path}
+
     
     log("max_steps_reached", steps=max_steps)
     return {"status": "max_steps_reached", "step": max_steps, "log_path": log_path}

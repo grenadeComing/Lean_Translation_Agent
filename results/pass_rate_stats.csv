@@ -1,9 +1,918 @@
 name,status,passed,steps,nl_statement,lean4_code
-Rudin_exercise_4_1a,success,True,9,Suppose $f$ is a real function defined on $\mathbb{R}$ which satisfies $\lim_{h \rightarrow 0} f(x + h) - f(x - h) = 0$ for every $x \in \mathbb{R}$. Show that $f$ does not need to be continuous.,"import Mathlib
+Rudin_exercise_1_1a,success,True,5,"If $r$ is rational $(r \neq 0)$ and $x$ is irrational, prove that $r+x$ is irrational.","import Mathlib
 
-theorem Rudin_exercise_4_1a :
-  ∃ f : ℝ → ℝ,
-    (∀ x : ℝ, ∀ ε : ℝ, ε > 0 → ∃ δ : ℝ, δ > 0 ∧ ∀ h : ℝ, |h| < δ → |f (x + h) - f (x - h)| < ε)
-    ∧ ¬ (∀ x : ℝ, ∀ ε : ℝ, ε > 0 → ∃ δ : ℝ, δ > 0 ∧ ∀ y : ℝ, |y - x| < δ → |f y - f x| < ε) := by
-  -- Example: f(x) = 1 if x = 0, and 0 otherwise. Proof omitted.
-  sorry"
+/-- A real number is rational if it equals p / q for integers p,q with q ≠ 0. -/
+def is_rational (x : ℝ) : Prop := ∃ p q : Int, q ≠ 0 ∧ x = (p : ℝ) / (q : ℝ)
+
+/-- Irrational is the negation of is_rational. -/
+def is_irrational (x : ℝ) : Prop := ¬ is_rational x
+
+/-- Rudin exercise 1.1(a): If r is rational (r ≠ 0) and x is irrational, then r + x is irrational. -/
+theorem Rudin_exercise_1_1a {r x : ℝ} (hr : is_rational r) (hrnz : r ≠ 0) (hx : is_irrational x) : is_irrational (r + x) := by
+  sorry
+"
+Rudin_exercise_4_21a,success,True,4,"Suppose $K$ and $F$ are disjoint sets in a metric space $X, K$ is compact, $F$ is closed. Prove that there exists $\delta>0$ such that $d(p, q)>\delta$ if $p \in K, q \in F$.","import Mathlib
+
+/-- Suppose K and F are disjoint sets in a metric space X, K is compact, F is closed.
+    Then there exists δ > 0 such that d(p, q) ≥ δ whenever p ∈ K and q ∈ F. -/
+theorem Rudin_exercise_4_21a {X : Type*} [MetricSpace X] {K F : Set X}
+  (hK : IsCompact K) (hF : IsClosed F) (hdis : Disjoint K F) :
+  ∃ δ > 0, ∀ p ∈ K, ∀ q ∈ F, δ ≤ dist p q := by sorry
+"
+Rudin_exercise_3_8,success,True,4,"If $\Sigma a_{n}$ converges, and if $\left\{b_{n}\right\}$ is monotonic and bounded, prove that $\Sigma a_{n} b_{n}$ converges.","import Mathlib
+
+/-- Abel's test: If Σ a_n converges, and (b_n) is monotone and bounded,
+then Σ a_n * b_n converges. -/
+theorem Rudin_exercise_3_8 (a b : ℕ → ℝ) (ha : Summable a)
+  (hb_mono : Monotone b) (hb_bdd : ∃ C : ℝ, 0 ≤ C ∧ ∀ n, |b n| ≤ C) :
+  Summable fun n => a n * b n := by sorry
+"
+Shakarchi_exercise_3_3,success,True,4,Show that $ \int_{-\infty}^{\infty} \frac{\cos x}{x^2 + a^2} dx = \pi \frac{e^{-a}}{a}$ for $a > 0$.,"import Mathlib
+
+open MeasureTheory
+
+theorem Shakarchi_exercise_3_3 (a : ℝ) (ha : 0 < a) :
+  ∫ x : ℝ, Real.cos x / (x^2 + a^2) = π * Real.exp (-a) / a := by sorry
+"
+Pugh_exercise_2_26,success,True,5,Prove that a set $U \subset M$ is open if and only if none of its points are limits of its complement.,"import Mathlib
+
+variable {M : Type _} [TopologicalSpace M] (U : Set M)
+
+theorem Pugh_exercise_2_26 : IsOpen U ↔ ∀ x, x ∈ U → ¬ (x ∈ closure (Uᶜ) \ Uᶜ) := by sorry
+"
+Rudin_exercise_3_21,max_steps_reached,False,6,"If $\left\{E_{n}\right\}$ is a sequence of closed nonempty and bounded sets in a complete metric space $X$, if $E_{n} \supset E_{n+1}$, and if $\lim _{n \rightarrow \infty} \operatorname{diam} E_{n}=0,$ then $\bigcap_{1}^{\infty} E_{n}$ consists of exactly one point.","import Mathlib
+
+variable {α : Type*} [MetricSpace α] [CompleteSpace α]
+
+open Set Filter
+
+/-- If {E_n} is a sequence of closed nonempty and bounded sets in a complete metric space X,
+    if E_n ⊇ E_{n+1}, and if lim_{n→∞} diam E_n = 0, then ⋂_{n=1}^∞ E_n consists of exactly one point. -/
+theorem Rudin_exercise_3_21 (E : ℕ → Set α)
+  (h_closed : ∀ n, IsClosed (E n))
+  (h_nonempty : ∀ n, (E n).Nonempty)
+  (h_bounded : ∀ n, Bounded (E n))
+  (h_mono : ∀ n, E (n + 1) ⊆ E n)
+  (h_diam : ∀ ε > 0, ∃ N, ∀ n ≥ N, ∀ x y, x ∈ E n → y ∈ E n → dist x y < ε) :
+  ∃! z, z ∈ ⋂ n, E n := by sorry
+"
+Rudin_exercise_1_19,success,True,6,"Suppose $a, b \in R^k$. Find $c \in R^k$ and $r > 0$ such that $|x-a|=2|x-b|$ if and only if $| x - c | = r$. Prove that $3c = 4b - a$ and $3r = 2 |b - a|$.","import Mathlib
+
+/-- Rudin Exercise 1.19 (translation).
+
+Suppose a, b ∈ ℝ^k. Find c ∈ ℝ^k and r > 0 such that
+  ‖x - a‖ = 2 ‖x - b‖  ↔  ‖x - c‖ = r
+for all x. Prove that 3c = 4b - a and 3r = 2 ‖b - a‖.
+
+This file contains only the statement (no proof): the theorem ends with `:= by sorry`.
+-/
+
+theorem Rudin_exercise_1_19 (k : ℕ) (a b : Fin k → ℝ) :
+  ∃ (c : Fin k → ℝ) (r : ℝ), 0 < r ∧ (∀ x : Fin k → ℝ, ‖x - a‖ = 2 * ‖x - b‖ ↔ ‖x - c‖ = r)
+    ∧ ((3 : ℝ) • c = (4 : ℝ) • b - a) ∧ (3 * r = 2 * ‖b - a‖) := by sorry
+"
+Rudin_exercise_1_8,max_steps_reached,False,6,Prove that no order can be defined in the complex field that turns it into an ordered field.,"import Mathlib
+
+/- Theorem: There is no order on the complex numbers that makes C into a linear ordered field.
+   We state this in Lean4/Mathlib style. We only provide the statement; the proof is omitted (""by sorry""). -/
+
+open Complex
+
+theorem no_order_makes_Complex_linear_ordered_field :
+  ¬ ∃ (r : Comparable ?), True := by sorry
+"
+Rudin_exercise_2_27b,max_steps_reached,False,6,"Suppose $E\subset\mathbb{R}^k$ is uncountable, and let $P$ be the set of condensation points of $E$. Prove that at most countably many points of $E$ are not in $P$.","import Mathlib
+
+open Set Metric
+
+/-- Rudin exercise 2.27(b): Suppose E ⊆ ℝ^k is uncountable, and let P be the set of
+condensation points of E (every neighborhood of a condensation point meets E in an
+uncountable set). Prove that at most countably many points of E are not in P. -/
+theorem Rudin_exercise_2_27b {k : ℕ} (E : Set (Fin k → ℝ)) (hE : ¬ E.Countable) :
+  let P := { x : Fin k → ℝ | ∀ r > 0, ¬ ((Metric.ball x r ∩ E).Countable) } in
+  (E \ P).Countable := by sorry
+"
+Rudin_exercise_1_18a,success,True,3,"If $k \geq 2$ and $\mathbf{x} \in R^{k}$, prove that there exists $\mathbf{y} \in R^{k}$ such that $\mathbf{y} \neq 0$ but $\mathbf{x} \cdot \mathbf{y}=0$","import Mathlib
+
+open Finset
+
+theorem Rudin_exercise_1_18a {k : ℕ} (hk : 2 ≤ k) (x : Fin k → ℝ) :
+  ∃ y : Fin k → ℝ, y ≠ 0 ∧ Finset.sum (Finset.univ : Finset (Fin k)) (fun i => x i * y i) = 0 := by sorry
+"
+Rudin_exercise_5_3,success,True,3,"Suppose $g$ is a real function on $R^{1}$, with bounded derivative (say $\left|g^{\prime}\right| \leq M$ ). Fix $\varepsilon>0$, and define $f(x)=x+\varepsilon g(x)$. Prove that $f$ is one-to-one if $\varepsilon$ is small enough.","import Mathlib
+
+/-- Rudin exercise: Suppose g : ℝ → ℝ is differentiable with bounded derivative: |g'| ≤ M.
+    Show there exists δ > 0 such that for all ε with |ε| ≤ δ the map f(x) = x + ε g(x) is injective. -/
+theorem Rudin_exercise_5_3 (g : ℝ → ℝ) (hg : Differentiable ℝ g) (M : ℝ) (hM : 0 ≤ M)
+  (hbound : ∀ x, |deriv g x| ≤ M) :
+  ∃ δ, 0 < δ ∧ ∀ ε, |ε| ≤ δ → Function.Injective fun x => x + ε * g x := by sorry
+"
+Shakarchi_exercise_2_9,N/A,False,0,"Let $\Omega$ be a bounded open subset of $\mathbb{C}$, and $\varphi: \Omega \rightarrow \Omega$ a holomorphic function. Prove that if there exists a point $z_{0} \in \Omega$ such that $\varphi\left(z_{0}\right)=z_{0} \quad \text { and } \quad \varphi^{\prime}\left(z_{0}\right)=1$ then $\varphi$ is linear.",Lean4 code file not found
+Pugh_exercise_3_63b,success,True,5,Prove that $\sum 1/k(\log(k))^p$ diverges when $p \leq 1$.,"import Mathlib
+
+noncomputable section
+
+/-- Pugh exercise 3.63(b): For p ≤ 1 the series ∑_{k=2}^∞ 1/(k (log k)^p) diverges.
+We define a_n = 0 for n ≤ 1 and a_n = 1/(n * (log n)^p) for n ≥ 2, and state ¬ Summable a. -/
+
+def Pugh_a (p : ℝ) : ℕ → ℝ := fun n => if n ≤ 1 then 0 else 1 / (n * Real.rpow (Real.log n) p)
+
+theorem Pugh_exercise_3_63b (p : ℝ) (hp : p ≤ 1) : ¬ Summable (Pugh_a p) := by sorry
+
+end noncomputable section
+"
+Rudin_exercise_3_1a,success,True,4,Prove that convergence of $\left\{s_{n}\right\}$ implies convergence of $\left\{\left|s_{n}\right|\right\}$.,"import Mathlib
+
+open Filter
+
+theorem Rudin_exercise_3_1a (s : ℕ → ℝ) {L : ℝ} (h : Tendsto s atTop (nhds L)) : Tendsto (fun n => |s n|) atTop (nhds |L|) := by sorry
+"
+Rudin_exercise_1_1b,success,True,4,"If $r$ is rational $(r \neq 0)$ and $x$ is irrational, prove that $rx$ is irrational.","import Mathlib
+
+/-- If r is rational (r ≠ 0) and x is irrational, then r * x is irrational. -/
+theorem rational_mul_irrational {r : ℚ} (hr : r ≠ 0) {x : ℝ} (hx : Irrational x) : Irrational (r * x) := by sorry
+"
+Rudin_exercise_3_2a,N/A,False,0,Prove that $\lim_{n \rightarrow \infty}\sqrt{n^2 + n} -n = 1/2$.,Lean4 code file not found
+Rudin_exercise_1_14,success,True,4,"If $z$ is a complex number such that $|z|=1$, that is, such that $z \bar{z}=1$, compute $|1+z|^{2}+|1-z|^{2}$.","import Mathlib
+open BigOperators
+open Real Nat Topology
+
+/-- If $z$ is a complex number such that $|z|=1$, that is, such that $z \bar{z}=1$, compute $|1+z|^{2}+|1-z|^{2}.$ Save it to: Rudin_exercise_1_14.lean -/
+theorem rudin_exercise_1_14 (z : ℂ) (h : Complex.abs z = 1) : (Complex.abs (1 + z))^2 + (Complex.abs (1 - z))^2 = 4 := by sorry
+"
+Rudin_exercise_4_11a,success,True,6,Suppose $f$ is a uniformly continuous mapping of a metric space $X$ into a metric space $Y$ and prove that $\left\{f\left(x_{n}\right)\right\}$ is a Cauchy sequence in $Y$ for every Cauchy sequence $\{x_n\}$ in $X$.,"import Mathlib
+
+variable {X Y : Type*} [UniformSpace X] [UniformSpace Y] {f : X → Y}
+
+/-- If f is uniformly continuous, then it sends Cauchy sequences to Cauchy sequences. -/
+theorem Rudin_exercise_4_11a (hf : UniformContinuous f) {x : ℕ → X} (hx : CauchySeq x) : CauchySeq (f ∘ x) := by sorry
+"
+Rudin_exercise_3_20,max_steps_reached,False,6,"Suppose $\left\{p_{n}\right\}$ is a Cauchy sequence in a metric space $X$, and some sequence $\left\{p_{n l}\right\}$ converges to a point $p \in X$. Prove that the full sequence $\left\{p_{n}\right\}$ converges to $p$.","import Mathlib
+
+/-- Rudin Ex. 3.20
+
+Suppose {p_n} is a Cauchy sequence in a metric space X, and some subsequence {p_{n_k}} converges to a point p ∈ X.
+Prove that the full sequence {p_n} converges to p. -/
+theorem Rudin_exercise_3_20 {X : Type*} [MetricSpace X] {u : ℕ → X} (hu : CauchySeq u)
+  {φ : ℕ → ℕ} {a : X} (hφ : Filter.Tendsto (u ∘ φ) Filter.atTop (𝓝 a)) :
+  Filter.Tendsto u Filter.atTop (𝓝 a) := by sorry
+"
+Pugh_exercise_2_126,success,True,5,Suppose that $E$ is an uncountable subset of $\mathbb{R}$. Prove that there exists a point $p \in \mathbb{R}$ at which $E$ condenses.,"import Mathlib
+
+theorem Pugh_exercise_2_126 {E : Set ℝ} (h : ¬ Set.Countable E) :
+  ∃ p : ℝ, ∀ ε : ℝ, ε > 0 → ¬ Set.Countable (E ∩ Metric.ball p ε) := by sorry
+"
+Rudin_exercise_1_16a,success,True,4,"Suppose $k \geq 3, x, y \in \mathbb{R}^k, |x - y| = d > 0$, and $r > 0$. Prove that if $2r > d$, there are infinitely many $z \in \mathbb{R}^k$ such that $|z-x|=|z-y|=r$.","import Mathlib
+
+open Set
+
+/-- Rudin Exercise 1.16(a): In R^k with k ≥ 3, if |x-y| = d > 0 and r > 0 with 2r > d,
+    then there are infinitely many z with |z-x| = |z-y| = r. -/
+theorem Rudin_exercise_1_16a {k : ℕ} (hk : 3 ≤ k) (x y : EuclideanSpace ℝ (Fin k)) (r : ℝ)
+  (hxy : 0 < dist x y) (hr : 0 < r) (h2 : 2 * r > dist x y) :
+  Set.Infinite { z : EuclideanSpace ℝ (Fin k) | dist z x = r ∧ dist z y = r } := by
+  sorry
+"
+Rudin_exercise_5_15,success,True,3,"Suppose $a \in R^{1}, f$ is a twice-differentiable real function on $(a, \infty)$, and $M_{0}, M_{1}, M_{2}$ are the least upper bounds of $|f(x)|,\left|f^{\prime}(x)\right|,\left|f^{\prime \prime}(x)\right|$, respectively, on $(a, \infty)$. Prove that $M_{1}^{2} \leq 4 M_{0} M_{2} .$","import Mathlib
+
+/-
+Suppose a ∈ ℝ, f is twice-differentiable real function on (a, ∞), and M0, M1, M2 are the least
+upper bounds of |f(x)|, |f'(x)|, |f''(x)| respectively on (a, ∞). Prove that M1^2 ≤ 4 M0 M2.
+-/
+
+theorem Rudin_exercise_5_15 (a : ℝ) (f : ℝ → ℝ)
+  (hf : ∀ x, a < x → DifferentiableAt ℝ f x)
+  (M0 M1 M2 : ℝ)
+  (hM0 : ∀ x, a < x → |f x| ≤ M0)
+  (hM1 : ∀ x, a < x → |deriv f x| ≤ M1)
+  (hM2 : ∀ x, a < x → |deriv (deriv f) x| ≤ M2) :
+  M1^2 ≤ 4 * M0 * M2 := by sorry
+"
+Pugh_exercise_2_32a,N/A,False,0,Show that every subset of $\mathbb{N}$ is clopen.,Lean4 code file not found
+Rudin_exercise_5_17,success,True,5,"Suppose $f$ is a real, three times differentiable function on $[-1,1]$, such that $f(-1)=0, \quad f(0)=0, \quad f(1)=1, \quad f^{\prime}(0)=0 .$ Prove that $f^{(3)}(x) \geq 3$ for some $x \in(-1,1)$.","import Mathlib
+
+/-- Suppose f is a real, three times differentiable function on [-1,1], such that
+    f(-1) = 0, f(0) = 0, f(1) = 1, f'(0) = 0.
+    Prove that f^{(3)}(x) >= 3 for some x in (-1,1). -/
+theorem Rudin_exercise_5_17 (f : ℝ → ℝ)
+  (h_cont : ContDiffOn ℝ 3 f (Set.Icc (-1 : ℝ) 1))
+  (h_values : f (-1) = 0 ∧ f 0 = 0 ∧ f 1 = 1)
+  (h_deriv0 : deriv f 0 = 0) :
+  ∃ x ∈ Set.Ioo (-1 : ℝ) 1, deriv (deriv (deriv f)) x ≥ 3 := by
+  sorry
+"
+Shakarchi_exercise_1_26,success,True,5,Suppose $f$ is continuous in a region $\Omega$. Prove that any two primitives of $f$ (if they exist) differ by a constant.,"import Mathlib
+
+/-!
+Exercise: Suppose f is continuous in a region Ω (an open, preconnected subset of ℝ).
+Prove that any two primitives of f (if they exist) differ by a constant on Ω.
+-/
+
+open Set
+
+theorem Shakarchi_exercise_1_26 {Ω : Set ℝ} (h_open : IsOpen Ω) (h_conn : IsPreconnected Ω)
+  {f F G : ℝ → ℝ} (hf : ContinuousOn f Ω)
+  (hF : ∀ x ∈ Ω, HasDerivAt F (f x) x) (hG : ∀ x ∈ Ω, HasDerivAt G (f x) x) :
+  ∃ c : ℝ, ∀ x ∈ Ω, F x - G x = c := by sorry
+"
+Munkres_exercise_13_1,success,True,3,Let $X$ be a topological space; let $A$ be a subset of $X$. Suppose that for each $x \in A$ there is an open set $U$ containing $x$ such that $U \subset A$. Show that $A$ is open in $X$.,"import Mathlib
+
+/-- Let X be a topological space; let A be a subset of X. Suppose that for each x ∈ A there is an
+open set U containing x such that U ⊆ A. Show that A is open in X. -/
+theorem Munkres_exercise_13_1 {X : Type*} [TopologicalSpace X] {A : Set X}
+  (h : ∀ x ∈ A, ∃ U : Set X, IsOpen U ∧ x ∈ U ∧ U ⊆ A) : IsOpen A := by sorry
+"
+Rudin_exercise_2_19a,N/A,False,0,"If $A$ and $B$ are disjoint closed sets in some metric space $X$, prove that they are separated.",Lean4 code file not found
+Rudin_exercise_1_11a,success,True,4,"If $z$ is a complex number, prove that there exists an $r\geq 0$ and a complex number $w$ with $| w | = 1$ such that $z = rw$.","import Mathlib
+
+/-
+Exercise: If z is a complex number, prove that there exists an r ≥ 0 and a complex number w with |w| = 1 such that z = r w.
+This file provides the statement (proof omitted).
+-/
+
+theorem Rudin_exercise_1_11a (z : ℂ) :
+  ∃ (r : ℝ) (w : ℂ), 0 ≤ r ∧ Complex.abs w = 1 ∧ z = (r : ℂ) * w := by
+  sorry
+"
+Munkres_exercise_17_4,success,True,5,"Show that if $U$ is open in $X$ and $A$ is closed in $X$, then $U-A$ is open in $X$, and $A-U$ is closed in $X$.","import Mathlib
+
+open Set
+
+variable {X : Type _} [TopologicalSpace X]
+
+theorem Munkres_exercise_17_4 (U A : Set X) (hU : IsOpen U) (hA : IsClosed A) : IsOpen (U \ A) ∧ IsClosed (A \ U) := by sorry
+"
+Munkres_exercise_29_1,success,True,5,Show that the rationals $\mathbb{Q}$ are not locally compact.,"import Mathlib
+
+open Topology
+
+theorem rationals_not_locally_compact : ¬ LocallyCompactSpace (ℚ) := by sorry
+"
+Pugh_exercise_3_4,max_steps_reached,False,6,Prove that $\sqrt{n+1}-\sqrt{n} \rightarrow 0$ as $n \rightarrow \infty$.,"import Mathlib
+
+theorem Pugh_exercise_3_4 : Filter.Tendsto (fun n : Nat => Real.sqrt ((n : ℝ) + 1) - Real.sqrt (n : ℝ)) Filter.atTop (nhds (0 : ℝ)) := by sorry
+"
+Munkres_exercise_32_2c,success,True,5,"Show that if $\prod X_\alpha$ is normal, then so is $X_\alpha$. Assume that each $X_\alpha$ is nonempty.","import Mathlib
+
+open Topology Set
+
+variable {ι : Type*} {X : ι → Type*} [∀ i, TopologicalSpace (X i)]
+
+/-- If the product ∏ i, X i (with the product topology) is normal, and each factor X i is nonempty,
+then each factor X i is normal. -/
+theorem normal_of_pi_normal (h : NormalSpace (∀ i, X i)) (hne : ∀ i, Nonempty (X i)) (i0 : ι) :
+  NormalSpace (X i0) := by sorry
+"
+Munkres_exercise_32_2b,success,True,4,"Show that if $\prod X_\alpha$ is regular, then so is $X_\alpha$. Assume that each $X_\alpha$ is nonempty.","import Mathlib
+
+/-- If the product of a family of nonempty spaces is regular, then each factor is regular. -/
+theorem Munkres_exercise_32_2b {ι : Type _} {X : ι → Type _} [∀ i, TopologicalSpace (X i)]
+  (h_nonempty : ∀ i, Nonempty (X i)) :
+  RegularSpace (∀ i, X i) → ∀ i, RegularSpace (X i) := by sorry
+"
+Munkres_exercise_43_2,success,True,3,"Let $(X, d_X)$ and $(Y, d_Y)$ be metric spaces; let $Y$ be complete. Let $A \subset X$. Show that if $f \colon A \rightarrow Y$ is uniformly continuous, then $f$ can be uniquely extended to a continuous function $g \colon \bar{A} \rightarrow Y$, and $g$ is uniformly continuous.","import Mathlib
+
+open Set
+
+/-- Let (X, d_X) and (Y, d_Y) be metric spaces; let Y be complete. Let A ⊂ X.
+If f : X → Y is uniformly continuous on A, then f can be uniquely extended to a continuous
+function g on closure A, and g is uniformly continuous on closure A. -/
+theorem uniform_continuous_on.extend_to_closure_unique {X Y : Type*} [MetricSpace X] [MetricSpace Y] [CompleteSpace Y]
+  {A : Set X} {f : X → Y} (hf : UniformContinuousOn f A) :
+  ∃! g : X → Y, (ContinuousOn g (closure A)) ∧ (∀ x ∈ A, g x = f x) ∧ (UniformContinuousOn g (closure A)) := by sorry
+"
+Rudin_exercise_4_5b,max_steps_reached,False,6,"Show that there exist a set $E \subset \mathbb{R}$ and a real continuous function $f$ defined on $E$, such that there does not exist a continuous real function $g$ on $\mathbb{R}$ such that $g(x)=f(x)$ for all $x \in E$.","import Mathlib
+
+open Set
+
+/-- There exist a subset E ⊂ ℝ and a continuous function f on E (with the subspace topology)
+    such that there is no continuous extension g : ℝ → ℝ with g x = f x for all x ∈ E. -/
+theorem Rudin_exercise_4_5b :
+  ∃ (E : Set ℝ) (f : {x : ℝ // x ∈ E} → ℝ),
+    Continuous f ∧
+    (∀ g : ℝ → ℝ, Continuous g → ∃ x (hx : x ∈ E), g x ≠ f ⟨x, hx⟩) := by sorry
+"
+Munkres_exercise_23_3,success,True,6,"Let $\left\{A_{\alpha}\right\}$ be a collection of connected subspaces of $X$; let $A$ be a connected subset of $X$. Show that if $A \cap A_{\alpha} \neq \varnothing$ for all $\alpha$, then $A \cup\left(\bigcup A_{\alpha}\right)$ is connected.","import Mathlib
+
+/-- Let {A_α} be a collection of connected subspaces of X; let A be a connected subset of X.
+    Show that if A ∩ A_α ≠ ∅ for all α, then A ∪ (⋃_α A_α) is connected. -/
+theorem Munkres_exercise_23_3 {X : Type*} [TopologicalSpace X] {ι : Type*} {A : Set X} {Aα : ι → Set X}
+  (hA : IsConnected A) (hAα : ∀ i, IsConnected (Aα i)) (h : ∀ i, (A ∩ Aα i).Nonempty) :
+  IsConnected (A ∪ ⋃ i, Aα i) := by sorry
+"
+Munkres_exercise_38_6,N/A,False,0,Let $X$ be completely regular. Show that $X$ is connected if and only if the Stone-Čech compactification of $X$ is connected.,Lean4 code file not found
+Munkres_exercise_30_10,success,True,6,"Show that if $X$ is a countable product of spaces having countable dense subsets, then $X$ has a countable dense subset.","import Mathlib
+
+/-!
+Munkres exercise 30.10: If X is a countable product of spaces having countable dense
+subsets, then X has a countable dense subset.
+-/
+
+theorem munkres_exercise_30_10 {ι : Type*} [Countable ι] {X : ι → Type*} [∀ i, TopologicalSpace (X i)]
+  (s : ∀ i, Set (X i)) (hs_count : ∀ i, (s i).Countable) (hs_dense : ∀ i, Dense (s i)) :
+  ∃ D : Set (∀ i, X i), D.Countable ∧ Dense D := by sorry
+"
+Munkres_exercise_13_4a1,N/A,False,0,"If $\mathcal{T}_\alpha$ is a family of topologies on $X$, show that $\bigcap \mathcal{T}_\alpha$ is a topology on $X$.",Lean4 code file not found
+Munkres_exercise_13_4b1,N/A,False,0,Let $\mathcal{T}_\alpha$ be a family of topologies on $X$. Show that there is a unique smallest topology on $X$ containing all the collections $\mathcal{T}_\alpha$.,Lean4 code file not found
+Munkres_exercise_34_9,max_steps_reached,False,6,"Let $X$ be a compact Hausdorff space that is the union of the closed subspaces $X_1$ and $X_2$. If $X_1$ and $X_2$ are metrizable, show that $X$ is metrizable.","import Mathlib
+
+/-- Exercise: Let X be a compact Hausdorff space that is the union of the closed subspaces X1 and X2.
+If X1 and X2 are metrizable, show that X is metrizable. -/
+theorem Munkres_exercise_34_9 {X : Type*} [TopologicalSpace X] [CompactSpace X] [T2Space X]
+  (X1 X2 : Set X) (h_cover : X1 ∪ X2 = (univ : Set X)) (h1_closed : IsClosed (X1))
+  (h2_closed : IsClosed (X2)) (h1 : MetrizableSpace (Subtype X1)) (h2 : MetrizableSpace (Subtype X2)) :
+  MetrizableSpace X := by sorry
+"
+Munkres_exercise_30_13,max_steps_reached,False,6,"Show that if $X$ has a countable dense subset, every collection of disjoint open sets in $X$ is countable.","import Mathlib
+
+open Set
+
+theorem countable_of_countable_dense {X : Type*} [TopologicalSpace X] {s : Set X} (hs : s.Countable) (hd : Dense s)
+  {ι : Type*} {U : ι → Set X} (hopen : ∀ i, IsOpen (U i)) (hne : ∀ i, (U i).Nonempty)
+  (hdisj : pairwise (fun i j => Disjoint (U i) (U j))) : Countable ι := by sorry
+"
+Munkres_exercise_32_1,N/A,False,0,Show that a closed subspace of a normal space is normal.,Lean4 code file not found
+Artin_exercise_2_3_2,success,True,3,Prove that the products $a b$ and $b a$ are conjugate elements in a group.,"import Mathlib
+
+theorem Artin_exercise_2_3_2 (G : Type*) [Group G] (a b : G) : ∃ g : G, g * (a * b) * g⁻¹ = b * a := by sorry
+"
+Munkres_exercise_13_5b,N/A,False,0,"Show that if $\mathcal{A}$ is a subbasis for a topology on $X$, then the topology generated by $\mathcal{A}$ equals the intersection of all topologies on $X$ that contain $\mathcal{A}$.",Lean4 code file not found
+Munkres_exercise_16_6,max_steps_reached,False,6,"Show that the countable collection \[\{(a, b) \times (c, d) \mid a < b \text{ and } c < d, \text{ and } a, b, c, d \text{ are rational}\}\] is a basis for $\mathbb{R}^2$.","import Mathlib
+
+open Set
+
+/-- The countable collection of open rectangles with rational endpoints in R^2. -/
+def rational_rectangles : Set (Set (ℝ × ℝ)) :=
+  { s | ∃ (a b c d : ℚ), (a : ℝ) < (b : ℝ) ∧ (c : ℝ) < (d : ℝ) ∧ s = Set.Ioo (a : ℝ, c : ℝ) (b : ℝ, d : ℝ) }
+
+/-- The collection of all open rectangles with rational endpoints is a basis for R^2.
+    We state the two basis axioms (every point is in some basis element, and the intersection
+    property) but do not provide a full proof here. -/
+theorem Munkres_exercise_16_6 :
+  let B := rational_rectangles in
+  (∀ x : ℝ × ℝ, ∃ U, U ∈ B ∧ x ∈ U) ∧
+  (∀ U V : Set (ℝ × ℝ), U ∈ B → V ∈ B → ∀ x, x ∈ U ∩ V → ∃ W, W ∈ B ∧ x ∈ W ∧ W ⊆ U ∩ V) := by
+  sorry
+"
+Dummit-Foote_exercise_1_1_4,success,True,3,Prove that the multiplication of residue class $\mathbb{Z}/n\mathbb{Z}$ is associative.,"import Mathlib
+
+/-!
+Exercise: Show that multiplication in the residue classes ZMod n is associative.
+-/
+
+theorem zmod_mul_assoc {n : ℕ} (a b c : ZMod n) : (a * b) * c = a * (b * c) := by sorry
+"
+Dummit-Foote_exercise_7_3_37,success,True,3,An ideal $N$ is called nilpotent if $N^{n}$ is the zero ideal for some $n \geq 1$. Prove that the ideal $p \mathbb{Z} / p^{m} \mathbb{Z}$ is a nilpotent ideal in the ring $\mathbb{Z} / p^{m} \mathbb{Z}$.,"import Mathlib
+
+/-- Exercise: Let p be a prime and m ≥ 1. In the ring ZMod (p ^ m), the ideal generated by p is nilpotent:
+    the ideal I = span {p : ZMod (p ^ m)} satisfies I ^ m = ⊥. -/
+theorem dummit_foote_exercise_7_3_37 {p : ℕ} (hp : p.Prime) {m : ℕ} (hm : 1 ≤ m) :
+  (Ideal.span ({(p : ZMod (p ^ m))} : Set (ZMod (p ^ m))) ^ m) = ⊥ := by sorry
+"
+Munkres_exercise_23_11,N/A,False,0,"Let $p: X \rightarrow Y$ be a quotient map. Show that if each set $p^{-1}(\{y\})$ is connected, and if $Y$ is connected, then $X$ is connected.",Lean4 code file not found
+Munkres_exercise_18_8a,N/A,False,0,"Let $Y$ be an ordered set in the order topology. Let $f, g: X \rightarrow Y$ be continuous. Show that the set $\{x \mid f(x) \leq g(x)\}$ is closed in $X$.",Lean4 code file not found
+Munkres_exercise_13_4b2,N/A,False,0,Let $\mathcal{T}_\alpha$ be a family of topologies on $X$. Show that there is a unique largest topology on $X$ contained in all the collections $\mathcal{T}_\alpha$.,Lean4 code file not found
+Dummit-Foote_exercise_1_1_34,success,True,3,"If $x$ is an element of infinite order in $G$, prove that the elements $x^{n}, n \in \mathbb{Z}$ are all distinct.","import Mathlib
+
+variable {G : Type _} [Group G]
+
+/-- If x has infinite order, then its integer powers are all distinct. -/
+theorem Dummit_Foote_exercise_1_1_34 (x : G) (h : ∀ n : Int, n ≠ 0 → x ^ n ≠ (1 : G)) :
+  ∀ m n : Int, m ≠ n → x ^ m ≠ x ^ n := by sorry
+"
+Dummit-Foote_exercise_7_4_27,success,True,5,Let $R$ be a commutative ring with $1 \neq 0$. Prove that if $a$ is a nilpotent element of $R$ then $1-a b$ is a unit for all $b \in R$.,"import Mathlib
+
+/--
+Let R be a commutative ring with 1 ≠ 0. Prove that if a is a nilpotent element of R then 1 - a b is a unit for all b ∈ R.
+This is the Lean translation of the statement (proof omitted).
+-/
+
+theorem Dummit_Foote_exercise_7_4_27 {R : Type _} [CommRing R] [Nontrivial R] {a b : R}
+  (ha : IsNilpotent a) : IsUnit (1 - a * b) := by
+  sorry
+"
+Dummit-Foote_exercise_1_1_15,success,True,5,"Prove that $(a_1a_2\dots a_n)^{-1} = a_n^{-1}a_{n-1}^{-1}\dots a_1^{-1}$ for all $a_1, a_2, \dots, a_n\in G$.","import Mathlib
+
+/-- Dummit and Foote, Ex. 1.1.15:
+For a group G and elements a1 ... an,
+  (a1 * a2 * ... * an)⁻¹ = an⁻¹ * ... * a1⁻¹.
+This is stated here in the list formulation: for any list l of elements of G,
+  (l.prod)⁻¹ = (l.reverse.map (·⁻¹)).prod
+-/
+
+theorem Dummit_Foote_exercise_1_1_15 {G : Type _} [Group G] (l : List G) : l.prod⁻¹ = (l.reverse.map (·⁻¹)).prod := by sorry
+"
+Herstein_exercise_2_2_6c,success,True,3,"Let $G$ be a group in which $(a b)^{n}=a^{n} b^{n}$ for some fixed integer $n>1$ for all $a, b \in G$. For all $a, b \in G$, prove that $\left(a b a^{-1} b^{-1}\right)^{n(n-1)}=e$.","import Mathlib
+
+variable {G : Type _} [Group G]
+
+variable (n : ℕ) (hn : 1 < n) (hpow : ∀ a b : G, (a * b) ^ n = a ^ n * b ^ n)
+
+theorem Herstein_exercise_2_2_6c (a b : G) : (a * b * a⁻¹ * b⁻¹) ^ (n * (n - 1)) = 1 := by sorry
+"
+Herstein_exercise_2_9_2,success,True,5,"If $G_1$ and $G_2$ are cyclic groups of orders $m$ and $n$, respectively, prove that $G_1 \times G_2$ is cyclic if and only if $m$ and $n$ are relatively prime.","import Mathlib
+
+/-- If G1 and G2 are cyclic groups of orders m and n, respectively, then
+    G1 × G2 is cyclic iff m and n are relatively prime. -/
+theorem herstein_exercise_2_9_2 {G1 G2 : Type*} [Group G1] [Fintype G1] [Pow G1 ℤ]
+  [Group G2] [Fintype G2] [Pow G2 ℤ] {m n : ℕ}
+  (h1 : Fintype.card G1 = m) (h2 : Fintype.card G2 = n)
+  (hc1 : IsCyclic G1) (hc2 : IsCyclic G2) :
+  IsCyclic (G1 × G2) ↔ Nat.Coprime m n := by sorry
+"
+Dummit-Foote_exercise_4_5_19,success,True,4,Prove that if $|G|=6545$ then $G$ is not simple.,"import Mathlib
+
+/-- If |G| = 6545 then G is not simple. -/
+theorem Dummit_Foote_exercise_4_5_19 (G : Type _) [Group G] [Fintype G]
+  (h : Fintype.card G = 6545) : ¬IsSimpleGroup G := by sorry
+"
+Herstein_exercise_5_2_20,max_steps_reached,False,6,Let $V$ be a vector space over an infinite field $F$. Show that $V$ cannot be the set-theoretic union of a finite number of proper subspaces of $V$.,"import Mathlib
+
+/-
+Herstein Exercise 5.2.20
+Let V be a vector space over an infinite field F. Show that V cannot be the
+set-theoretic union of a finite number of proper subspaces of V.
+-/
+
+variable {F : Type _} [Field F]
+variable {V : Type _} [AddCommGroup V] [Module F V]
+
+theorem not_union_of_finitely_many_proper_submodules {n : ℕ} (s : Fin n → Submodule F V)
+  (h : ∀ i, s i ≠ ⊤) : ¬ (∀ v : V, ∃ i : Fin n, v ∈ s i) := by sorry
+"
+Herstein_exercise_2_3_17,success,True,6,"If $G$ is a group and $a, x \in G$, prove that $C\left(x^{-1} a x\right)=x^{-1} C(a) x$","import Mathlib
+
+/-- If G is a group and a, x ∈ G, then the centralizer of x^{-1} a x equals the conjugate
+of the centralizer of a by x^{-1}.
+-/
+theorem Herstein_exercise_2_3_17 (G : Type*) [Group G] (a x : G) :
+  (Subgroup.centralizer ({x⁻¹ * a * x} : Set G) : Set G) =
+    Set.image (fun y => x⁻¹ * y * x) (Subgroup.centralizer ({a} : Set G) : Set G) := by sorry
+"
+Dummit-Foote_exercise_4_5_22,success,True,5,Prove that if $|G|=132$ then $G$ is not simple.,"import Mathlib
+
+open Classical
+
+theorem Dummit_Foote_exercise_4_5_22 (G : Type*) [Group G] [Fintype G] (h : Fintype.card G = 132) : ¬ IsSimpleGroup G := by sorry
+"
+Herstein_exercise_2_2_3,success,True,3,"If $G$ is a group in which $(a b)^{i}=a^{i} b^{i}$ for three consecutive integers $i$, prove that $G$ is abelian.","import Mathlib
+
+/-- If G is a group and for three consecutive integers k, k+1, k+2 we have
+    (a * b)^i = a^i * b^i for all a, b in G, then G is abelian. -/
+theorem Herstein_exercise_2_2_3 {G : Type _} [Group G] (k : Int)
+  (h0 : ∀ a b : G, (a * b) ^ k = a ^ k * b ^ k)
+  (h1 : ∀ a b : G, (a * b) ^ (k + 1) = a ^ (k + 1) * b ^ (k + 1))
+  (h2 : ∀ a b : G, (a * b) ^ (k + 2) = a ^ (k + 2) * b ^ (k + 2)) :
+  ∀ a b : G, a * b = b * a := by sorry
+"
+Munkres_exercise_28_6,max_steps_reached,False,6,"Let $(X, d)$ be a metric space. If $f: X \rightarrow X$ satisfies the condition $d(f(x), f(y))=d(x, y)$ for all $x, y \in X$, then $f$ is called an isometry of $X$. Show that if $f$ is an isometry and $X$ is compact, then $f$ is bijective and hence a homeomorphism.","import Mathlib
+
+/-- Let (X, d) be a metric space. A map f : X → X is an isometry if it preserves distances.
+    If f is an isometry and X is compact, then f is bijective and hence a homeomorphism. -/
+theorem isometry_on_compact_bijective_homeomorph {X : Type*} [MetricSpace X] [CompactSpace X]
+  {f : X → X} (h : ∀ x y : X, dist (f x) (f y) = dist x y) :
+  Function.Bijective f ∧ ∃ (φ : Homeomorph X X), (φ.toEquiv : X ≃ X).toFun = f := by sorry
+"
+Herstein_exercise_2_5_37,success,True,5,"If $G$ is a nonabelian group of order 6, prove that $G \simeq S_3$.","import Mathlib
+
+/-- Exercise: If G is a nonabelian group of order 6, then G is isomorphic to S₃. -/
+theorem Herstein_exercise_2_5_37 {G : Type*} [Group G] [Fintype G]
+  (hcard : Fintype.card G = 6) (hnonabel : ∃ a b : G, a * b ≠ b * a) :
+  Nonempty (G ≃* Equiv.Perm (Fin 3)) := by sorry
+"
+Artin_exercise_6_4_3,success,True,5,"Prove that no group of order $p^2 q$, where $p$ and $q$ are prime, is simple.","import Mathlib
+
+/-- Exercise (Artin 6.4.3): A group of order p^2 * q (p,q primes) is not simple. -/
+theorem Artin_exercise_6_4_3 (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q) {G : Type*} [Group G] [Fintype G]
+  (hcard : Fintype.card G = p ^ 2 * q) : ¬ IsSimpleGroup G := by sorry
+"
+Herstein_exercise_4_1_19,success,True,5,Show that there is an infinite number of solutions to $x^2 = -1$ in the quaternions.,"import Mathlib
+
+open Quaternion
+
+/-- Show that there is an infinite number of solutions to x^2 = -1 in the quaternions. -/
+theorem quaternion_infinite_solutions_sq_eq_neg_one : Set.Infinite { q : Quaternion ℝ | q * q = (-1 : Quaternion ℝ) } := by sorry
+"
+Dummit-Foote_exercise_3_1_22b,N/A,False,0,Prove that the intersection of an arbitrary nonempty collection of normal subgroups of a group is a normal subgroup (do not assume the collection is countable).,Lean4 code file not found
+Artin_exercise_13_4_10,success,True,3,"Prove that if a prime integer $p$ has the form $2^r+1$, then it actually has the form $2^{2^k}+1$.","import Mathlib
+
+theorem Artin_exercise_13_4_10 {p r : ℕ} (hp : Nat.Prime p) (h : p = 2 ^ r + 1) : ∃ k, r = 2 ^ k := by sorry
+"
+Dummit-Foote_exercise_9_4_2b,success,True,3,Prove that $x^6+30x^5-15x^3 + 6x-120$ is irreducible in $\mathbb{Z}[x]$.,"import Mathlib
+
+open Polynomial
+
+theorem Dummit_Foote_exercise_9_4_2b :
+  Irreducible ((X ^ 6 + 30 * X ^ 5 - 15 * X ^ 3 + 6 * X - 120) : Polynomial ℤ) := by sorry
+"
+Dummit-Foote_exercise_5_4_2,N/A,False,0,"Prove that a subgroup $H$ of $G$ is normal if and only if $[G, H] \leq H$.",Lean4 code file not found
+Axler_exercise_6_16,max_steps_reached,False,6,Suppose $U$ is a subspace of $V$. Prove that $U^{\perp}=\{0\}$ if and only if $U=V$,"import Mathlib
+
+variable {𝕜 : Type*} [IsROrC 𝕜]
+variable {V : Type*} [NormedAddCommGroup V] [InnerProductSpace 𝕜 V] [FiniteDimensional 𝕜 V]
+
+/-- Exercise: Let U be a subspace of V. Then Uᗮ = ⊥ iff U = ⊤. -/
+theorem axler_exercise_6_16 (U : Submodule 𝕜 V) : Submodule.orthogonal U = ⊥ ↔ U = ⊤ := by sorry
+"
+Axler_exercise_5_13,max_steps_reached,False,6,Suppose $T \in \mathcal{L}(V)$ is such that every subspace of $V$ with dimension $\operatorname{dim} V-1$ is invariant under $T$. Prove that $T$ is a scalar multiple of the identity operator.,"import Mathlib
+
+variable {K : Type _} [DivisionRing K]
+variable {V : Type _} [AddCommGroup V] [Module K V] [FiniteDimensional K V]
+
+open LinearMap Submodule
+
+theorem Axler_exercise_5_13 (T : V →ₗ[K] V)
+  (h : ∀ (φ : V →ₗ[K] K), φ ≠ 0 → ∀ v, v ∈ φ.ker → T v ∈ φ.ker) :
+  ∃ c : K, ∀ v : V, T v = c • v := by sorry
+"
+Dummit-Foote_exercise_1_1_22a,success,True,3,"If $x$ and $g$ are elements of the group $G$, prove that $|x|=\left|g^{-1} x g\right|$.","import Mathlib
+
+variable {G : Type*} [Group G]
+
+/-- If x and g are elements of the group G, then the order of x equals the order of g⁻¹ x g. -/
+theorem Dummit_Foote_exercise_1_1_22a (x g : G) : orderOf x = orderOf (g⁻¹ * x * g) := by
+  sorry
+"
+Dummit-Foote_exercise_4_5_16,success,True,3,"Let $|G|=p q r$, where $p, q$ and $r$ are primes with $p<q<r$. Prove that $G$ has a normal Sylow subgroup for either $p, q$ or $r$.","import Mathlib
+
+/-- Let |G|=p q r, where p, q and r are primes with p<q<r. Prove that G has a normal Sylow subgroup for either p, q or r. -/
+theorem exists_normal_Sylow_of_prime_dvd_card {G : Type*} [Group G] {p q r : ℕ} (hp : p.Prime)
+    (hq : q.Prime) (hr : r.Prime) (hpq : p < q) (hqr : q < r) (hG : Nat.card G = p * q * r) :
+    ∃ P : Sylow p G, (P : Subgroup G).Normal ∨ ∃ Q : Sylow q G, (Q : Subgroup G).Normal ∨ ∃ R : Sylow r G,
+      (R : Subgroup G).Normal := by sorry
+"
+Herstein_exercise_4_2_9,success,True,5,"Let $p$ be an odd prime and let $1 + \frac{1}{2} + ... + \frac{1}{p - 1} = \frac{a}{b}$, where $a, b$ are integers. Show that $p \mid a$.","import Mathlib
+
+open Finset
+
+theorem herstein_exercise_4_2_9 (p : ℕ) (hp : Nat.Prime p) (hp2 : p ≠ 2) {a b : ℤ}
+  (h : Finset.sum (Finset.range (p - 1)) (fun k => (1 : ℚ) / (k + 1 : ℚ)) = (a : ℚ) / (b : ℚ)) :
+  (p : ℤ) ∣ a := by sorry"
+Herstein_exercise_3_2_21,success,True,6,"If $\sigma, \tau$ are two permutations that disturb no common element and $\sigma \tau = e$, prove that $\sigma = \tau = e$.","import Mathlib
+
+/-- If σ and τ are permutations of a type α which disturb no common element
+    (i.e. for every x, at least one of σ or τ fixes x), and their composition
+    is the identity, then both σ and τ are the identity permutation. -/
+theorem herstein_exercise_3_2_21 {α : Type _} (σ τ : Equiv.Perm α)
+  (h_disjoint : ∀ x : α, σ x = x ∨ τ x = x)
+  (h_comp : σ.trans τ = Equiv.refl α) :
+  σ = Equiv.refl α ∧ τ = Equiv.refl α := by sorry
+"
+Herstein_exercise_4_6_3,max_steps_reached,False,6,Show that there is an infinite number of integers a such that $f(x) = x^7 + 15x^2 - 30x + a$ is irreducible in $Q[x]$.,"import Mathlib
+
+-- Show there are infinitely many integers a such that f(x) = x^7 + 15x^2 - 30x + a is irreducible over Q.
+
+open Set
+open Polynomial
+open Nat
+
+/-- The polynomial f(x) = x^7 + 15x^2 - 30x + a over Q. -/
+noncomputable def f (a : Int) : Polynomial ℚ :=
+  Polynomial.C (1 : ℚ) * X ^ 7 + Polynomial.C (15 : ℚ) * X ^ 2 - Polynomial.C (30 : ℚ) * X + Polynomial.C (a : ℚ)
+
+theorem Herstein_exercise_4_6_3 : (Set.Infinite {a : Int | Irreducible (f a : Polynomial ℚ)}) :=
+  by
+    -- proof omitted
+    sorry
+"
+Artin_exercise_6_4_2,success,True,6,"Prove that no group of order $p q$, where $p$ and $q$ are prime, is simple.","import Mathlib
+
+/-!
+Exercise (Artin 6.4.2) — translation only.
+Prove that no group of order p * q, where p and q are primes, is simple.
+-/
+
+theorem Artin_exercise_6_4_2 {G : Type _} [Group G] [Fintype G] (p q : ℕ) (hp : p.Prime) (hq : q.Prime)
+  (h_card : Fintype.card G = p * q) : ¬ IsSimpleGroup G := by sorry
+"
+Artin_exercise_2_11_3,success,True,3,Prove that a group of even order contains an element of order $2 .$,"import Mathlib
+
+theorem Artin_exercise_2_11_3 {G : Type*} [Group G] [Fintype G]
+  (h : (Fintype.card G) % 2 = 0) :
+  ∃ g : G, g ≠ 1 ∧ g * g = 1 := by
+  sorry
+"
+Herstein_exercise_5_3_7,success,True,4,"If $a \in K$ is such that $a^2$ is algebraic over the subfield $F$ of $K$, show that a is algebraic over $F$.","import Mathlib
+
+/-- If F ⊆ K are fields and a ∈ K with a^2 algebraic over F, then a is algebraic over F. -/
+theorem herstein_exercise_5_3_7 {F K : Type*} [Field F] [Field K] [Algebra F K] (a : K)
+  (h : IsAlgebraic F (a * a)) : IsAlgebraic F a := by sorry
+"
+Dummit-Foote_exercise_2_4_16a,success,True,3,A subgroup $M$ of a group $G$ is called a maximal subgroup if $M \neq G$ and the only subgroups of $G$ which contain $M$ are $M$ and $G$. Prove that if $H$ is a proper subgroup of the finite group $G$ then there is a maximal subgroup of $G$ containing $H$.,"import Mathlib
+
+/-- Exercise 2.4.16(a) (Dummit & Foote)
+If H is a proper subgroup of the finite group G then there is a maximal subgroup of G containing H. -/
+theorem exists_maximal_subgroup_containing {G : Type*} [Group G] [Fintype G]
+  (H : Subgroup G) (hproper : H ≠ (⊤ : Subgroup G)) :
+  ∃ M : Subgroup G,
+    H ≤ M ∧ M ≠ (⊤ : Subgroup G) ∧ (∀ K : Subgroup G, M ≤ K → (K = M ∨ K = (⊤ : Subgroup G))) := by sorry
+"
+Dummit-Foote_exercise_4_5_13,N/A,False,0,Prove that a group of order 56 has a normal Sylow $p$-subgroup for some prime $p$ dividing its order.,Lean4 code file not found
+Dummit-Foote_exercise_2_4_4,success,True,4,Prove that if $H$ is a subgroup of $G$ then $H$ is generated by the set $H-\{1\}$.,"import Mathlib
+
+/-!
+Exercise: Prove that if H is a subgroup of G then H is generated by the set H - {1}.
+We state this as: for a subgroup H of a group G, H = Subgroup.closure ((H : Set G) \ {1}).
+-/
+
+theorem Dummit_Foote_exercise_2_4_4 {G : Type*} [Group G] (H : Subgroup G) :
+  H = Subgroup.closure ((H : Set G) \ ({1} : Set G)) := by sorry
+"
+Dummit-Foote_exercise_4_5_23,success,True,4,Prove that if $|G|=462$ then $G$ is not simple.,"import Mathlib
+open scoped Classical
+open Fintype
+
+/-- Prove that if |G|=462 then G is not simple. -/
+theorem not_isSimpleGroup_of_card_eq_462 {G : Type*} [Group G] [Fintype G]
+    (hG : Fintype.card G = 462) : ¬IsSimpleGroup G := by sorry"
+Artin_exercise_10_1_13,success,True,4,"An element $x$ of a ring $R$ is called nilpotent if some power of $x$ is zero. Prove that if $x$ is nilpotent, then $1+x$ is a unit in $R$.","import Mathlib
+
+variable {R : Type _} [Ring R]
+
+/-- Exercise (Artin 10.1.13): If x is nilpotent then 1 + x is a unit. -/
+theorem Artin_exercise_10_1_13 (x : R) (h : ∃ n : ℕ, 0 < n ∧ x ^ n = 0) : IsUnit (1 + x) := by sorry
+"
+Dummit-Foote_exercise_7_1_15,max_steps_reached,False,6,A ring $R$ is called a Boolean ring if $a^{2}=a$ for all $a \in R$. Prove that every Boolean ring is commutative.,"import Mathlib
+
+/-- A ring R is called a Boolean ring if every element is idempotent: a * a = a. -/
+def BooleanRing (R : Type _) [Ring R] : Prop := ∀ a : R, a * a = a
+
+/-- Exercise: Every Boolean ring is commutative. -/
+theorem boolean_ring_comm {R : Type _} [Ring R] (h : BooleanRing R) : ∀ a b : R, a * b = b * a := by sorry
+"
+Artin_exercise_6_1_14,max_steps_reached,False,6,"Let $Z$ be the center of a group $G$. Prove that if $G / Z$ is a cyclic group, then $G$ is abelian and hence $G=Z$.","import Mathlib
+
+open GroupTheory
+
+variable {G : Type*} [Group G]
+
+/-- If the quotient G / center G is cyclic, then G is abelian. -/
+theorem Artin_exercise_6_1_14 (h : IsCyclic (G ⧸ center G)) : IsAbelian G := by sorry
+
+/-- Consequently, the center equals the whole group. -/
+theorem Artin_exercise_6_1_14_center_eq_top (h : IsCyclic (G ⧸ center G)) : (center G : Subgroup G) = ⊤ := by sorry
+"
+Axler_exercise_6_3,success,True,3,"Prove that $\left(\sum_{j=1}^{n} a_{j} b_{j}\right)^{2} \leq\left(\sum_{j=1}^{n} j a_{j}{ }^{2}\right)\left(\sum_{j=1}^{n} \frac{b_{j}{ }^{2}}{j}\right)$ for all real numbers $a_{1}, \ldots, a_{n}$ and $b_{1}, \ldots, b_{n}$.","import Mathlib
+
+open BigOperators
+
+/-!
+Axler, Linear Algebra Done Right, exercise 6.3: For real numbers a_1,..,a_n and b_1,..,b_n,
+(show) (∑_{j=1}^n a_j b_j)^2 ≤ (∑_{j=1}^n j a_j^2) (∑_{j=1}^n b_j^2 / j).
+We index with `Fin n` and use `i.val + 1` for the index j ∈ {1,..,n}.
+-/
+
+theorem Axler_exercise_6_3 {n : ℕ} (a b : Fin n → ℝ) :
+  (∑ i : Fin n, a i * b i) ^ 2 ≤ (∑ i : Fin n, (i.val + 1) * (a i) ^ 2) * (∑ i : Fin n, (b i) ^ 2 / (i.val + 1)) := by
+  sorry
+"
+Dummit-Foote_exercise_3_1_3a,N/A,False,0,Let $A$ be an abelian group and let $B$ be a subgroup of $A$. Prove that $A / B$ is abelian.,Lean4 code file not found
+Axler_exercise_7_5,N/A,False,0,"Show that if $\operatorname{dim} V \geq 2$, then the set of normal operators on $V$ is not a subspace of $\mathcal{L}(V)$.",Lean4 code file not found
+Herstein_exercise_2_5_44,max_steps_reached,False,6,"Prove that a group of order $p^2$, $p$ a prime, has a normal subgroup of order $p$.","import Mathlib
+
+theorem Herstein_exercise_2_5_44 {G : Type*} [Group G] [Fintype G] (p : ℕ) (hp : Nat.Prime p)
+  (hcard : Fintype.card G = p ^ 2) :
+  ∃ H : Subgroup G, H.normal ∧ Fintype.card H = p := by
+sorry
+"
+Axler_exercise_7_11,N/A,False,0,Suppose $V$ is a complex inner-product space. Prove that every normal operator on $V$ has a square root. (An operator $S \in \mathcal{L}(V)$ is called a square root of $T \in \mathcal{L}(V)$ if $S^{2}=T$.),Lean4 code file not found
+Dummit-Foote_exercise_1_1_16,success,True,4,Let $x$ be an element of $G$. Prove that $x^2=1$ if and only if $|x|$ is either $1$ or $2$.,"import Mathlib
+
+/-!
+Exercise: Let G be a monoid and x an element of G. Prove that x^2 = 1 if and only if the order of x is 1 or 2.
+We state the lemma below; proof omitted (sorry).
+-/
+
+theorem Dummit_Foote_exercise_1_1_16 {G : Type _} [Monoid G] (x : G) : x ^ 2 = 1 ↔ orderOf x = 1 ∨ orderOf x = 2 := by sorry
+"
+Axler_exercise_7_9,N/A,False,0,Prove that a normal operator on a complex inner-product space is self-adjoint if and only if all its eigenvalues are real.,Lean4 code file not found
+Dummit-Foote_exercise_8_2_4,success,True,6,"Let $R$ be an integral domain. Prove that if the following two conditions hold then $R$ is a Principal Ideal Domain: (i) any two nonzero elements $a$ and $b$ in $R$ have a greatest common divisor which can be written in the form $r a+s b$ for some $r, s \in R$, and (ii) if $a_{1}, a_{2}, a_{3}, \ldots$ are nonzero elements of $R$ such that $a_{i+1} \mid a_{i}$ for all $i$, then there is a positive integer $N$ such that $a_{n}$ is a unit times $a_{N}$ for all $n \geq N$.","import Mathlib
+
+/-- Let R be an integral domain. If (i) any two nonzero elements a and b in R have a greatest
+    common divisor which can be written in the form r a + s b for some r, s in R, and
+    (ii) if a₁, a₂, a₃, ... are nonzero elements of R such that a_{i+1} ∣ a_i for all i, then the
+    sequence stabilizes up to multiplication by units. Then R is a Principal Ideal Domain. -/
+theorem Dummit_Foote_exercise_8_2_4 {R : Type _} [Semiring R] [IsDomain R]
+  (h_gcd_lin : ∀ a b : R, a ≠ 0 → b ≠ 0 →
+    ∃ d r s : R, (d ∣ a ∧ d ∣ b ∧ ∀ e : R, e ∣ a → e ∣ b → e ∣ d) ∧ d = r * a + s * b)
+  (h_asc_stab : ∀ (a : ℕ → R), (∀ i, a (i+1) ∣ a i) →
+    ∃ N, ∀ n, n ≥ N → ∃ u : Rˣ, a n = (u : R) * a N) : IsPrincipalIdealRing R := by
+  sorry
+"
+Axler_exercise_7_6,max_steps_reached,False,6,"Prove that if $T \in \mathcal{L}(V)$ is normal, then $\operatorname{range} T=\operatorname{range} T^{*}.$","import Mathlib
+
+/-- Prove that if $T \in \mathcal{L}(V)$ is normal, then \operatorname{range} T=\operatorname{range} T^{*}. -/
+theorem range_eq_range_adjoint_of_normal {V : Type*} [SeminormedAddCommGroup V] [InnerProductSpace ℂ V]
+  [FiniteDimensional ℂ V] (T : V →ₗ[ℂ] V) (hT : IsNormal (T : V →ₗ[ℂ] V)) :
+  LinearMap.range T = LinearMap.range T.adjoint := by
+  sorry
+"
+Dummit-Foote_exercise_4_5_21,N/A,False,0,Prove that if $|G|=2907$ then $G$ is not simple.,Lean4 code file not found
+Herstein_exercise_4_5_23,success,True,5,Let $F = \mathbb{Z}_7$ and let $p(x) = x^3 - 2$ and $q(x) = x^3 + 2$ be in $F[x]$. Show that $p(x)$ and $q(x)$ are irreducible in $F[x]$ and that the fields $F[x]/(p(x))$ and $F[x]/(q(x))$ are isomorphic.,"import Mathlib
+
+open Polynomial
+
+/-!
+Exercise: Let F = ZMod 7 and let p(x) = x^3 - 2 and q(x) = x^3 + 2 be in F[x].
+Show that p(x) and q(x) are irreducible in F[x] and that the fields
+F[x]/(p(x)) and F[x]/(q(x)) are isomorphic.
+-/
+
+theorem herstein_exercise_4_5_23 :
+  let F := ZMod 7
+  let p : Polynomial F := X ^ 3 - C (2 : F)
+  let q : Polynomial F := X ^ 3 + C (2 : F)
+  (Irreducible p ∧ Irreducible q ∧ Nonempty (Polynomial F ⧸ Ideal.span {p} ≃+* Polynomial F ⧸ Ideal.span {q})) := by
+  sorry
+"
+Herstein_exercise_2_3_16,success,True,3,"If a group $G$ has no proper subgroups, prove that $G$ is cyclic of order $p$, where $p$ is a prime number.","import Mathlib
+
+/-- If a group G has no proper subgroups, then G is cyclic of prime order. -/
+theorem Herstein_exercise_2_3_16 {G : Type _} [Group G]
+  (hne : ∃ x : G, x ≠ 1)
+  (hsub : ∀ H : Subgroup G, H = ⊤ ∨ H = ⊥) :
+  ∃ (p : ℕ) (hp : p.Prime) (inst : Fintype G), IsCyclic G ∧ Fintype.card G = p := by sorry
+"
+Herstein_exercise_5_3_10,success,True,4,Prove that $\cos 1^{\circ}$  is algebraic over $\mathbb{Q}$.,"import Mathlib
+
+-- Herstein Ex. 5.3.10: cos 1° is algebraic over Q.
+-- We express 1° as pi / 180 radians.
+
+theorem Herstein_exercise_5_3_10 : IsAlgebraic ℚ (Real.cos (Real.pi / 180) : ℝ) := by sorry"
+Dummit-Foote_exercise_4_2_9a,N/A,False,0,"Prove that if $p$ is a prime and $G$ is a group of order $p^{\alpha}$ for some $\alpha \in \mathbb{Z}^{+}$, then every subgroup of index $p$ is normal in $G$.",Lean4 code file not found
+Dummit-Foote_exercise_9_3_2,success,True,6,"Prove that if $f(x)$ and $g(x)$ are polynomials with rational coefficients whose product $f(x) g(x)$ has integer coefficients, then the product of any coefficient of $g(x)$ with any coefficient of $f(x)$ is an integer.","import Mathlib
+
+open Polynomial
+
+/-- Dummit & Foote, exercise 9.3.2:
+If f(x) and g(x) are polynomials with rational coefficients whose product f(x) g(x)
+has integer coefficients, then the product of any coefficient of g(x) with any
+coefficient of f(x) is an integer. -/
+theorem Dummit_Foote_exercise_9_3_2 (f g : Polynomial ℚ)
+  (h : ∃ p : Polynomial ℤ, Polynomial.map (Int.castRingHom ℚ) p = f * g) :
+  ∀ i j : ℕ, ∃ n : ℤ, (f.coeff i * g.coeff j : ℚ) = (n : ℚ) := by sorry
+"
+Herstein_exercise_4_1_34,N/A,False,0,"Let $T$ be the group of $2\times 2$ matrices $A$ with entries in the field $\mathbb{Z}_2$ such that $\det A$ is not equal to 0. Prove that $T$ is isomorphic to $S_3$, the symmetric group of degree 3.",Lean4 code file not found
+Herstein_exercise_2_11_22,success,True,5,Show that any subgroup of order $p^{n-1}$ in a group $G$ of order $p^n$ is normal in $G$.,"import Mathlib
+
+/-- Let G be a finite group of order p^n (p prime, n ≥ 1). Any subgroup H of order p^(n-1) is normal. -/
+theorem Herstein_exercise_2_11_22 {G : Type*} [Group G] [Fintype G] {p n : ℕ}
+  (hp : Nat.Prime p) (hn : 1 ≤ n) (hG : Fintype.card G = p ^ n) {H : Subgroup G} [Fintype H]
+  (hH : Fintype.card H = p ^ (n - 1)) : H.Normal := by sorry
+"
+Herstein_exercise_4_6_2,N/A,False,0,Prove that $f(x) = x^3 + 3x + 2$ is irreducible in $Q[x]$.,Lean4 code file not found
+Axler_exercise_5_1,success,True,4,"Suppose $T \in \mathcal{L}(V)$. Prove that if $U_{1}, \ldots, U_{m}$ are subspaces of $V$ invariant under $T$, then $U_{1}+\cdots+U_{m}$ is invariant under $T$.","import Mathlib
+
+variable {K : Type*} [Field K]
+variable {V : Type*} [AddCommGroup V] [Module K V]
+variable (T : V →ₗ[K] V)
+
+/-- If a finite family of submodules is invariant under a linear map T,
+then the span (sum) of the family is invariant under T. -/
+theorem Axler_exercise_5_1 {m : Nat} (Us : Fin m → Submodule K V)
+  (h : ∀ i (u : V), u ∈ Us i → T u ∈ Us i) :
+  ∀ x, x ∈ Submodule.span K (⋃ i, (Us i : Set V)) → T x ∈ Submodule.span K (⋃ i, (Us i : Set V)) := by sorry
+"
+Dummit-Foote_exercise_4_2_8,N/A,False,0,Prove that if $H$ has finite index $n$ then there is a normal subgroup $K$ of $G$ with $K \leq H$ and $|G: K| \leq n!$.,Lean4 code file not found
+Dummit-Foote_exercise_9_4_9,max_steps_reached,False,6,Prove that the polynomial $x^{2}-\sqrt{2}$ is irreducible over $\mathbb{Z}[\sqrt{2}]$. You may assume that $\mathbb{Z}[\sqrt{2}]$ is a U.F.D.,"import Mathlib
+
+open Polynomial
+
+noncomputable def R : Type := AdjoinRoot (Polynomial.X ^ 2 - 2 : Polynomial Int)
+
+noncomputable def alpha : R := AdjoinRoot.root (Polynomial.X ^ 2 - 2 : Polynomial Int)
+
+theorem Dummit_Foote_exercise_9_4_9 :
+  Irreducible ((Polynomial.X : Polynomial R) ^ 2 - C (alpha) : Polynomial R) := by sorry
+"
+Ireland-Rosen_exercise_3_1,success,True,3,Show that there are infinitely many primes congruent to $-1$ modulo 6 .,"import Mathlib
+
+theorem Ireland_Rosen_exercise_3_1 : Infinite { p : ℕ | Nat.Prime p ∧ p % 6 = 5 } := by sorry
+"
+Dummit-Foote_exercise_7_3_16,success,True,5,Let $\varphi: R \rightarrow S$ be a surjective homomorphism of rings. Prove that the image of the center of $R$ is contained in the center of $S$.,"import Mathlib
+
+/-- The center of a ring: elements that commute with all others. -/
+def center (T : Type _) [Ring T] : Set T := { z | ∀ t : T, z * t = t * z }
+
+/-- If φ : R →+* S is a surjective ring homomorphism, then the image of the center of R is contained in the center of S. -/
+theorem map_center_subset_center {R S : Type _} [Ring R] [Ring S] (φ : R →+* S) (hφ : Function.Surjective φ) :
+  φ '' (center R) ⊆ center S := by sorry
+"
+Ireland-Rosen_exercise_12_12,N/A,False,0,Show that $\sin (\pi / 12)$ is an algebraic number.,Lean4 code file not found
+Ireland-Rosen_exercise_1_27,success,True,4,For all odd $n$ show that $8 \mid n^{2}-1$.,"import Mathlib
+
+-- Ireland-Rosen, Exercise 1.27
+-- For all odd n show that 8 ∣ n^2 - 1.
+
+theorem ireland_rosen_exercise_1_27 (n : ℕ) (h : Odd n) : 8 ∣ n^2 - 1 := by sorry
+"
+Artin_exercise_13_6_10,max_steps_reached,False,6,Let $K$ be a finite field. Prove that the product of the nonzero elements of $K$ is $-1$.,"import Mathlib
+
+/-- Artin Ex. 13.6.10
+
+Let K be a finite field. The product of the nonzero elements of K is -1. -/
+theorem Artin_exercise_13_6_10 {K : Type _} [Field K] [Fintype K] [DecidableEq K] :
+  Finset.prod (Finset.univ.erase (0 : K)) (fun a => a) = (-1 : K) := by sorry
+"
+Ireland-Rosen_exercise_3_5,success,True,5,Show that the equation $7 x^{3}+2=y^{3}$ has no solution in integers.,"import Mathlib
+
+/-!
+Ireland--Rosen exercise 3.5: Show that 7*x^3 + 2 = y^3 has no integer solutions.
+-/
+
+theorem ireland_rosen_exercise_3_5 : ¬ ∃ (x y : ℤ), 7 * x ^ 3 + 2 = y ^ 3 := by sorry
+"
+Dummit-Foote_exercise_2_4_16b,max_steps_reached,False,6,Show that the subgroup of all rotations in a dihedral group is a maximal subgroup.,"import Mathlib
+
+variable {G : Type _} [Group G] [Fintype G]
+
+/-- If a subgroup H has index 2 in a finite group G, then H is maximal: any subgroup K with H ≤ K ≤ G
+    is either H or the whole group. -/
+theorem subgroup_index_two_maximal (H : Subgroup G) [Fintype (↥H)]
+  (h_index : Fintype.card G = 2 * Fintype.card (↥H)) :
+  ∀ K : Subgroup G, H ≤ K → (K = H ∨ K = (⊤ : Subgroup G)) := by sorry
+"
+Axler_exercise_5_20,max_steps_reached,False,6,Suppose that $T \in \mathcal{L}(V)$ has $\operatorname{dim} V$ distinct eigenvalues and that $S \in \mathcal{L}(V)$ has the same eigenvectors as $T$ (not necessarily with the same eigenvalues). Prove that $S T=T S$.,"import Mathlib
+
+open LinearMap
+
+variable {K : Type*} [Field K]
+variable {V : Type*} [AddCommGroup V] [Module K V] [FiniteDimensional K V]
+
+/-- Exercise: Suppose T : V →ₗ[K] V has a basis of eigenvectors, and S : V →ₗ[K] V has the same eigenvectors (possibly with different eigenvalues). Then S and T commute. -/
+theorem Axler_exercise_5_20 {ι : Type*} [Fintype ι] (b : Basis ι K V) (T S : V →ₗ[K] V)
+  (μ λ : ι → K)
+  (hT : ∀ i, T (b i) = μ i • b i)
+  (hS : ∀ i, S (b i) = λ i • b i) : S.comp T = T.comp S := by sorry
+"
+Putnam_exercise_1998_b6,success,True,3,"Prove that, for any integers $a, b, c$, there exists a positive integer $n$ such that $\sqrt{n^3+a n^2+b n+c}$ is not an integer.","import Mathlib
+
+/-- Putnam 1998 B6: For any integers a, b, c, there exists a positive integer n such that
+    sqrt(n^3 + a n^2 + b n + c) is not an integer.
+
+    We state this by saying there is n > 0 such that no integer m satisfies m*m = n^3 + a n^2 + b n + c.
+-/
+theorem putnam_exercise_1998_b6 (a b c : Int) :
+  ∃ n : Nat, n > 0 ∧ ¬ ∃ m : Int, m * m = (n : Int) ^ 3 + a * (n : Int) ^ 2 + b * (n : Int) + c := by sorry
+"
+Ireland-Rosen_exercise_4_4,success,True,4,Consider a prime $p$ of the form $4 t+1$. Show that $a$ is a primitive root modulo $p$ iff $-a$ is a primitive root modulo $p$.,"import Mathlib
+
+/-- Exercise: Let p be a prime with p ≡ 1 (mod 4). For a ∈ ZMod p, a is a primitive root modulo p
+    iff -a is a primitive root modulo p. -/
+theorem ireland_rosen_exercise_4_4 {p : ℕ} (hp : p.Prime) (hmod : p % 4 = 1) {a : ZMod p} :
+  IsPrimitiveRoot a (p - 1) ↔ IsPrimitiveRoot (-a : ZMod p) (p - 1) := by sorry
+"
+Putnam_exercise_2000_a2,success,True,3,"Prove that there exist infinitely many integers $n$ such that $n, n+1, n+2$ are each the sum of the squares of two integers.","import Mathlib
+
+/-- There exist infinitely many integers n such that n, n+1, n+2 are each the sum of two squares. -/
+theorem Putnam_exercise_2000_a2 : Set.Infinite { n : ℤ | ∃ a b : ℤ, n = a ^ 2 + b ^ 2 ∧ ∃ a' b' : ℤ, n + 1 = a' ^ 2 + b' ^ 2 ∧ ∃ a'' b'' : ℤ, n + 2 = a'' ^ 2 + b'' ^ 2 } := by sorry
+"
+Ireland-Rosen_exercise_3_4,success,True,3,Show that the equation $3 x^{2}+2=y^{2}$ has no solution in integers.,"import Mathlib
+
+/- Show that the Diophantine equation 3*x^2 + 2 = y^2 has no integer solutions. -/
+theorem ireland_rosen_exercise_3_4 : ¬ ∃ x y : Int, 3 * x * x + 2 = y * y := by
+  sorry
+"
+Axler_exercise_1_6,success,True,6,"Give an example of a nonempty subset $U$ of $\mathbf{R}^2$ such that $U$ is closed under addition and under taking additive inverses (meaning $-u \in U$ whenever $u \in U$), but $U$ is not a subspace of $\mathbf{R}^2$.","import Mathlib
+
+/-- The subset U of R^2 consisting of pairs of integers (viewed as reals). -/
+def U : Set (ℝ × ℝ) := { p | ∃ (m n : Int), p = ((m : ℝ), (n : ℝ)) }
+
+/-- U is nonempty. -/
+theorem U_nonempty : ∃ x, x ∈ U := by sorry
+
+/-- U is closed under addition (componentwise). -/
+theorem U_closed_add : ∀ u v : ℝ × ℝ, u ∈ U → v ∈ U → (u.1 + v.1, u.2 + v.2) ∈ U := by sorry
+
+/-- U is closed under additive inverses (componentwise). -/
+theorem U_closed_neg : ∀ u : ℝ × ℝ, u ∈ U → (-u.1, -u.2) ∈ U := by sorry
+
+/-- U is not a subspace of R^2: it fails to be closed under scalar multiplication by arbitrary reals. -/
+theorem U_not_closed_smul : ∃ (r : ℝ) (v : ℝ × ℝ), v ∈ U ∧ r • v ∉ U := by sorry
+"
+Putnam_exercise_2020_b5,success,True,5,"For $j \in\{1,2,3,4\}$, let $z_{j}$ be a complex number with $\left|z_{j}\right|=1$ and $z_{j} \neq 1$. Prove that $3-z_{1}-z_{2}-z_{3}-z_{4}+z_{1} z_{2} z_{3} z_{4} \neq 0 .$","import Mathlib
+
+theorem Putnam_exercise_2020_b5 {z1 z2 z3 z4 : Complex}
+  (h1 : Complex.abs z1 = 1) (h2 : Complex.abs z2 = 1) (h3 : Complex.abs z3 = 1) (h4 : Complex.abs z4 = 1)
+  (nz1 : z1 ≠ 1) (nz2 : z2 ≠ 1) (nz3 : z3 ≠ 1) (nz4 : z4 ≠ 1) :
+  (3 : Complex) - z1 - z2 - z3 - z4 + z1 * z2 * z3 * z4 ≠ 0 := by sorry
+"
+Putnam_exercise_2017_b3,success,True,5,"Suppose that $f(x)=\sum_{i=0}^{\infty} c_{i} x^{i}$ is a power series for which each coefficient $c_{i}$ is 0 or 1 . Show that if $f(2 / 3)=3 / 2$, then $f(1 / 2)$ must be irrational.","import Mathlib
+
+/-- Suppose that f(x) = ∑_{i=0}^∞ c_i x^i is a power series with each coefficient c_i equal to 0 or 1.
+    Show that if f(2/3) = 3/2, then f(1/2) is irrational. -/
+theorem putnam_exercise_2017_b3 (c : ℕ → ℕ)
+  (h01 : ∀ i, c i = 0 ∨ c i = 1)
+  (hconv23 : Summable (fun i => (c i : ℝ) * (2/3) ^ i))
+  (hval23 : (∑' i, (c i : ℝ) * (2/3) ^ i) = 3 / 2) :
+  Irrational (∑' i, (c i : ℝ) * (1 / 2) ^ i) := by sorry
+"
+Ireland-Rosen_exercise_4_11,max_steps_reached,False,6,Prove that $1^{k}+2^{k}+\cdots+(p-1)^{k} \equiv 0(p)$ if $p-1 \nmid k$ and $-1(p)$ if $p-1 \mid k$.,"import Mathlib
+
+open Finset
+
+/-- Exercise 4.11 (Ireland & Rosen).
+For a prime p and k : ℕ, the sum 1^k + 2^k + ... + (p-1)^k in Z/pZ is 0 if (p-1) ∤ k and -1 if (p-1) ∣ k. -/
+theorem ireland_rosen_exercise_4_11 (p k : ℕ) (hp : p.Prime) :
+  (∑ i in (Finset.range p).erase 0, (i : ZMod p) ^ k) = if (p - 1) ∣ k then (-1 : ZMod p) else 0 := by sorry
+"
