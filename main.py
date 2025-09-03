@@ -20,6 +20,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
     name = entry["name"].replace("|", "_")
     nl = entry["nl_statement"]
     output_path = output_dir / f"{name}.lean"
+    domain = entry.get("domain")
 
     try:
         logging.info(f"Processing: {name}")
@@ -40,6 +41,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
                 # successful processing
                 return {
                     "name": name,
+                    "domain": domain,
                     "status": result["status"],
                     "steps": result["step"],
                     "nl_statement": nl,
@@ -51,6 +53,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
                 # output file not found
                 return {
                     "name": name,
+                    "domain": domain,
                     "status": "N/A",
                     "steps": 0,
                     "nl_statement": nl,
@@ -61,6 +64,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
             # output file read error
             return {
                 "name": name,
+                "domain": domain,
                 "status": "NA",
                 "steps": "NA",
                 "nl_statement": nl,
@@ -72,6 +76,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
         logging.error(f"Agent loading error when processing {name}: {e}")
         return {
             "name": name,
+            "domain": domain,
             "status": "agent_crashed",
             "steps": 0,
             "nl_statement": nl,
@@ -115,48 +120,22 @@ def load_retrieval_database_globally(project_root: Path) -> None:
     
     logging.info(f"Successfully loaded {len(META_DATA)} examples for retrieval.")
 
-
-def print_and_save_stats(stats: List[Dict[str, Any]], output_dir: Path):
-    """Saves a simple pass/fail log to a CSV and prints the overall pass rate."""
-    if not stats:
-        logging.warning("No statistics were generated to save.")
+def print_final_summary(status_counts: Dict[str, int], total_processed: int):
+    """Print the final summary statistics without needing the full stats list."""
+    if total_processed == 0:
+        logging.warning("No entries were processed successfully.")
         return
-
-    # Debug: Print all unique statuses to see what we're getting
-    unique_statuses = set(s["status"] for s in stats)
-    print(f"DEBUG: Found these statuses: {unique_statuses}")
-
-    stats_file = output_dir / "pass_rate_stats.csv"
-    with open(stats_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.writer(f)
-        writer.writerow(["name", "status", "passed", "steps","nl_statement","lean4_code"])
-        for s in stats:
-            passed = (s["status"] == "success")
-            writer.writerow([s["name"], s["status"], passed, s["steps"], s["nl_statement"], s["lean4_code"]])
-
-    logging.info(f"Simple pass/fail statistics saved to {stats_file}")
-
-    total_runs = len(stats)
-    passed_runs = sum(1 for s in stats if s["status"] == "success")
     
-    # Debug: Show breakdown by status
-    status_counts = {}
-    for s in stats:
-        status = s["status"]
-        status_counts[status] = status_counts.get(status, 0) + 1
-    
-    print(f"DEBUG: Status breakdown: {status_counts}")
-    
-    pass_rate = (passed_runs / total_runs) * 100 if total_runs > 0 else 0
+    passed_runs = status_counts.get("success", 0)
+    pass_rate = (passed_runs / total_processed) * 100 if total_processed > 0 else 0
 
     print("\n" + "="*40)
     print("📊 Final Pass Rate Summary")
     print("="*40)
-    print(f"Overall Pass Rate: {passed_runs} / {total_runs} ({pass_rate:.1f}%)")
+    print(f"Overall Pass Rate: {passed_runs} / {total_processed} ({pass_rate:.1f}%)")
     for status, count in status_counts.items():
         print(f"  {status}: {count}")
     print("="*40 + "\n")
-
 
 def main() -> None:
     """
@@ -164,8 +143,7 @@ def main() -> None:
     """
     PROJECT_ROOT = Path(__file__).resolve().parent
     LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
-    #INPUT_FILE = PROJECT_ROOT / "dataset/input/proofnet_sampled.jsonl"
-    INPUT_FILE = PROJECT_ROOT / "dataset/input/filtered.jsonl"
+    INPUT_FILE = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/dataset/input/ProofNet_all_filtered_domain.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
 
     LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -189,34 +167,84 @@ def main() -> None:
         logging.error(f"Failed to load input data: {e}")
         raise
 
-    # No need for functools.partial anymore
-    all_stats = []
+    # Initialize CSV file and writer
+    stats_file = LEAN_OUTPUT_DIR / "pass_rate_stats.csv"
+    csv_file = open(stats_file, "w", newline="", encoding="utf-8")
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerow(["name", "domain", "status", "passed", "steps", "nl_statement", "lean4_code"])
+    csv_file.flush()  # Ensure header is written immediately
+    
+    # Counters for final statistics
+    status_counts = {}
+    total_processed = 0
+    
     logging.info(f"Starting parallel processing with up to {MAX_WORKERS} threads...")
 
-    # Use ThreadPoolExecutor instead of ProcessPoolExecutor
-    with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        # Submit all jobs directly
-        future_to_entry = {
-            executor.submit(process_entry, entry, LEAN_OUTPUT_DIR): entry 
-            for entry in entries
-        }
-        
-        # Process completed results as they finish
-        with tqdm(total=len(entries), desc="Processing entries") as pbar:
-            for future in concurrent.futures.as_completed(future_to_entry):
-                try:
-                    stat = future.result()
-                    if stat:
-                        all_stats.append(stat)
-                        # Update progress bar with current status
-                        pbar.set_postfix({"Status": stat["status"], "Name": stat["name"][:20]})
-                except Exception as e:
-                    entry = future_to_entry[future]
-                    logging.error(f"Error processing {entry.get('name', 'unknown')}: {e}")
-                finally:
-                    pbar.update(1)
+    try:
+        # Use ThreadPoolExecutor instead of ProcessPoolExecutor
+        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+            # Submit all jobs directly
+            future_to_entry = {
+                executor.submit(process_entry, entry, LEAN_OUTPUT_DIR): entry 
+                for entry in entries
+            }
+            
+            # Process completed results as they finish
+            with tqdm(total=len(entries), desc="Processing entries") as pbar:
+                for future in concurrent.futures.as_completed(future_to_entry):
+                    try:
+                        stat = future.result()
+                        if stat:
+                            # Write immediately to CSV
+                            passed = (stat["status"] == "success")
+                            csv_writer.writerow([
+                                stat["name"], 
+                                stat["domain"], 
+                                stat["status"], 
+                                passed, 
+                                stat["steps"], 
+                                stat["nl_statement"], 
+                                stat["lean4_code"]
+                            ])
+                            csv_file.flush()  # Ensure data is written to disk
+                            
+                            # Update counters for final summary
+                            status_counts[stat["status"]] = status_counts.get(stat["status"], 0) + 1
+                            total_processed += 1
+                            
+                            # Update progress bar with current status
+                            pbar.set_postfix({"Status": stat["status"], "Name": stat["name"][:20]})
+                    except Exception as e:
+                        entry = future_to_entry[future]
+                        logging.error(f"Error processing {entry.get('name', 'unknown')}: {e}")
+                    finally:
+                        pbar.update(1)
+    
+    finally:
+        # Always close the CSV file
+        csv_file.close()
 
-    print_and_save_stats(all_stats, LEAN_OUTPUT_DIR)
+    # Print final statistics using the counters
+    print_final_summary(status_counts, total_processed)
+
+
+def print_final_summary(status_counts: Dict[str, int], total_processed: int):
+    """Print the final summary statistics without needing the full stats list."""
+    if total_processed == 0:
+        logging.warning("No entries were processed successfully.")
+        return
+    
+    passed_runs = status_counts.get("success", 0)
+    pass_rate = (passed_runs / total_processed) * 100 if total_processed > 0 else 0
+
+    print("\n" + "="*40)
+    print("📊 Final Pass Rate Summary")
+    print("="*40)
+    print(f"Overall Pass Rate: {passed_runs} / {total_processed} ({pass_rate:.1f}%)")
+    for status, count in status_counts.items():
+        print(f"  {status}: {count}")
+    print("="*40 + "\n")
+
 
 if __name__ == "__main__":
     setup_logging()
