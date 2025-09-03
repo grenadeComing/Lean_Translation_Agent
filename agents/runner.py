@@ -14,10 +14,10 @@ lean_repl_tool_instance = LeanReplTool()
 TOOLS: Dict[str, Any] = {
     "lean4_translation": LeanTranslationTool(),
     "lean_write_file": WriteToFileTool(),
-    #"lean4_repl_runner": lean_repl_tool_instance,
-    #"lean_retrieval": LeanRetrieverTool(),
-    #"search_online": SearchOnlineTool(),
-    #"lean_check_theorem": LeanCheckTheoremTool(lean_repl_tool_instance)
+    "lean4_repl_runner": lean_repl_tool_instance,
+    "lean_retrieval": LeanRetrieverTool(),
+    "search_online": SearchOnlineTool(),
+    "lean_check_theorem": LeanCheckTheoremTool(lean_repl_tool_instance)
 }
 
 def _tool_spec(tool_obj: Any) -> Dict[str, Any]:
@@ -145,7 +145,7 @@ def call_openai_lean_agent(
 
 
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_agent_with_translator_only},
+        {"role": "system", "content": system_content_agent_with_translator},
         {
             "role": "user",
             "content": (
