@@ -144,7 +144,7 @@ def main() -> None:
     PROJECT_ROOT = Path(__file__).resolve().parent
     LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
     INPUT_FILE = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/dataset/input/ProofNet_all_filtered_domain.jsonl"
-    MAX_WORKERS = 10 # Higher for I/O bound threads
+    MAX_WORKERS = 6 # Higher for I/O bound threads
 
     LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
