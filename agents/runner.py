@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 lean_repl_tool_instance = LeanReplTool()
 
 TOOLS: Dict[str, Any] = {
-    "lean4_translation": LeanTranslationTool(),
+    #"lean4_translation": LeanTranslationTool(),
     "lean_write_file": WriteToFileTool(),
     "lean4_repl_runner": lean_repl_tool_instance,
     "lean_retrieval": LeanRetrieverTool(),
@@ -145,7 +145,7 @@ def call_openai_lean_agent(
 
 
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_agent_with_translator},
+        {"role": "system", "content": system_content_agent_without_translator},
         {
             "role": "user",
             "content": (
