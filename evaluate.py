@@ -113,6 +113,7 @@ def main(dry_run=False):
         raise SystemExit(f"❌ ERROR: The CSV file was not found at: {CSV_FILE}")
 
     all_lean_files = list(LEAN_FILES_DIR.glob("*.lean"))
+    print(f"🔍 Found {len(all_lean_files)} .lean files in {LEAN_FILES_DIR}")
     validate_file_correspondence(all_lean_files, df)
     
     # --- 2. Filter for Files to Re-evaluate ---

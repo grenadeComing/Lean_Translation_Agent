@@ -1,6 +1,5 @@
 import os
 import json
-import time
 import logging
 from pathlib import Path
 from typing import Dict, Any, List
@@ -12,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 lean_repl_tool_instance = LeanReplTool()
 
 TOOLS: Dict[str, Any] = {
-    #"lean4_translation": LeanTranslationTool(),
+    "lean4_translation": LeanTranslationTool(),
     "lean_write_file": WriteToFileTool(),
     "lean4_repl_runner": lean_repl_tool_instance,
     "lean_retrieval": LeanRetrieverTool(),
@@ -87,6 +86,7 @@ def call_openai_lean_agent(
         Always use the `lean4_translation` tool as your first step. 
         If helpful, you may first generate an example statement and provide it to the translator. 
         After generating the code, use `lean_write_file` and `lean4_repl_runner` to write and verify it for errors.
+        The `lean4_repl_runner` tool will execute the Lean4 code and tell if a pass =1 or fail =0, with pass meaning your code is correct and compiles.
 
         ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
 
@@ -142,10 +142,29 @@ def call_openai_lean_agent(
         Respond with: `{ "status": "success" }` if you are done.
     """
 
+    system_content_without_repl = """
+    You are an expert Lean4 programmer and agent. Your primary mission is to translate a mathematical statement into Lean4 code using the provided tools.
+    Your main goal is to produce a Lean4 translation, **not a full proof**. 
+    After generating the code, use `lean_write_file` to write it to a file.
 
+    ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
+
+    ** Tool using guidence **
+    check_theorem_tool: Checks for the existence and official definition of a theorem, definition, or lemma.
+    search_online: Search the web for Lean4-related code or documentation.
+    lean_write_file: write Lean4 code to disk.
+    lean4_translation: produce a Lean4 declaration from natural language (no proof; ends with := by sorry) using FrenzyMath/Herald\_translator, you can use this tool generate, but you need to ensure the generated code is correct and follows Lean4 syntax by using other tools, you should not reply on this tool only.
+    lean_retrieval: fetch context/examples (lean4 code, nl_statement) pairs of the current natural language to translate.
+
+    ### Important Lean4/Mathlib Naming Conventions
+    1. **Types/Props use PascalCase**: `IsSimpleGroup`, `IsCyclic`, `Nat.Prime`.
+    2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
+    3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
+    4. Check the naming using `lean_check_theorem`.
+    """
 
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_agent_without_translator},
+        {"role": "system", "content": system_content_without_repl},
         {
             "role": "user",
             "content": (
@@ -155,7 +174,15 @@ def call_openai_lean_agent(
         },
     ]
 
-    tool_specs = [_tool_spec(t) for t in TOOLS.values()]
+    AGENT_TOOLS = {
+    "lean4_translation": TOOLS["lean4_translation"],
+    "lean_write_file": TOOLS["lean_write_file"],
+    "lean_retrieval": TOOLS["lean_retrieval"], 
+    "search_online": TOOLS["search_online"],
+    "lean_check_theorem": TOOLS["lean_check_theorem"]
+    }
+
+    tool_specs = [_tool_spec(t) for t in AGENT_TOOLS.values()]
 
     for step in range(1, max_steps + 1):
         # Call model

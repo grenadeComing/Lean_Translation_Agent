@@ -62,9 +62,9 @@ class LeanReplTool(BaseTool):
             return {
                 "ok": True,
                 "repl_pass": repl_pass,
-                "repl_output": stdout or "{}",
-                "stdout": stdout,
-                "stderr": stderr
+                #"repl_output": stdout or "{}",
+                #"stdout": stdout,
+                #"stderr": stderr
             }
 
         except subprocess.TimeoutExpired:

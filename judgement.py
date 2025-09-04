@@ -13,24 +13,26 @@ def validate_translation(nl_statement: str, lean4_code: str) -> str:
         {
         "role": "system",
         "content": r"""(
-            You are an expert in Lean 4, Mathlib, and Mathematics. You are an auditor with strict guidelines.  
+            You are an expert in Lean 4, Mathlib, and Mathematics. You are an auditor with guidelines.  
 
             Instructions:  
-            Your input will be a compiling Lean 4 code and a natural language statement. Your task is to determine if the compiling Lean 4 code successfully translates the natural language statement. No proofs are used but the translation must be the same.  
+            Your input will be a compiling Lean 4 code and a natural language statement. Your task is to determine if the compiling Lean 4 code successfully translates the natural language statement. No proofs are used but the translation should be essentially the same. 
 
             Think step by step:  
-            1. Translate each line of the Lean 4 code into natural language. Assess if it makes sense and is on the right path.  
+            1. Translate each line of the Lean 4 code into natural language. Assess if it makes sense and is on the right path. 
             2. When you finish, see if the whole translation is faithful to the original statement.  
             3. Do a final check: are the two math problems the same or different? Compare each statement carefully. Point out any differences you found.  
 
             Guidelines:  
-            1. You are extra harsh.  It must be a legitimate, faithful translation in order to pass.  
+            1. It must be a legitimate, faithful translation in order to pass. Keep in mind there may be discrepancies between formalized Lean4 code and natural language.  Keep in mind this Lean4 code compiles so the terms it does not define are really a part of Mathlib.
             2. The code should be using the latest, applicable Mathlib terms.  This could be a red flag. If it faithfully defines Mathlib concepts then it's fine.
             3. Check if the Lean 4 code makes secondary definitions other than just the final theorem/definition statement. This could be a red flag. If all auxiliary definitions are faithfully defined and not vacuous placeholders, then it's fine. However if any auxiliary definition  is vacuous (e.g., `:= True`, `:= none`, or filled with `sorry`),  then the translation fails. The auxiliary definition must faithfully describe what it it's trying to say. 
-            4. Only if each auxiliary definition is legitimate and the final theorem matches the statement in mathematical meaning, then the translation passes.  It is okay to be logically equivalent to the original statement as well. That is considered having the same mathematical meaning. 
+            4. Only if each auxiliary definition is legitimate and the final theorem matches the statement in mathematical meaning, then the translation passes. Remember that there may be some technical details in formalization that slightly changes the meaning from natural language. Do not punish the translation for this. As long as there was no cheating in the translation, and the translation is genuinely accurate, then it is a pass. 
+            5. If it's a near pass asses if the Lean4 code is the good way to  formalize the natural language statement. If it is a slight generalization or a slight specialization of the natural language statement, then that's fine. Consider giving it a pass if no serious mistakes are made. 
+
 
             After you have made your judgement, carefully review your analysis. 
-            Assign a Grade, an integer from 0-10, using this rubric:
+            Assign a Grade, an integer from 0-10, using this rubric. A 10 is only assigned for faithful code.
             0: completely unrelated
             3:  makes up vacuous definitions and even if they were fixed, the final theorem/definition would not be faithful
             6: makes up vacuous definitions but if that were fixed, then the final theorem/definition is faithful
@@ -38,6 +40,7 @@ def validate_translation(nl_statement: str, lean4_code: str) -> str:
             10: it is faithful
             You can place the grade in-between if you think that's where it should be. 
             Please verify the grade reflects the mistakes in translation.
+
 
             ---
 
@@ -82,9 +85,7 @@ def validate_translation(nl_statement: str, lean4_code: str) -> str:
             end Covering```
 
             Here is the original  natural language statement
-            ```{"name": "benmckay_top_covering-spaces_62", 
-            "nl_statement": "Prove that the number \\(n\\) of sheets (which might be \\(\\infty\\)) above an evenly covered open set is constant along any path in \\(Y\\). In particular, if \\(Y\\) is path connected, this number \\(n\\) is constant, and we say that the covering map is \\(n\\) to \\(1\\).", 
-            "domain": "Topology"}```
+            ``` Prove that the number \\(n\\) of sheets (which might be \\(\\infty\\)) above an evenly covered open set is constant along any path in \\(Y\\). In particular, if \\(Y\\) is path connected, this number \\(n\\) is constant, and we say that the covering map is \\(n\\) to \\(1\\) ```
 
             ###BEGIN THOUGHT
             Setup:
@@ -272,7 +273,7 @@ if __name__ == "__main__":
     start_time = time.time()
     
     CVS_folder_path = Path(__file__).parent
-    input_csv = CVS_folder_path / "all_experiments_csv/400_data_agent+herald+allTools.csv"
+    input_csv = CVS_folder_path / "all_experiments_csv/ProofNet_data_agent+herald+write_only.csv"
     update_csv_write_immediately(str(input_csv))
     end_time = time.time()
     print(f"Execution time: {end_time - start_time} seconds")

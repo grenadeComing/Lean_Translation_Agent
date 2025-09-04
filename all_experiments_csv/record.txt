@@ -1,0 +1,33 @@
+"all_experiments_csv/400_agent_with_herald+repl_1_0_lean_files.csv"
+✅ Done! 400 successful, 0 errors
+Execution time: 1293.714054107666 seconds
+
+
+________________________________
+
+"all_experiments_csv/400_agent+tools+herald_lean_files.csv"
+✅ Done! 400 successful, 0 errors
+Execution time: 1120.447427034378 seconds
+
+
+________________________________
+"all_experiments_csv/400_agent+tools+no_herald_lean_files.csv"
+✅ Done! 400 successful, 0 errors
+Execution time: 1193.262568950653 seconds
+
+________________________________
+"all_experiments_csv/ProofNet_data_agent+allTools_no_herald.csv"
+✅ Done! 371 successful, 0 errors
+Execution time: 829.9080362319946 seconds
+
+
+________________________________
+"all_experiments_csv/ProofNet_data_agent+herald+allTools.csv"
+✅ Done! 370 successful, 0 errors
+Execution time: 876.6141767501831 seconds
+
+
+________________________________
+all_experiments_csv/ProofNet_data_agent+herald+write_only.csv
+✅ Done! 371 successful, 0 errors
+Execution time: 907.4641690254211 seconds

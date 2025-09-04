@@ -3,6 +3,7 @@ import json
 import logging
 import csv
 from pathlib import Path
+import time
 from typing import List, Dict, Any
 import numpy as np
 from tqdm import tqdm
@@ -179,7 +180,7 @@ def main() -> None:
     total_processed = 0
     
     logging.info(f"Starting parallel processing with up to {MAX_WORKERS} threads...")
-
+    time_start = time.perf_counter()
     try:
         # Use ThreadPoolExecutor instead of ProcessPoolExecutor
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
@@ -224,8 +225,12 @@ def main() -> None:
         # Always close the CSV file
         csv_file.close()
 
+
+
+    time_end = time.perf_counter()
     # Print final statistics using the counters
     print_final_summary(status_counts, total_processed)
+    print(f"Total processing time: {time_end - time_start:.2f} seconds")
 
 
 def print_final_summary(status_counts: Dict[str, int], total_processed: int):
