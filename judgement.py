@@ -3,6 +3,8 @@ import csv,json,shutil
 import time
 from openai import OpenAI
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import threading
 
 client = OpenAI()
 
@@ -142,59 +144,135 @@ def validate_translation(nl_statement: str, lean4_code: str) -> str:
             "reason": f"ERROR: {str(e)}"
         }
 
-def update_csv_in_place(file_path: str):
-    # Step 1: Read all rows
-    with open(file_path, "r", encoding="utf-8") as f:
-        reader = list(csv.DictReader(f))
-        fieldnames = reader[0].keys()
+def process_row(row_data):
+    """Process a single row"""
+    row, index, total = row_data
+    
+    name = row.get("name", "")
+    print(f"[{index + 1}/{total}] Processing {name}...")
+    
+    nl = row.get("nl_statement", "")
+    lean = row.get("lean4_code", "")
+    
+    # Your validation function
+    result = validate_translation(nl, lean)
+    
+    # Update row
+    row["validate_score"] = result.get("grade", -1)
+    row["validate_reason"] = result.get("thought", "No reason given")
+    row["equivalent"] = result.get("faithful_score", False)
+    
+    return row
 
-        # Ensure required columns exist
-        extra_cols = ["validate_score", "validate_reason", "equivalent"]
-        for col in extra_cols:
-            if col not in fieldnames:
-                fieldnames = list(fieldnames) + [col]
+# Simple lock for file writing
+write_lock = threading.Lock()
 
-    # Step 2: Process every row, even if already filled
-    updated_rows = []
-    total = 0
-    errors = 0
-
-    for row in reader:
-        total += 1
-        name = row.get("name", "")
-        print(f"[{total}] Re-processing {name}...")
-
+def process_and_write_row(args):
+    """Process row and immediately append to file"""
+    row, index, total, temp_file, fieldnames = args
+    
+    name = row.get("name", "")
+    print(f"[{index + 1}/{total}] Processing {name}...")
+    
+    try:
         nl = row.get("nl_statement", "")
         lean = row.get("lean4_code", "")
-
+        
+        # Your validation function
         result = validate_translation(nl, lean)
-
+        
+        # Update row
         row["validate_score"] = result.get("grade", -1)
         row["validate_reason"] = result.get("thought", "No reason given")
         row["equivalent"] = result.get("faithful_score", False)
+        
+        # Write immediately to temp file
+        with write_lock:
+            with open(temp_file, "a", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writerow(row)
+        
+        print(f"✓ [{index + 1}/{total}] Saved {name}")
+        return True
+        
+    except Exception as e:
+        print(f"✗ [{index + 1}/{total}] Error processing {name}: {e}")
+        # Still write the original row
+        with write_lock:
+            with open(temp_file, "a", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writerow(row)
+        return False
 
-        if row["validate_score"] == -1:
-            errors += 1
-
-        updated_rows.append(row)
-
-    # Step 3: Backup original file
-    shutil.copy(file_path, file_path + ".bak")
-
-    # Step 4: Overwrite original with updated content
-    with open(file_path, "w", newline="", encoding="utf-8") as f:
+def update_csv_write_immediately(file_path: str, max_workers: int = 12):
+    """Process and write each row as soon as it's done"""
+    
+    # Read file
+    with open(file_path, "r", encoding="utf-8") as f:
+        reader = list(csv.DictReader(f))
+        if not reader:
+            print("No rows to process!")
+            return
+        fieldnames = list(reader[0].keys())
+    
+    # Add new columns
+    new_cols = ["validate_score", "validate_reason", "equivalent"]
+    for col in new_cols:
+        if col not in fieldnames:
+            fieldnames.append(col)
+    
+    total = len(reader)
+    temp_file = file_path + ".tmp"
+    
+    # Create temp file with headers
+    with open(temp_file, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerows(updated_rows)
-
-    print(f"\n✅ Done. Reprocessed {total} rows. Errors: {errors}")
-    print(f"📦 Original file backed up as: {file_path}.bak")
+    
+    print(f"Processing {total} rows, writing results immediately...")
+    
+    # Process in parallel, write as completed
+    successes = 0
+    try:
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all tasks
+            futures = [
+                executor.submit(process_and_write_row, (row.copy(), i, total, temp_file, fieldnames))
+                for i, row in enumerate(reader)
+            ]
+            
+            # Collect results as they complete
+            for future in as_completed(futures):
+                try:
+                    if future.result():
+                        successes += 1
+                except Exception as e:
+                    print(f"Unexpected error: {e}")
+        
+        # Replace original file
+        shutil.copy(file_path, file_path + ".bak")
+        shutil.move(temp_file, file_path)
+        
+        errors = total - successes
+        print(f"✅ Done! {successes} successful, {errors} errors")
+        
+    except Exception as e:
+        print(f"Error during processing: {e}")
+        # Clean up temp file if something went wrong
+        try:
+            import os
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
+        except:
+            pass
+        raise
 
 # === Run ===
 if __name__ == "__main__":
     start_time = time.time()
     
-    input_csv = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/outputs/max_try_6_lean4_file_with_csv(with_translator_tool)test_144/pass_rate_stats.csv"
-    update_csv_in_place(input_csv)
+    CVS_folder_path = Path(__file__).parent
+    input_csv = CVS_folder_path / "all_experiments_csv/400_data_agent+herald+allTools.csv"
+    update_csv_write_immediately(str(input_csv))
     end_time = time.time()
     print(f"Execution time: {end_time - start_time} seconds")
