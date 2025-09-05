@@ -76,8 +76,10 @@ export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 ```
 4. Remember to change the config
 ```bash
-## 1. for line 50 of 
-agents/tools/translator_tool.py ##remeber the v1/chat/completions
+
+## 1. change the translator model serving API,remeber the v1/chat/completions
+## in line 50 of 
+agents/tools/translator_tool.py
 
 ## 2. the repl path, changed it to where you build the repl lake project
 agents/tools/run_lean_tool.py
