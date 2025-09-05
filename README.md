@@ -13,7 +13,6 @@ Lean_Translation_Agent/
 │   └── tools/            # Tool implementations
 ├── dataset/               # Data files
 ├── results/               # Output directory
-└── agent_logs/          # Execution logs, moved into outputs
 ├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
 ├── all_experiments_csv/  # the final output CSV after evaluate.py
 ├── judgement.py       # input the agent output, asking judgment to give score of the agent work
