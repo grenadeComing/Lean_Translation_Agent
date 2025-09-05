@@ -137,17 +137,4 @@ MIT License - see LICENSE file for details.
 - ProofNet and Herald datasets
 - Openly licensed and freely available lecture notes for dataset curation: sub item - Jiří Lebl, Real and Complex Analysis — https://github.com/jirilebl/ra, https://github.com/jirilebl/ca sub item Benjamin McKay, Topology — https://github.com/Ben-McKay/topology-lecture-notes subitem - Stephen R. Doty, Abstract Algebra — https://github.com/srdoty/AbstractAlgebraBook
 
-## Citation
-
-If you use this work in your research, please cite:
-
-```bibtex
-@software{lean_translation_agent,
-  title = {Lean Translation Agent},
-  author = {GrenadeComing},
-  url = {https://github.com/grenadeComing/Lean_Translation_Agent},
-  year = {2025}
-}
-```
-
 
