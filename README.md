@@ -1,6 +1,6 @@
-# Lean Translation Agent
+# Agentic Lean Auformalization (ALA)
 
-A sophisticated AI-powered system for translating natural language mathematical statements into formal Lean4 proofs using OpenAI's GPT-4 and retrieval-augmented generation.
+A sophisticated AI-agent for translating natural language mathematical statements into formal Lean4 proofs using OpenAI's model and self-defined tools.
 
 ### Project Structure
 
@@ -91,21 +91,13 @@ agents/tools/run_lean_tool.py
 python main.py
 ```
 
-This will process all entries in `dataset/input/proofnet_sampled.jsonl` and save results to `results/`.
+This will process all entries in `INPUT_PATH_IN_MAIN` and save results to `results/`.
 
-### Configuration
-
-Edit `config.ini` to customize:
-- Input/output paths
-- Model parameters
-- API endpoints
-- Logging levels
 
 ### Output
 
 - **Lean4 Files**: Validated proofs in `results/` directory
 - **Logs**: Execution details in `.agent_logs/` and `translation_agent.log`
-- **Progress**: Real-time progress bars and status messages
 
 ## Data Format
 
@@ -131,16 +123,6 @@ Edit `config.ini` to customize:
 3. Add to `TOOLS` dictionary in `agents/runner.py`
 4. Update system prompt if needed
 
-### Testing
-
-```bash
-# Run with sample data
-python main.py
-
-# Check logs for debugging
-tail -f translation_agent.log
-```
-
 
 ## License
 
@@ -163,4 +145,4 @@ If you use this work in your research, please cite:
 
 - OpenAI for GPT-4 API
 - Lean community for the formalization framework
-- ProofNet and Herald datasets for training data
+- ProofNet and Herald datasets
