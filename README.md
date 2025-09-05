@@ -42,26 +42,18 @@ Lean_Translation_Agent/
    - **REPL Tool**: Lean4 compilation and error checking
 
 3. **Data Pipeline**
-   - Input: Mathematical problems from ProofNet dataset
+   - Input: Mathematical natural language statements
    - Retrieval DB: Herald dataset with informal-formal pairs
    - Output: Validated Lean4 `.lean` files
-
-### Workflow
-
-1. Load mathematical statement
-2. Generate initial Lean4 translation
-3. Validate with Lean REPL
-4. Retrieve similar examples if needed
-5. Iteratively refine until compilation succeeds
-6. Save validated proof to file
 
 ## Installation
 
 ### Prerequisites
 
-- Python 3.8+
 - OpenAI API key
-- Lean4 environment with Lake ([Lean4 REPL](https://github.com/leanprover-community/repl.git) to run the evaliation results.))
+- Lean4 toolkit (lake, Lean4, mathlib4 lib)
+- Lean4 [Lean4 REPL](https://github.com/leanprover-community/repl.git) to get feedback
+- Using Mathlib as a dependency in the REPL project, ```echo -e '\n[[require]]\nname = "mathlib"\nscope = "leanprover-community"' >> repl/lakefile.toml```
 - Local translation API server (optional)
 
 ### Setup
