@@ -82,6 +82,7 @@ export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 agents/tools/translator_tool.py
 
 ## 2. the repl path, changed it to where you build the repl lake project
+## in line 20 of
 agents/tools/run_lean_tool.py
 ```
 

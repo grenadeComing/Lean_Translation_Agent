@@ -47,8 +47,7 @@ class LeanTranslationTool(BaseTool):
     }
 
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
-    DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
-    #DEFAULT_API_URL = "https://requirement-pmc-gotten-brakes.trycloudflare.com/v1/chat/completions"
+    DEFAULT_API_URL = "MODEL_API_URL/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()

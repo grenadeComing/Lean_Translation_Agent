@@ -8,7 +8,7 @@ import argparse # Import the argparse library
 # --- CONFIGURATION ---
 # Define the root directory of your Lean project
 PROJECT_ROOT = Path(__file__).resolve().parent
-REPL_DIR = Path("/Users/kezhang/Desktop/projects/repl") 
+REPL_DIR = "PATH_TO_REPL_DIRECTORY"  # Replace with the path to your REPL directory
 # Define the directory where your .lean proof files are stored
 LEAN_FILES_DIR = PROJECT_ROOT / "results"
 # Define the path to your CSV file

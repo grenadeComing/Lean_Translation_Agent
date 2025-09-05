@@ -17,7 +17,7 @@ class LeanReplTool(BaseTool):
         "required": ["path"]
     }
 
-    REPL_DIR = "/Users/kezhang/Desktop/projects/repl"  # adjust if needed
+    REPL_DIR = "PATH_TO_REPL_DIRECTORY"  # adjust if needed
 
     def run(self, path: str, **kwargs) -> Dict[str, Any]:
         try:
