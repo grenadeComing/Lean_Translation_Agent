@@ -65,11 +65,13 @@ pip install -r requirements.txt
 3. Configure your OpenAI API key:
 ```bash
 export OPENAI_API_KEY="your-api-key-here"
+export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 ```
-
-4. (Optional) Start the local translation API server:
+4. Remember to change the API when to use the tranlsator_tool
 ```bash
-# Assuming you have the translation service running on localhost:8000
+## change line 50 under
+agents/tools/translator_tool.py
+# remeber the v1/chat/completions
 ```
 
 ## Usage
@@ -118,14 +120,17 @@ Edit `config.ini` to customize:
 ```
 Lean_Translation_Agent/
 ├── main.py                 # Entry point with data loading
-├── config.ini             # Configuration file
 ├── requirements.txt       # Python dependencies
 ├── agents/
 │   ├── runner.py         # Agent orchestration
 │   └── tools/            # Tool implementations
 ├── dataset/               # Data files
 ├── results/               # Output directory
-└── .agent_logs/          # Execution logs
+└── agent_logs/          # Execution logs, moved into outputs
+├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
+├── all_experiments_csv/  # the final output CSV after evaluate.py
+├── judgement.py       # input the agent output, asking judgment to give score of the agent work
+├── evaludate.py       # This work need to be improve, this one only check the max_step_reach for false negative, we can run over all .lean files to double check
 ```
 
 ### Adding New Tools

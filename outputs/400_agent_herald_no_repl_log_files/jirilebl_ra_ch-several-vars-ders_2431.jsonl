@@ -1,0 +1,12 @@
+{"action": "model_call", "step": 1, "has_tools": true, "content": null, "tools_requested": ["lean_check_theorem"]}
+{"action": "tool_run", "step": 1, "tool": "lean_check_theorem", "ok": true, "args": {"name_to_check": "LinearMap.opNorm"}, "result": "{\"ok\": true, \"definitions\": [], \"errors\": [], \"stdout\": \"\", \"stderr\": \"\"}"}
+{"action": "model_call", "step": 2, "has_tools": true, "content": null, "tools_requested": ["lean_check_theorem"]}
+{"action": "tool_run", "step": 2, "tool": "lean_check_theorem", "ok": true, "args": {"name_to_check": "ContinuousLinearMap.opNorm"}, "result": "{\"ok\": true, \"definitions\": [], \"errors\": [], \"stdout\": \"\", \"stderr\": \"\"}"}
+{"action": "model_call", "step": 3, "has_tools": true, "content": null, "tools_requested": ["lean_check_theorem"]}
+{"action": "tool_run", "step": 3, "tool": "lean_check_theorem", "ok": true, "args": {"name_to_check": "LinearMap.opNorm_eq_norm_sup"}, "result": "{\"ok\": true, \"definitions\": [], \"errors\": [], \"stdout\": \"\", \"stderr\": \"\"}"}
+{"action": "model_call", "step": 4, "has_tools": true, "content": null, "tools_requested": ["lean_check_theorem"]}
+{"action": "tool_run", "step": 4, "tool": "lean_check_theorem", "ok": true, "args": {"name_to_check": "ContinuousLinearMap.opNorm_eq_sup"}, "result": "{\"ok\": true, \"definitions\": [], \"errors\": [], \"stdout\": \"\", \"stderr\": \"\"}"}
+{"action": "model_call", "step": 5, "has_tools": true, "content": null, "tools_requested": ["lean_write_file"]}
+{"action": "tool_run", "step": 5, "tool": "lean_write_file", "ok": true, "args": {"path": "jirilebl_ra_ch-several-vars-ders_2431.lean", "content": "import Mathlib\n\n/-!\nSimple statement: For linear maps between finite-dimensional real normed spaces (ℝ^n → ℝ^m),\nthe operator norm equals the supremum over the closed unit ball, the supremum over the open unit\nball, and the maximum is attained on the unit sphere.\n-/\n\ntheorem operator_norm_on_Rn {n m : ℕ} (A : (Fin n → ℝ) →L[ℝ] (Fin m → ℝ)) :\n  ‖A‖ = Sup ((fun x => ‖A x‖) '' {x : Fin n → ℝ | ‖x‖ ≤ 1}) ∧\n  ‖A‖ = Sup ((fun x => ‖A x‖) '' {x : Fin n → ℝ | ‖x‖ < 1}) ∧\n  (∃ x : Fin n → ℝ, ‖x‖ = 1 ∧ ‖A‖ = ‖A x‖) := by\n  sorry\n"}, "result": "Wrote file: jirilebl_ra_ch-several-vars-ders_2431.lean"}
+{"action": "model_call", "step": 6, "has_tools": false, "content": "{ \"status\": \"success\" }", "tools_requested": []}
+{"action": "success", "step": 6, "type": "explicit"}

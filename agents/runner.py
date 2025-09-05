@@ -151,7 +151,6 @@ def call_openai_lean_agent(
 
     ** Tool using guidence **
     check_theorem_tool: Checks for the existence and official definition of a theorem, definition, or lemma.
-    search_online: Search the web for Lean4-related code or documentation.
     lean_write_file: write Lean4 code to disk.
     lean4_translation: produce a Lean4 declaration from natural language (no proof; ends with := by sorry) using FrenzyMath/Herald\_translator, you can use this tool generate, but you need to ensure the generated code is correct and follows Lean4 syntax by using other tools, you should not reply on this tool only.
     lean_retrieval: fetch context/examples (lean4 code, nl_statement) pairs of the current natural language to translate.
@@ -180,7 +179,6 @@ def call_openai_lean_agent(
     "lean4_translation": TOOLS["lean4_translation"],
     "lean_write_file": TOOLS["lean_write_file"],
     "lean_retrieval": TOOLS["lean_retrieval"], 
-    "search_online": TOOLS["search_online"],
     "lean_check_theorem": TOOLS["lean_check_theorem"]
     }
 
