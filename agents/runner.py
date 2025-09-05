@@ -161,6 +161,8 @@ def call_openai_lean_agent(
     2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
     3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
     4. Check the naming using `lean_check_theorem`.
+
+    **Respond with: `{ "status": "success" }` if you think the translation is done and have write into the disk.**
     """
 
     messages: List[Dict[str, Any]] = [
