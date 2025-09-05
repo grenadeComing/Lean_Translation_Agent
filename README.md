@@ -2,6 +2,24 @@
 
 A sophisticated AI-powered system for translating natural language mathematical statements into formal Lean4 proofs using OpenAI's GPT-4 and retrieval-augmented generation.
 
+### Project Structure
+
+```
+Lean_Translation_Agent/
+├── main.py                 # Entry point with data loading
+├── requirements.txt       # Python dependencies
+├── agents/
+│   ├── runner.py         # Agent orchestration
+│   └── tools/            # Tool implementations
+├── dataset/               # Data files
+├── results/               # Output directory
+└── agent_logs/          # Execution logs, moved into outputs
+├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
+├── all_experiments_csv/  # the final output CSV after evaluate.py
+├── judgement.py       # input the agent output, asking judgment to give score of the agent work
+├── evaludate.py       # This work need to be improve, this one only check the max_step_reach for false negative, we can run over all .lean files to double check
+```
+
 ## Features
 
 - **Automated Translation**: Translates natural language mathematics to Lean4 code
@@ -113,25 +131,7 @@ Edit `config.ini` to customize:
 - **Metadata**: Informal-formal statement pairs with explanations
 - **Cache**: Query embedding cache for performance
 
-## Development
 
-### Project Structure
-
-```
-Lean_Translation_Agent/
-├── main.py                 # Entry point with data loading
-├── requirements.txt       # Python dependencies
-├── agents/
-│   ├── runner.py         # Agent orchestration
-│   └── tools/            # Tool implementations
-├── dataset/               # Data files
-├── results/               # Output directory
-└── agent_logs/          # Execution logs, moved into outputs
-├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
-├── all_experiments_csv/  # the final output CSV after evaluate.py
-├── judgement.py       # input the agent output, asking judgment to give score of the agent work
-├── evaludate.py       # This work need to be improve, this one only check the max_step_reach for false negative, we can run over all .lean files to double check
-```
 
 ### Adding New Tools
 
@@ -150,20 +150,6 @@ python main.py
 tail -f translation_agent.log
 ```
 
-## Performance
-
-- **Database**: 501 formalization examples with embeddings
-- **Average Processing Time**: ~2-5 minutes per theorem
-- **Success Rate**: ~70-80% depending on complexity
-- **Memory Usage**: ~500MB for embeddings + runtime
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
 
 ## License
 
