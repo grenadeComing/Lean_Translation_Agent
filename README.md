@@ -17,17 +17,14 @@ Lean_Translation_Agent/
 ├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
 ├── all_experiments_csv/  # the final output CSV after evaluate.py
 ├── judgement.py       # input the agent output, asking judgment to give score of the agent work
-├── evaludate.py       # This work need to be improve, this one only check the max_step_reach for false negative, we can run over all .lean files to double check
+├── evaludate.py       # re-check the max_reached, fix false negative
 ```
 
 ## Features
 
 - **Automated Translation**: Translates natural language mathematics to Lean4 code
-- **Retrieval-Augmented Generation**: Uses semantic search over 500+ formalization examples
-- **Iterative Refinement**: Multi-step process with error checking and correction
 - **Lean4 Validation**: Automatic compilation checking with Lake REPL
-- **Comprehensive Logging**: Detailed execution logs for debugging and analysis
-- **Progress Tracking**: Real-time progress bars and status updates
+- **Comprehensive Logging**: Detailed agent logs for debugging and analysis
 
 ## Architecture
 
@@ -64,7 +61,7 @@ Lean_Translation_Agent/
 
 - Python 3.8+
 - OpenAI API key
-- Lean4 environment with Lake
+- Lean4 environment with Lake ([Lean4 REPL](https://github.com/leanprover-community/repl.git) to run the evaliation results.))
 - Local translation API server (optional)
 
 ### Setup
@@ -85,11 +82,13 @@ pip install -r requirements.txt
 export OPENAI_API_KEY="your-api-key-here"
 export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 ```
-4. Remember to change the API when to use the tranlsator_tool
+4. Remember to change the config
 ```bash
-## change line 50 under
-agents/tools/translator_tool.py
-# remeber the v1/chat/completions
+## 1. for line 50 of 
+agents/tools/translator_tool.py ##remeber the v1/chat/completions
+
+## 2. the repl path, changed it to where you build the repl lake project
+agents/tools/run_lean_tool.py
 ```
 
 ## Usage
