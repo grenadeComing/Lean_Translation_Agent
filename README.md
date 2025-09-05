@@ -130,6 +130,13 @@ This will process all entries in `INPUT_PATH_IN_MAIN` and save results to `resul
 
 MIT License - see LICENSE file for details.
 
+## Acknowledgments
+
+- OpenAI API Plataform
+- Lean community for the formalization framework and REPL tool
+- ProofNet and Herald datasets
+- Openly licensed and freely available lecture notes for dataset curation: sub item - Jiří Lebl, Real and Complex Analysis — https://github.com/jirilebl/ra, https://github.com/jirilebl/ca sub item Benjamin McKay, Topology — https://github.com/Ben-McKay/topology-lecture-notes subitem - Stephen R. Doty, Abstract Algebra — https://github.com/srdoty/AbstractAlgebraBook
+
 ## Citation
 
 If you use this work in your research, please cite:
@@ -143,8 +150,4 @@ If you use this work in your research, please cite:
 }
 ```
 
-## Acknowledgments
 
-- OpenAI for GPT-4 API
-- Lean community for the formalization framework
-- ProofNet and Herald datasets
