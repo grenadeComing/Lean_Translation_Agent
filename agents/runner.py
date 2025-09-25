@@ -165,7 +165,7 @@ def call_openai_lean_agent(
     """
 
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_without_repl},
+        {"role": "system", "content": system_content_agent_with_translator},
         {
             "role": "user",
             "content": (
@@ -176,10 +176,12 @@ def call_openai_lean_agent(
     ]
 
     AGENT_TOOLS = {
-    "lean4_translation": TOOLS["lean4_translation"],
-    "lean_write_file": TOOLS["lean_write_file"],
-    "lean_retrieval": TOOLS["lean_retrieval"], 
-    "lean_check_theorem": TOOLS["lean_check_theorem"]
+        "lean4_translation": TOOLS["lean4_translation"],
+        "lean_write_file": TOOLS["lean_write_file"],
+        "lean4_repl_runner": TOOLS["lean4_repl_runner"],
+        "lean_retrieval": TOOLS["lean_retrieval"],
+        "search_online": TOOLS["search_online"],
+        "lean_check_theorem": TOOLS["lean_check_theorem"],
     }
 
     tool_specs = [_tool_spec(t) for t in AGENT_TOOLS.values()]

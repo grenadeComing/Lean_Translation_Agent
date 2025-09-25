@@ -13,7 +13,6 @@ Lean_Translation_Agent/
 │   └── tools/            # Tool implementations
 ├── dataset/               # Data files
 ├── results/               # Output directory
-└── agent_logs/          # Execution logs, moved into outputs
 ├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
 ├── all_experiments_csv/  # the final output CSV after evaluate.py
 ├── judgement.py       # input the agent output, asking judgment to give score of the agent work
@@ -82,6 +81,7 @@ export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 agents/tools/translator_tool.py
 
 ## 2. the repl path, changed it to where you build the repl lake project
+## in line 20 of
 agents/tools/run_lean_tool.py
 ```
 
@@ -130,21 +130,11 @@ This will process all entries in `INPUT_PATH_IN_MAIN` and save results to `resul
 
 MIT License - see LICENSE file for details.
 
-## Citation
-
-If you use this work in your research, please cite:
-
-```bibtex
-@software{lean_translation_agent,
-  title = {Lean Translation Agent},
-  author = {GrenadeComing},
-  url = {https://github.com/grenadeComing/Lean_Translation_Agent},
-  year = {2025}
-}
-```
-
 ## Acknowledgments
 
-- OpenAI for GPT-4 API
-- Lean community for the formalization framework
+- OpenAI API Plataform
+- Lean community for the formalization framework and REPL tool
 - ProofNet and Herald datasets
+- Openly licensed and freely available lecture notes for dataset curation: sub item - Jiří Lebl, Real and Complex Analysis — https://github.com/jirilebl/ra, https://github.com/jirilebl/ca sub item Benjamin McKay, Topology — https://github.com/Ben-McKay/topology-lecture-notes subitem - Stephen R. Doty, Abstract Algebra — https://github.com/srdoty/AbstractAlgebraBook
+
+

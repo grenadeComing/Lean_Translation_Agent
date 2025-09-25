@@ -17,7 +17,7 @@ class LeanReplTool(BaseTool):
         "required": ["path"]
     }
 
-    REPL_DIR = "/Users/kezhang/Desktop/projects/repl"  # adjust if needed
+    REPL_DIR = "PATH_TO_REPL_DIRECTORY"  # adjust if needed
 
     def run(self, path: str, **kwargs) -> Dict[str, Any]:
         try:
@@ -41,30 +41,38 @@ class LeanReplTool(BaseTool):
                 check=False
             )
 
-            stdout, stderr = result.stdout.strip(), result.stderr.strip()
+            stdout = result.stdout
+            stderr = result.stderr
 
+            raw_output = stdout.strip()
+            repl_json = None
             repl_pass = 1
-            try:
-                obj = json.loads(stdout)
+
+            if raw_output:
+                try:
+                    repl_json = json.loads(raw_output)
+                except json.JSONDecodeError:
+                    repl_json = None
+
+            if isinstance(repl_json, dict):
                 all_messages = []
 
                 # 👇 Collect from both "messages" and tactics[*].messages
-                if "messages" in obj:
-                    all_messages.extend(obj["messages"])
-                for tactic in obj.get("tactics", []):
+                if "messages" in repl_json:
+                    all_messages.extend(repl_json["messages"])
+                for tactic in repl_json.get("tactics", []):
                     all_messages.extend(tactic.get("messages", []))
 
                 if any(msg.get("severity", "").lower() == "error" for msg in all_messages):
                     repl_pass = 0
-            except json.JSONDecodeError:
-                pass  # Fail-safe: assume it's valid if no parsing errors
 
             return {
                 "ok": True,
                 "repl_pass": repl_pass,
-                #"repl_output": stdout or "{}",
-                #"stdout": stdout,
-                #"stderr": stderr
+                "repl_output": raw_output,
+                "repl_json": repl_json,
+                "stdout": stdout,
+                "stderr": stderr
             }
 
         except subprocess.TimeoutExpired:

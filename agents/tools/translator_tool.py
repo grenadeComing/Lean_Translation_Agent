@@ -47,8 +47,7 @@ class LeanTranslationTool(BaseTool):
     }
 
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
-    DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
-    #DEFAULT_API_URL = "https://requirement-pmc-gotten-brakes.trycloudflare.com/v1/chat/completions"
+    DEFAULT_API_URL = "MODEL_API_URL/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()
@@ -62,7 +61,7 @@ class LeanTranslationTool(BaseTool):
         **kwargs,
     ) -> Dict[str, Any]:
         try:
-            messages = history or []
+            messages = list(history) if history else []
 
             retrieved_context = ""
             if retrieved_examples:
@@ -75,13 +74,21 @@ class LeanTranslationTool(BaseTool):
                 examples_str = "\n\n---\n\n".join(
                     [f"NL: {ex.get('nl', '')}\nLean:\n```lean\n{ex.get('lean', '')}\n```" for ex in examples_to_use]
                 )
-                retrieved_context = f"Here are some similar examples for context:\n\n{examples_str}\n\n"
+                retrieved_context = f"Here are some similar examples for context:\n\n{examples_str}"
 
-            final_prompt = (
-                f"{retrieved_context}"
-                "Based on the full conversation history and the provided examples (if any), "
-                "generate or correct the Lean4 code to satisfy the user's original request. If the last message was a tool error, fix the code."
+            prompt_sections = [
+                "Translate the following natural language statement into Lean4 code or refine existing Lean code as needed.",
+                f"Natural language statement:\n{natural_language_statement.strip()}",
+            ]
+
+            if retrieved_context:
+                prompt_sections.append(retrieved_context)
+
+            prompt_sections.append(
+                "Based on the full conversation history and the provided examples (if any), generate or correct the Lean4 code to satisfy the user's original request. If the last message was a tool error, fix the code."
             )
+
+            final_prompt = "\n\n".join(section for section in prompt_sections if section)
 
             messages.append({"role": "user", "content": final_prompt})
 
