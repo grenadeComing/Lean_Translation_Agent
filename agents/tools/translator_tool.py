@@ -1,6 +1,4 @@
 # in agents/tools/translator_tool.py
-
-import requests
 import logging
 from typing import List, Dict, Any
 from .base_tool import BaseTool
@@ -29,18 +27,6 @@ class LeanTranslationTool(BaseTool):
                     },
                     "required": ["nl", "lean"]
                 }
-            },
-            "history": {
-                "type": "array",
-                "description": "Chat history as a list of messages, each with role and content.",
-                "items": {
-                    "type": "object",
-                    "properties": {
-                        "role": {"type": "string"},
-                        "content": {"type": "string"}
-                    },
-                    "required": ["role", "content"]
-                }
             }
         },
         "required": ["natural_language_statement"]
@@ -58,12 +44,19 @@ class LeanTranslationTool(BaseTool):
         self,
         natural_language_statement: str,
         retrieved_examples: List[Dict[str, Any]] | None = None,
-        history: List[Dict[str, Any]] | None = None,
         **kwargs,
     ) -> Dict[str, Any]:
         try:
-            messages = history or []
-
+            messages: List[Dict[str, Any]] = [
+                {
+                    "role": "user",
+                    "content": (
+                        "Translate the following natural language statement to Lean4 code. "
+                        "Import Mathlib and end the declaration with := by sorry.\n\n"
+                        f"Statement:\n{natural_language_statement}"
+                    )
+                }
+            ]
             retrieved_context = ""
             if retrieved_examples:
                 valid_examples = [ex for ex in retrieved_examples if isinstance(ex, dict)]
@@ -77,13 +70,12 @@ class LeanTranslationTool(BaseTool):
                 )
                 retrieved_context = f"Here are some similar examples for context:\n\n{examples_str}\n\n"
 
-            final_prompt = (
-                f"{retrieved_context}"
-                "Based on the full conversation history and the provided examples (if any), "
-                "generate or correct the Lean4 code to satisfy the user's original request. If the last message was a tool error, fix the code."
-            )
-
-            messages.append({"role": "user", "content": final_prompt})
+            if retrieved_context:
+                final_prompt = (
+                    "Below are some examples of natural language statements and their corresponding Lean4 translations, use at Chain-of-Thought to help you translate the new statement.\n\n"
+                    f"{retrieved_context}"
+                )
+                messages.append({"role": "user", "content": final_prompt})
 
             resp = requests.post(
                 self.api_url,
