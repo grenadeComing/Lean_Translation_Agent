@@ -50,10 +50,43 @@ class LeanRetrieverTool(BaseTool):
                 np.linalg.norm(self.embedding_matrix, axis=1) * np.linalg.norm(query_embedding)
             )
             top_indices = np.argsort(similarities)[::-1][:effective_top_k]
-            results = [self.meta_data[i] for i in top_indices]
 
-            logging.info(f"Retrieved {len(results)} examples for query: '{query}'")
-            return {"ok": True, "results": results}
+            formatted_results = []
+            for idx in top_indices:
+                raw = self.meta_data[idx]
+                if not isinstance(raw, dict):
+                    logging.warning("Skipping retrieval example at index %s: not a dict", idx)
+                    continue
+                nl = (
+                    raw.get("nl")
+                    or raw.get("informal_statement")
+                    or raw.get("informal")
+                    or raw.get("natural_language")
+                    or ""
+                )
+                lean = (
+                    raw.get("lean")
+                    or raw.get("formal_statement")
+                    or raw.get("formal")
+                    or raw.get("lean4")
+                    or ""
+                )
+
+                formatted = {
+                    "nl": nl,
+                    "lean": lean,
+                }
+
+                # Preserve commonly useful metadata if present
+                if "id" in raw:
+                    formatted["id"] = raw["id"]
+                if "source" in raw:
+                    formatted["source"] = raw["source"]
+
+                formatted_results.append(formatted)
+
+            logging.info(f"Retrieved {len(formatted_results)} examples for query: '{query}'")
+            return {"ok": True, "results": formatted_results}
 
         except Exception as e:
             logging.exception("RetrieverTool exception:")

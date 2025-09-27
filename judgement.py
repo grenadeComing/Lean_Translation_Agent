@@ -273,7 +273,7 @@ if __name__ == "__main__":
     start_time = time.time()
     
     CVS_folder_path = Path(__file__).parent
-    input_csv = CVS_folder_path / "all_experiments_csv/ProofNet_data_agent+herald+write_only.csv"
+    input_csv = CVS_folder_path / "results/pass_rate_stats.csv"
     update_csv_write_immediately(str(input_csv))
     end_time = time.time()
     print(f"Execution time: {end_time - start_time} seconds")

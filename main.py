@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 import concurrent.futures
 
-from agents.runner import call_openai_lean_agent, TOOLS
+from agents.runner_no_check_no_translation_no_search import call_openai_lean_agent, TOOLS
 from agents.tools.base_tool import BaseTool
 
 

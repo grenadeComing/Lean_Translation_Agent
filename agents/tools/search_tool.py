@@ -1,73 +1,89 @@
+import os
 import requests
-import os  # Import the 'os' module to access environment variables
 from .base_tool import BaseTool
+
 
 class SearchOnlineTool(BaseTool):
     name = "search_online"
     description = (
-        "Search the web for Lean4-related code or documentation. "
-        "Use this tool when additional context from Lean4 GitHub repos is needed."
-        "Search under https://github.com/leanprover-community/mathlib4"
+        "Search Lean4-related code on GitHub. "
+        "Uses the GitHub code search API scoped to leanprover-community/mathlib4 and leanprover/lean4."
     )
     parameters = {
         "query": "Search query related to Lean4 code or concepts"
     }
 
-    SERPER_URL = "https://google.serper.dev/search"
+    SEARCH_URL = "https://api.github.com/search/code"
 
-    # --- ADD THIS __init__ METHOD ---
     def __init__(self):
-        """
-        Initializes the tool and loads the Serper API key from environment variables.
-        """
-        # Load the API key from an environment variable named SERPER_API_KEY
-        self.SERPER_API_KEY = os.getenv("SERPER_API_KEY")
-        if not self.SERPER_API_KEY:
-            raise ValueError("SERPER_API_KEY environment variable not set. Please get a key from https://serper.dev")
-    # --------------------------------
+        token = os.getenv("GITHUB_TOKEN")
+        self._session = requests.Session()
+        self._session.headers["Accept"] = "application/vnd.github.text-match+json"
+        if token:
+            self._session.headers["Authorization"] = f"Bearer {token}"
+
+    def _github_code_search(self, payload: dict, source: str) -> list[dict]:
+        resp = self._session.get(self.SEARCH_URL, params=payload, timeout=10)
+
+        if resp.status_code == 403:
+            raise RuntimeError("GitHub rate limit exceeded; add a GITHUB_TOKEN.")
+        if resp.status_code != 200:
+            raise RuntimeError(f"GitHub error {resp.status_code}: {resp.text}")
+
+        results: list[dict] = []
+        data = resp.json()
+        for item in data.get("items", [])[:5]:
+            repo = item.get("repository", {})
+            matches = item.get("text_matches", [])
+            snippet = matches[0].get("fragment", "") if matches else ""
+            results.append({
+                "name": item.get("name"),
+                "path": item.get("path"),
+                "repo": repo.get("full_name"),
+                "url": item.get("html_url"),
+                "snippet": snippet,
+                "source": source,
+            })
+        return results
 
     def run(self, query: str) -> dict:
         try:
-            # Instruct Google to restrict to Lean4 GitHub context
-            restricted_query = f"{query} site:github.com/leanprover/lean4 OR site:github.com/leanprover-community"
-
-            headers = {
-                "X-API-KEY": self.SERPER_API_KEY,  # This will now work correctly
-                "Content-Type": "application/json"
+            primary_payload = {
+                "q": (
+                    f"{query} "
+                    "repo:leanprover-community/mathlib4 "
+                    "repo:leanprover/lean4 "
+                    "language:Lean"
+                ),
+                "per_page": 5,
             }
 
-            payload = {
-                "q": restricted_query,
-                "num": 5
-            }
+            try:
+                results = self._github_code_search(primary_payload, source="mathlib4")
+            except RuntimeError as err:
+                return {"ok": False, "error": str(err)}
 
-            resp = requests.post(self.SERPER_URL, headers=headers, json=payload)
-
-            if resp.status_code != 200:
-                return {
-                    "ok": False,
-                    "error": f"Serper API error {resp.status_code}: {resp.text}"
+            if not results:
+                broadened_payload = {
+                    "q": f"{query} language:Lean",
+                    "per_page": 5,
                 }
+                try:
+                    results = self._github_code_search(broadened_payload, source="github-wide")
+                except RuntimeError as err:
+                    return {"ok": False, "error": str(err)}
 
-            data = resp.json()
-            results = data.get("organic", [])[:5]
+            if not results:
+                results = [{
+                    "name": "No exact matches",
+                    "path": "",
+                    "repo": "",
+                    "url": "https://leanprover-community.github.io/mathlib4_docs/",
+                    "snippet": "No matching snippets found on GitHub; consider broadening the query or checking mathlib4 docs.",
+                    "source": "fallback",
+                }]
 
-            filtered_results = [
-                {
-                    "title": item.get("title"),
-                    "link": item.get("link"),
-                    "snippet": item.get("snippet")
-                }
-                for item in results
-            ]
-
-            return {
-                "ok": True,
-                "results": filtered_results
-            }
+            return {"ok": True, "results": results}
 
         except Exception as e:
-            return {
-                "ok": False,
-                "error": f"SearchOnlineTool exception: {e}"
-            }
+            return {"ok": False, "error": f"SearchOnlineTool exception: {e}"}

@@ -60,7 +60,7 @@ def _repl_passed(result_str: str) -> bool:
 def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
-    model: str = "gpt-5-mini",   # manager model
+    model: str = "gpt-4o",   # manager model
     max_steps: int = 24,
     timeout_sec: float = 180.0,
     log_dir: str = "agent_logs",
@@ -94,7 +94,8 @@ def call_openai_lean_agent(
         1. **Initial Context (Optional, 1 time max)**: If you need context, you may use `lean_retrieval` **once** at the beginning.
         2. **Translate to Lean4**: (Optionally generate an example, then) Use the `lean4_translation` tool or translate manually for a first draft. Remember: translation only, not proof—end with `:= by sorry`.
         3. **Write & Verify**: Use `lean_write_file` and `lean4_repl_runner` to check your code.
-        4. **Succeed**: When `lean4_repl_runner` sets its flag to 1, the translation is correct. Respond with: `{ "status": "success" }`. If the flag is 0, iterate and retry.
+        4. **Succeed**: When `lean4_repl_runner` sets its flag to 1, the translation is logically correct, then you need to verify that the translation in Lean is faithful to the original one.
+        Respond with: `{ "status": "success" }`if the flag is 1 and the translation is faithful, otherwise iterate and retry.
 
         ## Contingency Plan: Error Handling
         1. **Error Type: Unknown Theorem or Lemma Name**: Use `lean_check_theorem` to check and correct the names of the key theorems/definitions before running the code again.
@@ -107,65 +108,9 @@ def call_openai_lean_agent(
         2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
         3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
     """
-
-
-    system_content_agent_without_translator = """
-        You are an expert Lean4 programmer and agent. Your primary mission is to translate a mathematical statement into Lean4 code using the provided tools.
-        Your main goal is to produce a Lean4 translation, **not a full proof**. 
-        After generating the code, use `lean_write_file` and `lean4_repl_runner` to write and verify it for errors.
-
-        ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
-
-        ## The following steps outline the process:
-        1. **Initial Context (Optional, 1 time max)**: If you need context, you may use `lean_retrieval` **once** at the beginning.
-        3. **Write & Verify**: Use `lean_write_file` and `lean4_repl_runner` to check your code.
-        4. **Succeed**: When `lean4_repl_runner` sets its flag to 1, the translation is correct. Respond with: `{ "status": "success" }`. If the flag is 0, iterate and retry.
-
-        ## Contingency Plan: Error Handling
-        1. **Error Type: Unknown Theorem or Lemma Name**: Use `lean_check_theorem` to check and correct the names of the key theorems/definitions before running the code again.
-        2. **Error Type: Syntax/Tactic Error (not name related)**: Use `search_online` to find examples or documentation about the error.
-        3. **Re-test**: Return to `lean4_repl_runner` to check whether the issue is fixed.
-        4. **Iterate**: Refine names, fix tactics, or revise syntax based on what you learned, then re-test.
-
-        ### Important Lean4/Mathlib Naming Conventions
-        1. **Types/Props use PascalCase**: `IsSimpleGroup`, `IsCyclic`, `Nat.Prime`.
-        2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
-        3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
-    """
-
-    system_content_agent_with_translator_only = """
-        You are an expert Lean4 programmer and agent. Your primary mission is to translate a mathematical statement into Lean4 code using the provided tools.
-        Your main goal is to produce a Lean4 translation, **not a full proof**. 
-        After generating the code, use `lean_write_file` to write it to a file.
-
-        ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
-        Respond with: `{ "status": "success" }` if you are done.
-    """
-
-    system_content_without_repl = """
-    You are an expert Lean4 programmer and agent. Your primary mission is to translate a mathematical statement into Lean4 code using the provided tools.
-    Your main goal is to produce a Lean4 translation, **not a full proof**. 
-    After generating the code, use `lean_write_file` to write it to a file.
-
-    ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
-
-    ** Tool using guidence **
-    check_theorem_tool: Checks for the existence and official definition of a theorem, definition, or lemma.
-    lean_write_file: write Lean4 code to disk.
-    lean4_translation: produce a Lean4 declaration from natural language (no proof; ends with := by sorry) using FrenzyMath/Herald\_translator, you can use this tool generate, but you need to ensure the generated code is correct and follows Lean4 syntax by using other tools, you should not reply on this tool only.
-    lean_retrieval: fetch context/examples (lean4 code, nl_statement) pairs of the current natural language to translate.
-
-    ### Important Lean4/Mathlib Naming Conventions
-    1. **Types/Props use PascalCase**: `IsSimpleGroup`, `IsCyclic`, `Nat.Prime`.
-    2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
-    3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
-    4. Check the naming using `lean_check_theorem`.
-
-    **Respond with: `{ "status": "success" }` if you think the translation is done and have write into the disk.**
-    """
-
+    
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_without_repl},
+        {"role": "system", "content": system_content_agent_with_translator},
         {
             "role": "user",
             "content": (
@@ -179,7 +124,9 @@ def call_openai_lean_agent(
     "lean4_translation": TOOLS["lean4_translation"],
     "lean_write_file": TOOLS["lean_write_file"],
     "lean_retrieval": TOOLS["lean_retrieval"], 
-    "lean_check_theorem": TOOLS["lean_check_theorem"]
+    "lean_check_theorem": TOOLS["lean_check_theorem"],
+    "lean4_repl_runner": TOOLS["lean4_repl_runner"],
+    "search_online": TOOLS["search_online"]
     }
 
     tool_specs = [_tool_spec(t) for t in AGENT_TOOLS.values()]

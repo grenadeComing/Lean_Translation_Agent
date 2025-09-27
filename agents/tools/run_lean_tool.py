@@ -31,43 +31,45 @@ class LeanReplTool(BaseTool):
         }) + "\n\n"
 
         try:
-            result = subprocess.run(
+            process = subprocess.Popen(
                 ["lake", "exe", "repl"],
-                input=payload,
-                capture_output=True,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
                 text=True,
-                timeout=80,
                 cwd=self.REPL_DIR,
-                check=False
             )
+            stdout, stderr = process.communicate(payload, timeout=80)
+            stdout, stderr = stdout.strip(), stderr.strip()
 
-            stdout, stderr = result.stdout.strip(), result.stderr.strip()
-
-            repl_pass = 1
+            repl_pass = 0
             try:
                 obj = json.loads(stdout)
+            except json.JSONDecodeError:
+                obj = None
+
+            if process.returncode == 0 and obj is not None:
                 all_messages = []
 
-                # 👇 Collect from both "messages" and tactics[*].messages
+                # Collect from both "messages" and tactics[*].messages
                 if "messages" in obj:
                     all_messages.extend(obj["messages"])
                 for tactic in obj.get("tactics", []):
                     all_messages.extend(tactic.get("messages", []))
 
-                if any(msg.get("severity", "").lower() == "error" for msg in all_messages):
-                    repl_pass = 0
-            except json.JSONDecodeError:
-                pass  # Fail-safe: assume it's valid if no parsing errors
+                if not any(msg.get("severity", "").lower() == "error" for msg in all_messages):
+                    repl_pass = 1
 
             return {
                 "ok": True,
                 "repl_pass": repl_pass,
-                #"repl_output": stdout or "{}",
-                #"stdout": stdout,
-                #"stderr": stderr
+                "repl_output": stdout or "{}",
+                "stdout": stdout,
+                "stderr": stderr
             }
 
         except subprocess.TimeoutExpired:
+            process.kill()
             return {"ok": False, "error": "Lean REPL timed out."}
         except Exception as e:
             logging.exception("LeanReplTool error")

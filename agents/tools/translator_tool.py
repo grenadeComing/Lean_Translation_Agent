@@ -1,4 +1,5 @@
 # in agents/tools/translator_tool.py
+import requests
 import logging
 from typing import List, Dict, Any
 from .base_tool import BaseTool
@@ -33,8 +34,12 @@ class LeanTranslationTool(BaseTool):
     }
 
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
+
+    # google cloud VM
     DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
-    #DEFAULT_API_URL = "https://requirement-pmc-gotten-brakes.trycloudflare.com/v1/chat/completions"
+
+    # university server
+    #DEFAULT_API_URL = "https://encountered-missions-linux-fact.trycloudflare.com/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()
