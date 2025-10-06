@@ -17,7 +17,6 @@ Lean_Translation_Agent/
 ├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
 ├── all_experiments_csv/  # the final output CSV after evaluate.py
 ├── judgement.py       # input the agent output, asking judgment to give score of the agent work
-├── evaludate.py       # re-check the max_reached, fix false negative
 ```
 
 ## Features
@@ -40,6 +39,8 @@ Lean_Translation_Agent/
    - **Retrieval Tool**: Semantic search over formalization database
    - **Write Tool**: Safe file operations within project boundaries
    - **REPL Tool**: Lean4 compilation and error checking
+   - **Theorem check tool**--: Check if a theorem or lemma exists in Mathlib4
+   - **Search Tool** --: Seach inside the Mathlib4 github community 
 
 3. **Data Pipeline**
    - Input: Mathematical natural language statements
@@ -72,7 +73,6 @@ pip install -r requirements.txt
 3. Configure your OpenAI API key:
 ```bash
 export OPENAI_API_KEY="your-api-key-here"
-export SERPER_API_KEY="your-google-serper-api-in-order-to-search"
 ```
 4. Remember to change the config
 ```bash
@@ -99,7 +99,7 @@ This will process all entries in `INPUT_PATH_IN_MAIN` and save results to `resul
 ### Output
 
 - **Lean4 Files**: Validated proofs in `results/` directory
-- **Logs**: Execution details in `.agent_logs/` and `translation_agent.log`
+- **Logs**: Execution details in `.agent_running_logs/` and `translation_agent.log`
 
 ## Data Format
 
@@ -145,6 +145,6 @@ If you use this work in your research, please cite:
 
 ## Acknowledgments
 
-- OpenAI for GPT-4 API
+- OpenAI for GPTs API
 - Lean community for the formalization framework
 - ProofNet and Herald datasets
