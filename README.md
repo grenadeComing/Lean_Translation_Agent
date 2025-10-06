@@ -13,7 +13,7 @@ Lean_Translation_Agent/
 |   ├── configs           # adjust tools agent has access to
 |   ├── prompts           # according prompt with respect to each config
 │   └── tools/            # Tool implementations
-|       └── base_tool.py
+|       ├── base_tool.py
 |       ├── run_lean_tool.py 
 |       ... (other tools)
 ├── dataset/               # Data files
