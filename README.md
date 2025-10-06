@@ -6,14 +6,19 @@ A sophisticated AI-agent for translating natural language mathematical statement
 
 ```
 Lean_Translation_Agent/
-├── main.py                 # Entry point with data loading
+├── main.py                 # agent entry
 ├── requirements.txt       # Python dependencies
 ├── agents/
 │   ├── runner.py         # Agent orchestration
+|   ├── configs           # adjust tools agent has access to
+|   ├── prompts           # according prompt with respect to each config
 │   └── tools/            # Tool implementations
+|       └── base_tool.py
+|       ├── run_lean_tool.py 
+|       ... (other tools)
 ├── dataset/               # Data files
 ├── results/               # Output directory
-└── agent_logs/          # Execution logs, moved into outputs
+└── agent_running_logs/          # Execution logs, moved into outputs
 ├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
 ├── all_experiments_csv/  # the final output CSV after evaluate.py
 ├── judgement.py       # input the agent output, asking judgment to give score of the agent work
