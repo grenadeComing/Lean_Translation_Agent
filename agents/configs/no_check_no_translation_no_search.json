@@ -1,0 +1,8 @@
+{
+  "enabled_tools": [
+    "lean_write_file",
+    "lean4_repl_runner",
+    "lean_retrieval"
+  ],
+  "system_prompt_file": "../prompts/no_check_no_translation_no_search.txt"
+}

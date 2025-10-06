@@ -9,7 +9,7 @@ import numpy as np
 from tqdm import tqdm
 import concurrent.futures
 
-from agents.runner_no_check_no_translation_no_search import call_openai_lean_agent, TOOLS
+from agents.runner import call_openai_lean_agent, TOOLS
 from agents.tools.base_tool import BaseTool
 
 
@@ -27,7 +27,8 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
         logging.info(f"Processing: {name}")
         result = call_openai_lean_agent(
             file_path=str(output_path),
-            natural_language_statement=nl
+            natural_language_statement=nl,
+            config = "default"
         )
         
         logging.info(f"Finished processing '{name}' with status: {result['status']} in {result['step']} steps.")
@@ -60,7 +61,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
                     "nl_statement": nl,
                     "lean4_code": "Lean4 code file not found"
                 }
-        except:
+        except Exception:
             logging.error(f"Error reading output file {output_path}.")
             # output file read error
             return {
@@ -86,13 +87,15 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
 
 def setup_logging() -> None:
     """Configure logging with the default 'INFO' level."""
+    log_path = Path(__file__).resolve().parent / "translation.log"
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler('translation_agent.log'),
+            logging.FileHandler(log_path, mode="a", encoding="utf-8"),
             logging.StreamHandler()
-        ]
+        ],
+        force=True
     )
 
 # Global retrieval database - loaded once and shared by all threads
@@ -144,10 +147,11 @@ def main() -> None:
     """
     PROJECT_ROOT = Path(__file__).resolve().parent
     LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
+    LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # The input file
     INPUT_FILE = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/dataset/input/sample_best_400.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
-
-    LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Set the allowed root path for all tools
     BaseTool.allowed_root = str(LEAN_OUTPUT_DIR)
@@ -168,7 +172,7 @@ def main() -> None:
         logging.error(f"Failed to load input data: {e}")
         raise
 
-    # Initialize CSV file and writer
+    # Create a CSV file and write the headers
     stats_file = LEAN_OUTPUT_DIR / "pass_rate_stats.csv"
     csv_file = open(stats_file, "w", newline="", encoding="utf-8")
     csv_writer = csv.writer(csv_file)
@@ -226,30 +230,10 @@ def main() -> None:
         csv_file.close()
 
 
-
     time_end = time.perf_counter()
     # Print final statistics using the counters
     print_final_summary(status_counts, total_processed)
     print(f"Total processing time: {time_end - time_start:.2f} seconds")
-
-
-def print_final_summary(status_counts: Dict[str, int], total_processed: int):
-    """Print the final summary statistics without needing the full stats list."""
-    if total_processed == 0:
-        logging.warning("No entries were processed successfully.")
-        return
-    
-    passed_runs = status_counts.get("success", 0)
-    pass_rate = (passed_runs / total_processed) * 100 if total_processed > 0 else 0
-
-    print("\n" + "="*40)
-    print("📊 Final Pass Rate Summary")
-    print("="*40)
-    print(f"Overall Pass Rate: {passed_runs} / {total_processed} ({pass_rate:.1f}%)")
-    for status, count in status_counts.items():
-        print(f"  {status}: {count}")
-    print("="*40 + "\n")
-
 
 if __name__ == "__main__":
     setup_logging()

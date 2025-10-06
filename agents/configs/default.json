@@ -1,0 +1,11 @@
+{
+  "enabled_tools": [
+    "lean4_translation",
+    "lean_write_file",
+    "lean4_repl_runner",
+    "lean_retrieval",
+    "search_online",
+    "lean_check_theorem"
+  ],
+  "system_prompt_file": "../prompts/default_system.txt"
+}

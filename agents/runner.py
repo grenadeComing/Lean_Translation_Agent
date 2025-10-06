@@ -1,15 +1,17 @@
 import os
 import json
 import logging
+import re
+from functools import lru_cache
 from pathlib import Path
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from openai import OpenAI
 from agents.tools import *
-from typing import Optional
 
 logging.basicConfig(level=logging.INFO)
 lean_repl_tool_instance = LeanReplTool()
 
+# all possible tools
 TOOLS: Dict[str, Any] = {
     "lean4_translation": LeanTranslationTool(),
     "lean_write_file": WriteToFileTool(),
@@ -18,6 +20,46 @@ TOOLS: Dict[str, Any] = {
     "search_online": SearchOnlineTool(),
     "lean_check_theorem": LeanCheckTheoremTool(lean_repl_tool_instance)
 }
+
+BASE_DIR = Path(__file__).resolve().parent
+CONFIGS_DIR = BASE_DIR / "configs"
+
+
+def _resolve_config_path(config: Optional[str]) -> Path:
+    if config is None:
+        path = CONFIGS_DIR / "default.json"
+    else:
+        candidate = Path(config)
+        if candidate.is_absolute():
+            path = candidate
+        else:
+            if not candidate.suffix:
+                candidate = candidate.with_suffix(".json")
+            path = CONFIGS_DIR / candidate
+            if not path.exists():
+                path = BASE_DIR / candidate
+    path = path.resolve()
+    if not path.exists():
+        raise FileNotFoundError(f"Runner config not found: {path}")
+    return path
+
+
+# read the config file and load the system prompt accordingly
+def _load_runner_config(path_str: str) -> Dict[str, Any]:
+    path = Path(path_str).resolve()
+    with open(path, "r", encoding="utf-8") as f:
+        cfg = json.load(f)
+
+    prompt_path = Path(cfg["system_prompt_file"])
+    if not prompt_path.is_absolute():
+        prompt_path = (path.parent / prompt_path).resolve()
+
+    with open(prompt_path, "r", encoding="utf-8") as pf:
+        cfg["system_prompt"] = pf.read().strip()
+
+    cfg["enabled_tools"] = list(cfg["enabled_tools"])
+    return cfg
+
 
 def _tool_spec(tool_obj: Any) -> Dict[str, Any]:
     """
@@ -60,57 +102,44 @@ def _repl_passed(result_str: str) -> bool:
 def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
-    model: str = "gpt-4o",   # manager model
+    model: str = "gpt-5-nano",
     max_steps: int = 24,
     timeout_sec: float = 180.0,
-    log_dir: str = "agent_logs",
+    log_dir: str = "agent_running_logs",
+    config: Optional[str] = None,
 ) -> Dict[str, Any]:
     """
     Orchestrates the Lean agent. Stops immediately when lean4_repl_runner reports a pass.
+    Tool availability and system prompt are controlled via the ``config`` file.
     Returns status, step count, log path, and history for auditing.
     """
     os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, f"{Path(file_path).stem}.jsonl")
+
+    config_path = _resolve_config_path(config)
+    config_data = _load_runner_config(str(config_path))
+    enabled_tool_names = config_data.get("enabled_tools") or list(TOOLS.keys())
+    missing_tools = [name for name in enabled_tool_names if name not in TOOLS]
+    if missing_tools:
+        raise ValueError(f"Config requests unknown tools: {missing_tools}")
 
     def log(action, **kwargs):
         event = {"action": action, **kwargs}
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(event, ensure_ascii=False) + "\n")
 
+    log("config", path=str(config_path))
+
     client = OpenAI()
 
-    
-    system_content_agent_with_translator = """
-        You are an expert Lean4 programmer and agent. Your primary mission is to translate a mathematical statement into Lean4 code using the provided tools.
-        Your main goal is to produce a Lean4 translation, **not a full proof**. 
-        Always use the `lean4_translation` tool as your first step. 
-        If helpful, you may first generate an example statement and provide it to the translator. 
-        After generating the code, use `lean_write_file` and `lean4_repl_runner` to write and verify it for errors.
-        The `lean4_repl_runner` tool will execute the Lean4 code and tell if a pass =1 or fail =0, with pass meaning your code is correct and compiles.
+    system_prompt = config_data.get("system_prompt")
+    model_to_use = model
 
-        ** When translating, import Mathlib at the top and end the Lean4 statement with `:= by sorry` (not a full proof).
+    agent_tools = {name: TOOLS[name] for name in enabled_tool_names}
+    tool_specs = [_tool_spec(t) for t in agent_tools.values()]
 
-        ## The following steps outline the process:
-        1. **Initial Context (Optional, 1 time max)**: If you need context, you may use `lean_retrieval` **once** at the beginning.
-        2. **Translate to Lean4**: (Optionally generate an example, then) Use the `lean4_translation` tool or translate manually for a first draft. Remember: translation only, not proof—end with `:= by sorry`.
-        3. **Write & Verify**: Use `lean_write_file` and `lean4_repl_runner` to check your code.
-        4. **Succeed**: When `lean4_repl_runner` sets its flag to 1, the translation is logically correct, then you need to verify that the translation in Lean is faithful to the original one.
-        Respond with: `{ "status": "success" }`if the flag is 1 and the translation is faithful, otherwise iterate and retry.
-
-        ## Contingency Plan: Error Handling
-        1. **Error Type: Unknown Theorem or Lemma Name**: Use `lean_check_theorem` to check and correct the names of the key theorems/definitions before running the code again.
-        2. **Error Type: Syntax/Tactic Error (not name related)**: Use `search_online` to find examples or documentation about the error.
-        3. **Re-test**: Return to `lean4_repl_runner` to check whether the issue is fixed.
-        4. **Iterate**: Refine names, fix tactics, or revise syntax based on what you learned, then re-test.
-
-        ### Important Lean4/Mathlib Naming Conventions
-        1. **Types/Props use PascalCase**: `IsSimpleGroup`, `IsCyclic`, `Nat.Prime`.
-        2. **Lemmas/Functions use snake_case**: `Nat.add_comm`, `List.map`.
-        3. **Be Specific**: Prefer `Sylow.exists_subgroup_card_pow_prime` over generic names like 'Sylow Theorem'.
-    """
-    
     messages: List[Dict[str, Any]] = [
-        {"role": "system", "content": system_content_agent_with_translator},
+        {"role": "system", "content": system_prompt},
         {
             "role": "user",
             "content": (
@@ -120,22 +149,11 @@ def call_openai_lean_agent(
         },
     ]
 
-    AGENT_TOOLS = {
-    "lean4_translation": TOOLS["lean4_translation"],
-    "lean_write_file": TOOLS["lean_write_file"],
-    "lean_retrieval": TOOLS["lean_retrieval"], 
-    "lean_check_theorem": TOOLS["lean_check_theorem"],
-    "lean4_repl_runner": TOOLS["lean4_repl_runner"],
-    "search_online": TOOLS["search_online"]
-    }
-
-    tool_specs = [_tool_spec(t) for t in AGENT_TOOLS.values()]
-
     for step in range(1, max_steps + 1):
         # Call model
         try:
             response = client.chat.completions.create(
-                model=model, tools=tool_specs, tool_choice="auto",
+                model=model_to_use, tools=tool_specs, tool_choice="auto",
                 messages=messages, timeout=timeout_sec
             )
             msg = response.choices[0].message
@@ -162,15 +180,36 @@ def call_openai_lean_agent(
             
         except Exception as e:
             log("agent_API_error", step=step, error=str(e))
-            return {"status": "agent_API_error", "step": step, "log_path": log_path}
+            return {
+                "status": "agent_API_error",
+                "step": step,
+                "log_path": log_path,
+            }
 
-        # Check explicit success
-        if msg.content and '"status": "success"' in msg.content:
+        # Check explicit success, then quit immediately
+        explicit_success = False
+        if msg.content:
+            try:
+                parsed_content = json.loads(msg.content)
+            except json.JSONDecodeError:
+                parsed_content = None
+
+            if isinstance(parsed_content, dict):
+                explicit_success = parsed_content.get("status") == "success"
+            elif re.search(r'"status"\s*:\s*"success"', msg.content):
+                explicit_success = True
+
+        if explicit_success:
             log("success", step=step, type="explicit")
-            return {"status": "success", "step": step, "log_path": log_path}
+            return {
+                "status": "success",
+                "step": step,
+                "log_path": log_path,
+            }
         
+        # if not quit, there should be a tool call
         if msg.tool_calls:
-            tc = msg.tool_calls[0]   # Only use the first tool call
+            tc = msg.tool_calls[0]   # Only call the first tool
             try:
                 args = json.loads(tc.function.arguments or "{}")
                 result_obj = TOOLS[tc.function.name].run(**args)
@@ -188,8 +227,29 @@ def call_openai_lean_agent(
             # Auto-success on REPL pass
             if tc.function.name == "lean4_repl_runner" and _repl_passed(result_str):
                 log("success", step=step, type="repl_pass")
-                return {"status": "success", "step": step, "log_path": log_path}
+                return {
+                    "status": "success",
+                    "step": step,
+                    "log_path": log_path,
+                }
 
-    
+    repl_tool = TOOLS.get("lean4_repl_runner")
+    if repl_tool is not None and Path(file_path).exists():
+        try:
+            repl_result = repl_tool.run(path=file_path)
+            if isinstance(repl_result, dict) and repl_result.get("repl_pass") == 1:
+                log("success", step=max_steps, type="post_repl")
+                return {
+                    "status": "success",
+                    "step": max_steps,
+                    "log_path": log_path,
+                }
+        except Exception as repl_error:
+            log("post_repl_error", step=max_steps, error=str(repl_error))
+
     log("max_steps_reached", steps=max_steps)
-    return {"status": "max_steps_reached", "step": max_steps, "log_path": log_path}
+    return {
+        "status": "max_steps_reached",
+        "step": max_steps,
+        "log_path": log_path,
+    }

@@ -1,22 +1,25 @@
 import os
 from abc import ABC, abstractmethod
+from pathlib import Path
+
 
 class BaseTool(ABC):
     allowed_root = None  # Set this at runtime to a base directory
 
     @classmethod
-    def validate_path(cls, path: str):
+    def validate_path(cls, path: str) -> str:
         if cls.allowed_root is None:
             raise ValueError("allowed_root not set in BaseTool")
 
-        # Join the user path with allowed root, then get absolute path
-        abs_path = os.path.abspath(os.path.join(cls.allowed_root, path))
+        root = Path(cls.allowed_root).resolve()
+        abs_path = (root / path).resolve()
 
-        # Check if abs_path is still within the allowed root
-        if not abs_path.startswith(os.path.abspath(cls.allowed_root)):
+        try:
+            abs_path.relative_to(root)
+        except ValueError:
             raise ValueError(f"Disallowed path: {abs_path}")
 
-        return abs_path
+        return str(abs_path)
 
     @abstractmethod
     def run(self, **kwargs):

@@ -41,15 +41,30 @@ class LeanRetrieverTool(BaseTool):
         try:
             # Convert top_k safely
             try:
-                effective_top_k = min(int(top_k), 5)
-            except ValueError:
-                effective_top_k = 1
+                parsed_top_k = int(top_k)
+            except (TypeError, ValueError):
+                parsed_top_k = 3
+            effective_top_k = max(1, min(parsed_top_k, 5))
 
             query_embedding = self._get_embedding(query)
-            similarities = np.dot(self.embedding_matrix, query_embedding) / (
-                np.linalg.norm(self.embedding_matrix, axis=1) * np.linalg.norm(query_embedding)
+            query_norm = np.linalg.norm(query_embedding)
+            if query_norm == 0:
+                logging.warning("Query embedding norm is zero; returning no retrieval results.")
+                return {"ok": True, "results": []}
+
+            row_norms = np.linalg.norm(self.embedding_matrix, axis=1)
+            valid_mask = row_norms > 0
+            if not np.any(valid_mask):
+                logging.error("Embedding matrix contains no non-zero vectors.")
+                return {"ok": False, "error": "Retrieval database contains invalid embeddings."}
+
+            similarities = (
+                np.dot(self.embedding_matrix[valid_mask], query_embedding)
+                / (row_norms[valid_mask] * query_norm)
             )
-            top_indices = np.argsort(similarities)[::-1][:effective_top_k]
+            valid_indices = np.where(valid_mask)[0]
+            ranked_valid = np.argsort(similarities)[::-1][:effective_top_k]
+            top_indices = valid_indices[ranked_valid]
 
             formatted_results = []
             for idx in top_indices:
@@ -57,24 +72,14 @@ class LeanRetrieverTool(BaseTool):
                 if not isinstance(raw, dict):
                     logging.warning("Skipping retrieval example at index %s: not a dict", idx)
                     continue
-                nl = (
-                    raw.get("nl")
-                    or raw.get("informal_statement")
-                    or raw.get("informal")
-                    or raw.get("natural_language")
-                    or ""
-                )
-                lean = (
-                    raw.get("lean")
-                    or raw.get("formal_statement")
-                    or raw.get("formal")
-                    or raw.get("lean4")
-                    or ""
-                )
+                nl = raw.get("informal_statement")
+                lean = raw.get("formal_statement")
+                explanation = raw.get("explanation", "")
 
                 formatted = {
                     "nl": nl,
                     "lean": lean,
+                    "explanation": explanation
                 }
 
                 # Preserve commonly useful metadata if present
