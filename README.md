@@ -18,7 +18,7 @@ Lean_Translation_Agent/
 │       └── ... (other tools)
 ├── dataset/                # Data files
 ├── results/                # Experiment outputs
-│   └── config_<name>_results/
+│   └── config_<custom_config_name>_results/
 │       ├── lean_output/    # Generated `.lean` files
 │       ├── agent_logs/     # JSONL logs per theorem
 │       └── translation.log # Aggregated run log
@@ -112,6 +112,14 @@ To select a different runner configuration, pass its name (or path) as an option
 python main.py config_custom
 ```
 Outputs for that run will appear under `results/config_config_custom_results/` (mirroring the argument you pass) with the same subdirectory layout. The runner will look for `agents/configs/config_custom.json` (or the exact path you provide) instead of the default configuration when orchestrating the tools.
+
+### Creating Your Own Config
+
+1. Duplicate an existing file in `agents/configs/` (e.g., `default.json`).
+2. In `"enabled_tools"`, list the tool ids you want from `agents/tools/__init__.py` (common ids: `lean4_translation`, `lean_write_file`, `lean4_repl_runner`, `lean_retrieval`, `search_online`, `lean_check_theorem`).
+3. Point `"system_prompt_file"` at a prompt in `agents/prompts/`. Create a new prompt file if needed—ensure the filename you set here exactly matches the prompt file you create so the loader can find it.
+4. Run the agent with your config: `python main.py my_config` (if your file is `agents/configs/my_config.json`).
+5. Evaluate results via `python judgement.py my_config`.
 
 To score a completed experiment, run:
 ```bash
