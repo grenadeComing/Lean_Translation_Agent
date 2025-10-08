@@ -14,14 +14,19 @@ from agents.runner import call_openai_lean_agent, TOOLS
 from agents.tools.base_tool import BaseTool
 
 
-def process_entry(entry: Dict[str, Any], output_dir: Path, config_name: str) -> Dict[str, Any]:
+def process_entry(
+    entry: Dict[str, Any],
+    lean_output_dir: Path,
+    agent_log_dir: Path,
+    config_name: str
+) -> Dict[str, Any]:
     """
     Process a single entry from the input file.
     Uses globally loaded retrieval database.
     """
     name = entry["name"].replace("|", "_")
     nl = entry["nl_statement"]
-    output_path = output_dir / f"{name}.lean"
+    output_path = lean_output_dir / f"{name}.lean"
     domain = entry.get("domain")
 
     try:
@@ -29,7 +34,8 @@ def process_entry(entry: Dict[str, Any], output_dir: Path, config_name: str) -> 
         result = call_openai_lean_agent(
             file_path=str(output_path),
             natural_language_statement=nl,
-            config=config_name
+            config=config_name,
+            log_dir=str(agent_log_dir)
         )
         
         logging.info(f"Finished processing '{name}' with status: {result['status']} in {result['step']} steps.")
@@ -86,9 +92,9 @@ def process_entry(entry: Dict[str, Any], output_dir: Path, config_name: str) -> 
             "lean4_code": ""
         }
 
-def setup_logging() -> None:
+def setup_logging(log_path: Path) -> None:
     """Configure logging with the default 'INFO' level."""
-    log_path = Path(__file__).resolve().parent / "translation.log"
+    log_path.parent.mkdir(parents=True, exist_ok=True)
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -140,7 +146,7 @@ def print_final_summary(status_counts: Dict[str, int], total_processed: int):
     print(f"Overall Pass Rate: {passed_runs} / {total_processed} ({pass_rate:.1f}%)")
     for status, count in status_counts.items():
         print(f"  {status}: {count}")
-    print("="*40 + "\n")
+    print("=" * 40 + "\n")
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -160,16 +166,25 @@ def main(config_name: str = "default") -> None:
     Main function to run the Lean translation agent in parallel using threads.
     """
     PROJECT_ROOT = Path(__file__).resolve().parent
-    LEAN_OUTPUT_DIR = PROJECT_ROOT / "results"
-    LEAN_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    RESULTS_ROOT = PROJECT_ROOT / "results"
+    RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
+
+    config_label = Path(config_name).stem or config_name
+    config_results_dir = RESULTS_ROOT / f"config_{config_label}_results"
+    lean_output_dir = config_results_dir / "lean_output"
+    agent_log_dir = config_results_dir / "agent_logs"
+    for directory in (lean_output_dir, agent_log_dir):
+        directory.mkdir(parents=True, exist_ok=True)
+
+    setup_logging(config_results_dir / "translation.log")
 
     # The input file
-    INPUT_FILE = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/dataset/input/sample_best_400.jsonl"
+    INPUT_FILE = "/Users/kezhang/Desktop/projects/Lean_Translation_agent/dataset/input/test.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
 
     # Set the allowed root path for all tools
-    BaseTool.allowed_root = str(LEAN_OUTPUT_DIR)
-    logging.info(f"Set allowed_root to: {LEAN_OUTPUT_DIR}")
+    BaseTool.allowed_root = str(lean_output_dir)
+    logging.info(f"Set allowed_root to: {lean_output_dir}")
 
     try:
         load_retrieval_database_globally(PROJECT_ROOT)
@@ -187,7 +202,7 @@ def main(config_name: str = "default") -> None:
         raise
 
     # Create a CSV file and write the headers
-    stats_file = LEAN_OUTPUT_DIR / "pass_rate_stats.csv"
+    stats_file = config_results_dir / "agent_run_summary.csv"
     csv_file = open(stats_file, "w", newline="", encoding="utf-8")
     csv_writer = csv.writer(csv_file)
     csv_writer.writerow(["name", "domain", "status", "passed", "steps", "nl_statement", "lean4_code"])
@@ -204,7 +219,7 @@ def main(config_name: str = "default") -> None:
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             # Submit all jobs directly
             future_to_entry = {
-                executor.submit(process_entry, entry, LEAN_OUTPUT_DIR, config_name): entry 
+                executor.submit(process_entry, entry, lean_output_dir, agent_log_dir, config_name): entry 
                 for entry in entries
             }
             
@@ -250,6 +265,5 @@ def main(config_name: str = "default") -> None:
     print(f"Total processing time: {time_end - time_start:.2f} seconds")
 
 if __name__ == "__main__":
-    setup_logging()
     args = parse_args()
     main(args.config)

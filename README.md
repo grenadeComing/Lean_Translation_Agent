@@ -7,21 +7,24 @@ A sophisticated AI-agent for translating natural language mathematical statement
 ```
 Lean_Translation_Agent/
 ├── main.py                 # agent entry
-├── requirements.txt       # Python dependencies
+├── requirements.txt        # Python dependencies
 ├── agents/
-│   ├── runner.py         # Agent orchestration
-|   ├── configs           # adjust tools agent has access to
-|   ├── prompts           # according prompt with respect to each config
-│   └── tools/            # Tool implementations
-|       ├── base_tool.py
-|       ├── run_lean_tool.py 
-|       ... (other tools)
-├── dataset/               # Data files
-├── results/               # Output directory
-└── agent_running_logs/          # Execution logs, moved into outputs
-├── outputs/             # cut and paste the results folder and agent_logs folder and renaming
-├── all_experiments_csv/  # the final output CSV after evaluate.py
-├── judgement.py       # input the agent output, asking judgment to give score of the agent work
+│   ├── runner.py           # Agent orchestration
+│   ├── configs/            # Tool/prompt configurations
+│   ├── prompts/            # Prompt files
+│   └── tools/              # Tool implementations
+│       ├── base_tool.py
+│       ├── run_lean_tool.py 
+│       └── ... (other tools)
+├── dataset/                # Data files
+├── results/                # Experiment outputs
+│   └── config_<name>_results/
+│       ├── lean_output/    # Generated `.lean` files
+│       ├── agent_logs/     # JSONL logs per theorem
+│       └── translation.log # Aggregated run log
+├── all_experiments_csv/    # Final output CSV after evaluate.py
+├── judgement.py            # Scores agent outputs
+└── outputs/                # Legacy exports of results/logs
 ```
 
 ## Features
@@ -98,19 +101,30 @@ agents/tools/run_lean_tool.py
 python main.py
 ```
 
-By default this reads `dataset/input/sample_best_400.jsonl` (see `main.py`) and writes the translated Lean files into `results/`.
+By default this reads `dataset/input/sample_best_400.jsonl` (see `main.py`). Outputs are placed in `results/config_default_results/` with two subdirectories:
+- `results/config_default_results/lean_output/` – generated `.lean` files
+- `results/config_default_results/agent_logs/` – JSONL traces from the agent run
+- `results/config_default_results/translation.log` – aggregated run log
+- `results/config_default_results/agent_run_summary.csv` – pass/fail metrics for each theorem
 
 To select a different runner configuration, pass its name (or path) as an optional argument. For example:
 ```bash
 python main.py config_custom
 ```
-The runner will look for `agents/configs/config_custom.json` (or the exact path you provide) instead of the default configuration when orchestrating the tools.
+Outputs for that run will appear under `results/config_config_custom_results/` (mirroring the argument you pass) with the same subdirectory layout. The runner will look for `agents/configs/config_custom.json` (or the exact path you provide) instead of the default configuration when orchestrating the tools.
+
+To score a completed experiment, run:
+```bash
+python judgement.py config_custom
+```
+This reads `results/config_config_custom_results/agent_run_summary.csv` and appends validation scores.
 
 
 ### Output
 
 - **Lean4 Files**: Validated proofs in `results/` directory
-- **Logs**: Execution details in `.agent_running_logs/` and `translation_agent.log`
+- **Logs**: Execution details in `results/config_<config>_results/agent_logs/` plus the consolidated `translation.log`
+- **Summary**: CSV metrics in `results/config_<config>_results/agent_run_summary.csv`
 
 ## Data Format
 

@@ -1,14 +1,18 @@
-import os
-import csv,json,shutil
+import argparse
+import csv
+import json
+import shutil
 import time
 from openai import OpenAI
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
+from concurrent.futures import ThreadPoolExecutor, FIRST_COMPLETED, wait
+from typing import Any, Dict, Iterable, Tuple
 
 client = OpenAI()
 
-def validate_translation(nl_statement: str, lean4_code: str) -> str:
+RESULT_COLUMNS = ("validate_score", "validate_reason", "equivalent")
+
+def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
     messages = [
         {
         "role": "system",
@@ -145,135 +149,127 @@ def validate_translation(nl_statement: str, lean4_code: str) -> str:
             "reason": f"ERROR: {str(e)}"
         }
 
-def process_row(row_data):
-    """Process a single row"""
-    row, index, total = row_data
-    
+def _augment_row(row: Dict[str, Any], result: Dict[str, Any]) -> Tuple[Dict[str, Any], bool]:
+    updated = row.copy()
+    updated["validate_score"] = result.get("grade", -1)
+    reason = result.get("thought") or result.get("reason") or "No reason given"
+    updated["validate_reason"] = reason
+    updated["equivalent"] = result.get("faithful_score", False)
+    return updated, updated["validate_score"] >= 0
+
+
+def _evaluate_single(args: Tuple[int, Dict[str, Any]]) -> Tuple[int, str, Dict[str, Any], bool]:
+    idx, row = args
     name = row.get("name", "")
-    print(f"[{index + 1}/{total}] Processing {name}...")
-    
     nl = row.get("nl_statement", "")
     lean = row.get("lean4_code", "")
-    
-    # Your validation function
+
     result = validate_translation(nl, lean)
-    
-    # Update row
-    row["validate_score"] = result.get("grade", -1)
-    row["validate_reason"] = result.get("thought", "No reason given")
-    row["equivalent"] = result.get("faithful_score", False)
-    
-    return row
+    updated_row, success = _augment_row(row, result)
+    return idx, name, updated_row, success
 
-# Simple lock for file writing
-write_lock = threading.Lock()
 
-def process_and_write_row(args):
-    """Process row and immediately append to file"""
-    row, index, total, temp_file, fieldnames = args
-    
-    name = row.get("name", "")
-    print(f"[{index + 1}/{total}] Processing {name}...")
-    
-    try:
-        nl = row.get("nl_statement", "")
-        lean = row.get("lean4_code", "")
-        
-        # Your validation function
-        result = validate_translation(nl, lean)
-        
-        # Update row
-        row["validate_score"] = result.get("grade", -1)
-        row["validate_reason"] = result.get("thought", "No reason given")
-        row["equivalent"] = result.get("faithful_score", False)
-        
-        # Write immediately to temp file
-        with write_lock:
-            with open(temp_file, "a", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writerow(row)
-        
-        print(f"✓ [{index + 1}/{total}] Saved {name}")
-        return True
-        
-    except Exception as e:
-        print(f"✗ [{index + 1}/{total}] Error processing {name}: {e}")
-        # Still write the original row
-        with write_lock:
-            with open(temp_file, "a", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
-                writer.writerow(row)
-        return False
-
-def update_csv_write_immediately(file_path: str, max_workers: int = 12):
-    """Process and write each row as soon as it's done"""
-    
-    # Read file
-    with open(file_path, "r", encoding="utf-8") as f:
-        reader = list(csv.DictReader(f))
-        if not reader:
-            print("No rows to process!")
-            return
-        fieldnames = list(reader[0].keys())
-    
-    # Add new columns
-    new_cols = ["validate_score", "validate_reason", "equivalent"]
-    for col in new_cols:
+def _ensure_fieldnames(existing: Iterable[str]) -> Tuple[str, ...]:
+    fieldnames = list(existing)
+    for col in RESULT_COLUMNS:
         if col not in fieldnames:
             fieldnames.append(col)
-    
-    total = len(reader)
-    temp_file = file_path + ".tmp"
-    
-    # Create temp file with headers
-    with open(temp_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-    
-    print(f"Processing {total} rows, writing results immediately...")
-    
-    # Process in parallel, write as completed
+    return tuple(fieldnames)
+
+
+def evaluate_summary_csv(summary_path: Path, max_workers: int = 12) -> None:
+    with open(summary_path, "r", encoding="utf-8") as count_file:
+        total = sum(1 for _ in csv.DictReader(count_file))
+
+    if total == 0:
+        print("No rows to process!")
+        return
+
     successes = 0
-    try:
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            # Submit all tasks
-            futures = [
-                executor.submit(process_and_write_row, (row.copy(), i, total, temp_file, fieldnames))
-                for i, row in enumerate(reader)
-            ]
-            
-            # Collect results as they complete
-            for future in as_completed(futures):
-                try:
-                    if future.result():
-                        successes += 1
-                except Exception as e:
-                    print(f"Unexpected error: {e}")
-        
-        # Replace original file
-        shutil.copy(file_path, file_path + ".bak")
-        shutil.move(temp_file, file_path)
-        
-        errors = total - successes
-        print(f"✅ Done! {successes} successful, {errors} errors")
-        
-    except Exception as e:
-        print(f"Error during processing: {e}")
-        # Clean up temp file if something went wrong
-        try:
-            import os
-            if os.path.exists(temp_file):
-                os.remove(temp_file)
-        except:
-            pass
-        raise
+
+    with open(summary_path, "r", encoding="utf-8") as source:
+        reader = csv.DictReader(source)
+        if reader.fieldnames is None:
+            raise ValueError("Summary CSV missing header row.")
+        fieldnames = _ensure_fieldnames(reader.fieldnames)
+
+        temp_path = summary_path.with_suffix(summary_path.suffix + ".tmp")
+
+        print(f"Processing {total} rows from {summary_path} ...")
+
+        with open(temp_path, "w", newline="", encoding="utf-8") as tmp_file:
+            writer = csv.DictWriter(tmp_file, fieldnames=fieldnames)
+            writer.writeheader()
+
+            next_to_write = 0
+            result_buffer: Dict[int, Tuple[Dict[str, Any], bool, str]] = {}
+
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                pending = {}
+
+                def handle_done(done_futures) -> None:
+                    nonlocal successes, next_to_write
+                    for future in done_futures:
+                        idx, name, updated_row, success = future.result()
+                        result_buffer[idx] = (updated_row, success, name)
+                        pending.pop(future, None)
+
+                    while next_to_write in result_buffer:
+                        row_data, success, name = result_buffer.pop(next_to_write)
+                        status = "✓" if success else "✗"
+                        print(f"{status} [{next_to_write + 1}/{total}] {name}")
+                        writer.writerow(row_data)
+                        if success:
+                            successes += 1
+                        next_to_write += 1
+
+                for idx, row in enumerate(reader):
+                    future = executor.submit(_evaluate_single, (idx, row))
+                    pending[future] = idx
+
+                    if len(pending) >= max_workers:
+                        done, _ = wait(list(pending.keys()), return_when=FIRST_COMPLETED)
+                        handle_done(done)
+
+                while pending:
+                    done, _ = wait(list(pending.keys()), return_when=FIRST_COMPLETED)
+                    handle_done(done)
+
+        backup_path = summary_path.with_suffix(summary_path.suffix + ".bak")
+        shutil.copy(summary_path, backup_path)
+        temp_path.replace(summary_path)
+
+    failures = total - successes
+    print(f"✅ Completed evaluation. {successes} succeeded, {failures} failed.")
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Validate Lean translations recorded in a summary CSV."
+    )
+    parser.add_argument(
+        "config",
+        help="Config name or path used when generating the results (e.g., 'default', 'config_custom').",
+    )
+    return parser.parse_args()
+
+
+def resolve_summary_path(config: str) -> Path:
+    config_label = Path(config).stem or config
+    results_root = Path(__file__).parent / "results"
+    target_dir = results_root / f"config_{config_label}_results"
+    return target_dir / "agent_run_summary.csv"
+
 
 # === Run ===
 if __name__ == "__main__":
     start_time = time.time()
-    
-    CVS_folder_path = Path(__file__).parent
-    input_csv = CVS_folder_path / "results/pass_rate_stats.csv"
-    update_csv_write_immediately(str(input_csv))
+
+    args = parse_args()
+    summary_path = resolve_summary_path(args.config)
+
+    if not summary_path.exists():
+        raise SystemExit(f"Summary CSV not found at {summary_path}")
+
+    evaluate_summary_csv(summary_path)
     end_time = time.time()
     print(f"Execution time: {end_time - start_time} seconds")

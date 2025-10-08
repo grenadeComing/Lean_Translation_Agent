@@ -102,18 +102,17 @@ def _repl_passed(result_str: str) -> bool:
 def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
+    log_dir: str,
     model: str = "gpt-5-nano",
     max_steps: int = 24,
     timeout_sec: float = 180.0,
-    log_dir: str = "agent_running_logs",
-    config: Optional[str] = None,
+    config: str = "default",
 ) -> Dict[str, Any]:
     """
     Orchestrates the Lean agent. Stops immediately when lean4_repl_runner reports a pass.
     Tool availability and system prompt are controlled via the ``config`` file.
     Returns status, step count, log path, and history for auditing.
     """
-    os.makedirs(log_dir, exist_ok=True)
     log_path = os.path.join(log_dir, f"{Path(file_path).stem}.jsonl")
 
     config_path = _resolve_config_path(config)
