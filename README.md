@@ -1,4 +1,4 @@
-# Agentic Lean Auformalization (ALA)
+# Agentic Lean Auformalization - Translator(ALA-Translator v1")
 
 A sophisticated AI-agent for translating natural language mathematical statements into formal Lean4 proofs using OpenAI's model and self-defined tools.
 
@@ -98,7 +98,13 @@ agents/tools/run_lean_tool.py
 python main.py
 ```
 
-This will process all entries in `INPUT_PATH_IN_MAIN` and save results to `results/`.
+By default this reads `dataset/input/sample_best_400.jsonl` (see `main.py`) and writes the translated Lean files into `results/`.
+
+To select a different runner configuration, pass its name (or path) as an optional argument. For example:
+```bash
+python main.py config_custom
+```
+The runner will look for `agents/configs/config_custom.json` (or the exact path you provide) instead of the default configuration when orchestrating the tools.
 
 
 ### Output

@@ -1,4 +1,5 @@
 # main.py
+import argparse
 import json
 import logging
 import csv
@@ -13,7 +14,7 @@ from agents.runner import call_openai_lean_agent, TOOLS
 from agents.tools.base_tool import BaseTool
 
 
-def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
+def process_entry(entry: Dict[str, Any], output_dir: Path, config_name: str) -> Dict[str, Any]:
     """
     Process a single entry from the input file.
     Uses globally loaded retrieval database.
@@ -28,7 +29,7 @@ def process_entry(entry: Dict[str, Any], output_dir: Path) -> Dict[str, Any]:
         result = call_openai_lean_agent(
             file_path=str(output_path),
             natural_language_statement=nl,
-            config = "default"
+            config=config_name
         )
         
         logging.info(f"Finished processing '{name}' with status: {result['status']} in {result['step']} steps.")
@@ -141,7 +142,20 @@ def print_final_summary(status_counts: Dict[str, int], total_processed: int):
         print(f"  {status}: {count}")
     print("="*40 + "\n")
 
-def main() -> None:
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run the Lean translation agent over the configured dataset."
+    )
+    parser.add_argument(
+        "config",
+        nargs="?",
+        default="default",
+        help="Name or path of the runner config to use (default: %(default)s).",
+    )
+    return parser.parse_args()
+
+
+def main(config_name: str = "default") -> None:
     """
     Main function to run the Lean translation agent in parallel using threads.
     """
@@ -190,7 +204,7 @@ def main() -> None:
         with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             # Submit all jobs directly
             future_to_entry = {
-                executor.submit(process_entry, entry, LEAN_OUTPUT_DIR): entry 
+                executor.submit(process_entry, entry, LEAN_OUTPUT_DIR, config_name): entry 
                 for entry in entries
             }
             
@@ -237,4 +251,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     setup_logging()
-    main()
+    args = parse_args()
+    main(args.config)
