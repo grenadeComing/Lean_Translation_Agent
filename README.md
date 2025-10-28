@@ -170,7 +170,7 @@ If you use this work in your research, please cite:
 ```bibtex
 @software{lean_translation_agent,
   title = {Lean Translation Agent},
-  author = {GrenadeComing},
+  author = {Ke Zhang, Patricio Gallardo Candela},
   url = {https://github.com/grenadeComing/Lean_Translation_Agent},
   year = {2025}
 }
