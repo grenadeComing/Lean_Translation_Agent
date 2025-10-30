@@ -36,10 +36,10 @@ class LeanTranslationTool(BaseTool):
     DEFAULT_MODEL = "FrenzyMath/Herald_translator"
 
     # google cloud VM
-    #DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
+    DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
 
     # university server
-    DEFAULT_API_URL = "https://attraction-taxi-yet-previews.trycloudflare.com/v1/chat/completions"
+    #DEFAULT_API_URL = "https://attraction-taxi-yet-previews.trycloudflare.com/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()

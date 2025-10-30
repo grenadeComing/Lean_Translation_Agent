@@ -1,5 +1,4 @@
 import Mathlib
 
-variable {R : Type} [Ring R]
-theorem neg_one_mul_eq_neg (a : R) : (-1) * a = -a := by
+theorem srdoty_neg_one_mul_eq (R : Type*) [Ring R] (a : R) : (-1 : R) * a = -a := by
   sorry

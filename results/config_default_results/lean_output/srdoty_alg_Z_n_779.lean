@@ -1,6 +1,4 @@
 import Mathlib
 
-/-- Let n > 0 be a natural number and a, b : ℤ. Prove that a ≡ b [ZMOD n] iff a % n = b % n. -/
- theorem zmod_iff_remainder_eq (n : ℕ) (h : 0 < n) (a b : ℤ) : a ≡ b [ZMOD n] ↔ a % n = b % n := by
-  -- proof goes here
-  sorry
+/-- Let n>0 be an integer and let a,b ∈ Z. Prove that a ≡ b mod n iff a and b have the same remainder upon division by n. -/
+theorem modEq_iff_mod_eq_tac_26040 (n : ℤ) (hn : 0 < n) (a : ℤ) (b : ℤ) : a ≡ b [ZMOD n] ↔ a % n = b % n := by sorry

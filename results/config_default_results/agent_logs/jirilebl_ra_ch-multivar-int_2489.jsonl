@@ -1,0 +1,2 @@
+{"action": "config", "path": "/Users/kezhang/Desktop/projects/Lean_Translation_agent/agents/configs/default.json"}
+{"action": "agent_API_error", "step": 1, "error": "Error code: 429 - {'error': {'message': 'Rate limit reached for gpt-5-nano in organization org-dTvKlU2DTNRuABAooEsP7Whq on tokens per min (TPM): Limit 200000, Used 200000, Requested 662. Please try again in 198ms. Visit https://platform.openai.com/account/rate-limits to learn more.', 'type': 'tokens', 'param': None, 'code': 'rate_limit_exceeded'}}"}

@@ -1,8 +1,5 @@
 import Mathlib
 
-theorem srdoty_alg_Z_n_828 (n : ℕ) (ha : 0 < n) (a b c d : ℤ)
-  (hab : a ≡ b [MOD n]) (hcd : c ≡ d [MOD n]) :
-  a + c ≡ b + d [MOD n] ∧ a * c ≡ b * d [MOD n] := by
-  -- translation placeholder: both congruences follow from n ∣ (a - b) and n ∣ (c - d)
-  -- and basic modular arithmetic properties; this is a placeholder proof
-  sorry
+/-- Let n be a fixed positive integer and let a,b,c,d ∈ ℤ with a ≡ b [ZMOD n] and c ≡ d [ZMOD n]. Prove that a+c ≡ b+d [ZMOD n] and ac ≡ bd [ZMOD n]. -/
+theorem add_and_mul {a b c d : ℤ} (h1 : a ≡ b [ZMOD n]) (h2 : c ≡ d [ZMOD n]) :
+  a + c ≡ b + d [ZMOD n] ∧ a * c ≡ b * d [ZMOD n] := by sorry

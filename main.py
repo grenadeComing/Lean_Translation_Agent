@@ -179,7 +179,7 @@ def main(config_name: str = "default") -> None:
     setup_logging(config_results_dir / "translation.log")
 
     # The input file
-    INPUT_FILE = PROJECT_ROOT / "dataset/input/test.jsonl"
+    INPUT_FILE = PROJECT_ROOT / "dataset/input/sample_best_400.jsonl"
     MAX_WORKERS = 10 # Higher for I/O bound threads
 
     # Set the allowed root path for all tools

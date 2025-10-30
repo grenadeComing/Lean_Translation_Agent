@@ -1,16 +1,13 @@
 import Mathlib
 
-/--
-Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated.
-This is a statement (proof sketch would be necessary in a full project). We provide a formal statement with a placeholder proof.
--/
-theorem fundamental_group_finitely_generated_of_compact_locally_simply_connected
-  (X : Type) [TopologicalSpace X]
+universe u
+
+-- Placeholder translation: the fundamental group of a compact, path connected, locally simply connected space is finitely generated
+-- We encode the statement as: for any X with the given structure and any x : X, the group π1 X x is finitely generated.
+theorem fundamental_group_finitely_generated
+  (X : Type u) [TopologicalSpace X]
   [CompactSpace X]
   [PathConnectedSpace X]
-  (x : X)
-  (hLoc : LocallySimplyConnected X) :
-  FinitelyGenerated (π1 X x) := by
-  classical
-  -- Proof goes here
+  [LocallySimplyConnected X]
+  (x : X) : FinitelyGenerated (π1 X x) := by
   sorry

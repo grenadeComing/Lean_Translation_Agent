@@ -1,0 +1,8 @@
+{
+  "enabled_tools": [
+    "lean_write_file",
+    "lean_retrieval",
+    "search_online"
+  ],
+  "system_prompt_file": "../prompts/agent_without_feedback.txt"
+}

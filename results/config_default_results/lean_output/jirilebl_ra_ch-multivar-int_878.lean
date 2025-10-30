@@ -1,23 +1,25 @@
 import Mathlib
 
+-- A skeleton translation of the multivariate Riemann integrability additivity statement.
+-- This file provides a statement with a sorry proof placeholder.
+
 universe u
 
 variable {n : ℕ}
+variable (R' R'' R : Set (ℝ^n)) (f : ℝ^n → ℝ)
 
--- The following are placeholder axioms to enable a structural translation of the statement
--- without committing to any particular geometry or integration theory.
-axiom IsRectangle {α : Type*} (s : Set α) : Prop
-axiom V {α : Type*} (s : Set α) : ℝ
-axiom RiemannIntegrableOn {α : Type*} (f : α → ℝ) (s : Set α) : Prop
+axiom IsRectangle (s : Set (ℝ^n)) : Prop
+axiom volume (s : Set (ℝ^n)) : ℝ
+axiom RiemannIntegrableOn (f : ℝ^n → ℝ) (s : Set (ℝ^n)) : Prop
+axiom integral_on (f : ℝ^n → ℝ) (s : Set (ℝ^n)) : ℝ
 
-lemma riemann_additivity_of_rectangles
-  (R1 R2 R : Set (Fin n → ℝ))
-  (hR : R1 ∪ R2 = R)
-  (hR1 : IsRectangle R1)
-  (hR2 : IsRectangle R2)
-  (hI : IsRectangle (R1 ∩ R2) ∧ V (R1 ∩ R2) = 0)
-  (f : (Fin n → ℝ) → ℝ)
-  (hf1 : RiemannIntegrableOn f R1)
-  (hf2 : RiemannIntegrableOn f R2)
-  : RiemannIntegrableOn f R := by
+theorem integrable_on_union_of_rectangles
+  (hR' : IsRectangle R')
+  (hR'' : IsRectangle R'')
+  (hR : R = R' ∪ R'')
+  (hInter : IsRectangle (R' ∩ R''))
+  (hVol : volume (R' ∩ R'') = 0)
+  (hfR' : RiemannIntegrableOn f R')
+  (hfR'' : RiemannIntegrableOn f R'')
+  : RiemannIntegrableOn f R ∧ (integral_on f R = integral_on f R' + integral_on f R'') := by
   sorry

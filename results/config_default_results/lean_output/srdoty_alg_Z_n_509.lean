@@ -1,6 +1,4 @@
 import Mathlib
 
-variable {R : Type*} [Ring R]
-
-theorem neg_mul_neg_example (a b : R) : (-a) * (-b) = a * b := by
-  sorry
+/-- (-a) * (-b) = a * b for any ring R. -/
+theorem neg_mul_neg' {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry
