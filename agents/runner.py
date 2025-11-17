@@ -149,41 +149,45 @@ def call_openai_lean_agent(
     ]
 
     for step in range(1, max_steps + 1):
-        # Call model
-        try:
-            response = client.chat.completions.create(
-                model=model_to_use, tools=tool_specs, tool_choice="auto",
-                messages=messages, timeout=timeout_sec
-            )
-            msg = response.choices[0].message
-
-            # append the message accordingly
-            messages.append({
-                "role": "assistant",
-                "content": msg.content or "",
-                "tool_calls": [
-                    {
-                        "id": msg.tool_calls[0].id,
-                        "type": "function",
-                        "function": {
-                            "name": msg.tool_calls[0].function.name,
-                            "arguments": msg.tool_calls[0].function.arguments
-                        }
+        # Call model (retry transient errors up to MAX_MODEL_RETRIES times)
+        msg = None
+        for attempt in range(1, 4):
+            try:
+                response = client.chat.completions.create(
+                    model=model_to_use, tools=tool_specs, tool_choice="auto",
+                    messages=messages, timeout=timeout_sec
+                )
+                msg = response.choices[0].message
+                break
+            except Exception as e:
+                log("agent_API_error", step=step, attempt=attempt, error=str(e))
+                if attempt == 4:
+                    return {
+                        "status": "agent_API_error",
+                        "step": step,
+                        "log_path": log_path,
                     }
-                ] if msg.tool_calls else None
-            })
+                continue
 
-            log("model_call", step=step, has_tools=bool(msg.tool_calls),
-                content=msg.content[:200] if msg.content else None,
-                tools_requested=[tc.function.name for tc in msg.tool_calls or []])
-            
-        except Exception as e:
-            log("agent_API_error", step=step, error=str(e))
-            return {
-                "status": "agent_API_error",
-                "step": step,
-                "log_path": log_path,
-            }
+        # append the message accordingly
+        messages.append({
+            "role": "assistant",
+            "content": msg.content or "",
+            "tool_calls": [
+                {
+                    "id": msg.tool_calls[0].id,
+                    "type": "function",
+                    "function": {
+                        "name": msg.tool_calls[0].function.name,
+                        "arguments": msg.tool_calls[0].function.arguments
+                    }
+                }
+            ] if msg.tool_calls else None
+        })
+
+        log("model_call", step=step, has_tools=bool(msg.tool_calls),
+            content=msg.content[:200] if msg.content else None,
+            tools_requested=[tc.function.name for tc in msg.tool_calls or []])
 
         # Check explicit success, then quit immediately
         explicit_success = False

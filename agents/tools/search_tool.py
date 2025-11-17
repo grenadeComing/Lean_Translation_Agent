@@ -6,9 +6,13 @@ from .base_tool import BaseTool
 class SearchOnlineTool(BaseTool):
     name = "search_online"
     description = (
-        "Search Lean4-related code on GitHub. "
-        "Uses the GitHub code search API scoped to leanprover-community/mathlib4 and leanprover/lean4."
-    )
+    "Search real Lean4/mathlib4 code examples on GitHub. "
+    "Use short keyword-style queries (1–3 words) containing actual Lean identifiers, "
+    "not full sentences. Useful when structure or syntax is unclear. "
+    "Returns matching code snippets, paths, and repository links."
+)
+
+
     parameters = {
         "query": "Search query related to Lean4 code or concepts"
     }

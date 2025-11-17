@@ -1,8 +1,7 @@
 import Mathlib
+open Complex
+open Matrix
 
-/-- If M is the 2x2 matrix representing a complex number a + i b, then M has eigenvalues a ± i b with eigenvectors [1; ∓ i]. -/
-theorem hasEigenvalues_complex_2x2 (a b : ℂ) :
-  ∃ v1 v2 : Fin 2 → ℂ, ∃ l1 l2 : ℂ,
-    let M := ![![a, -b], ![b, a]] in
-      M.mulVec v1 = l1 • v1 ∧ M.mulVec v2 = l2 • v2 ∧ l1 = a + b * Complex.I ∧ l2 = a - b * Complex.I := by
-  sorry
+/-- Prove that if the 2 x 2 matrix M represents a complex number a+ib, then M has two eigenvalues: a ± i b with the corresponding eigenvectors [ [1], [∓ i] ]. Save it to: jirilebl_ca_ca_997.lean -/
+theorem hasEigenvalues_complex_of_two_by_two_block_diagonal (a b : ℝ) :
+    (!![a, -b; b, a]).HasEigenvalues (a + i * b) (a - i * b) := sorry
