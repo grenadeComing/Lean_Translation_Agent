@@ -1,3 +1,4 @@
 import Mathlib
 
-theorem neg_mul_neg_in_ring {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry
+/-- Let R be a ring and let a,b in R. Show that (-a)(-b) = ab. -/
+theorem neg_mul_neg_eq {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry

@@ -1,6 +1,5 @@
 import Mathlib
 
-def E {F : Type*} [Field F] (t : F) : Matrix (Fin 2) (Fin 2) F := ![![1, t], ![0, 1]]
-
-theorem E_inv_eq_E_neg_t {F : Type*} [Field F] (t : F) : (E (F:=F) t)⁻¹ = E (F:=F) (-t) := by
+/-- Let F be a field and E(t) = [[1, t], [0, 1]] for t in F. Show that E(t)^{-1} = E(-t) for all t in F. -/
+theorem SL2_inv_single_extracted [Field F] (t : F) : (!![1, t; 0, 1])⁻¹ = !![1, -t; 0, 1] := by
   sorry

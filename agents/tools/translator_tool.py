@@ -39,7 +39,7 @@ class LeanTranslationTool(BaseTool):
     #DEFAULT_API_URL = "http://35.202.126.68:8000/v1/chat/completions"
 
     # university server
-    DEFAULT_API_URL = "https://republican-garage-gzip-disciplinary.trycloudflare.com/v1/chat/completions"
+    DEFAULT_API_URL = "https://indexed-doctor-rebates-seating.trycloudflare.com/v1/chat/completions"
 
     def __init__(self, api_url: str | None = None):
         super().__init__()

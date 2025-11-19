@@ -1,21 +1,12 @@
 import Mathlib
+open Matrix
+open LinearMap
+open Subgroup
+open scoped Classical in
+open scoped MatrixGroups
+open Matrix MatrixGroups SpecialLinearGroup
+open MatrixGroups
+open Matrix Matrix.SpecialLinearGroup
 
-section
-variable {F : Type} [Field F]
-
--- A simple ASCII encoding of a reflection in 2x2 matrices over F: A is a reflection if A * Aᵀ = I and det A = -1.
-def is_reflection (A : Matrix (Fin 2) (Fin 2) F) : Prop :=
-  (A * Matrix.transpose A = 1) ∧ Matrix.det A = -1
-
--- A rotation in 2x2 matrices over F: A is a rotation if A * Aᵀ = I and det A = 1.
-def is_rotation (A : Matrix (Fin 2) (Fin 2) F) : Prop :=
-  (A * Matrix.transpose A = 1) ∧ Matrix.det A = 1
-
-/-- Show that the product of any two reflections is a rotation matrix in O(2) (formalized).
-This is a translation of the statement; the proof is left as a sorry.
--/
-theorem isRotation_mul_reflection_mul_reflection_extracted (M N : Matrix (Fin 2) (Fin 2) F)
-  (hM : is_reflection M) (hN : is_reflection N) : is_rotation (M * N) := by
-  sorry
-
-end
+/-- Provide a faithful Lean4 encoding (not a proof) that the product of any two reflection matrices in O(2) is a rotation matrix in SO(2). Use 2x2 real matrices M := Matrix (Fin 2) (Fin 2) ℝ. Define Reflection A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = -1). Define Rotation A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = 1). Then state: for all A B, Reflection A → Reflection B → Rotation (A ⬝ B). End with := by sorry. -/
+lemma reflection_mul_reflection_is_rotation_tac_17266 (A : Matrix (Fin 2) (Fin 2) ℝ) (B : Matrix (Fin 2) (Fin 2) ℝ) : (A.transpose * A = 1 ∧ A.det = -1) → (B.transpose * B = 1 ∧ B.det = -1) → (A * B).transpose * (A * B) = 1 ∧ (A * B).det = 1 := sorry

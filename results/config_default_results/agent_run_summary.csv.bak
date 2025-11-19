@@ -1,186 +1,182 @@
 name,domain,status,passed,steps,nl_statement,lean4_code
 srdoty_alg_Z_n_507,Algebra,success,True,3,"Let $R$ be a ring and let $a,b\in R$. Show that $a(-b) = -(ab) = (-a)b$.","import Mathlib
 
-example {R : Type*} [Ring R] (a b : R) : a * (-b) = -(a * b) ∧ -(a * b) = (-a) * b := by
-  sorry
+/-- Let R be a ring and let a,b in R. Show that a(-b) = -(ab) = (-a)b. -/
+theorem neg_mul_extracted [Ring R] (a b : R) : a * -b = -(a * b) ∧ -(a * b) = (-a) * b := by sorry
 "
 srdoty_alg_Z_n_513,Algebra,success,True,3,Let $R$ be a ring and let $a\in R$. Show that $(-1)a = -a$.,"import Mathlib
 
-theorem neg_one_mul_eq_neg (R : Type u) [MulOneClass R] [HasDistribNeg R] (a : R) : -1 * a = -a := by sorry
+/-- Let R be a ring and let a∈R. Show that (-1)a = -a. -/
+theorem neg_one_mul_ext (R : Type*) [Ring R] (a : R) : (-1 : R) * a = -a := by sorry
 "
-srdoty_alg_linear-gps_836,Algebra,success,True,3,"Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(s)E(t)=E(s+t)$ for all $s,t\in F$.","import Mathlib
+srdoty_alg_linear-gps_838,Algebra,success,True,3,Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(t)^{-1}=E(-t)$ for all $t\in F$.,"import Mathlib
+
+/-- Let F be a field and E(t) = [[1, t], [0, 1]] for t in F. Show that E(t)^{-1} = E(-t) for all t in F. -/
+theorem SL2_inv_single_extracted [Field F] (t : F) : (!![1, t; 0, 1])⁻¹ = !![1, -t; 0, 1] := by
+  sorry"
+srdoty_alg_Z_n_509,Algebra,success,True,5,"Let $R$ be a ring and let $a,b\in R$. Show that $(-a)(-b) = ab$.","import Mathlib
+
+/-- Let R be a ring and let a,b in R. Show that (-a)(-b) = ab. -/
+theorem neg_mul_neg_eq {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry
+"
+srdoty_alg_Z_n_505,Algebra,success,True,4,Let $R$ be a ring and let $a\in R$. Show that $a\cdot 0 = 0 = 0\cdot a$.,"import Mathlib
+
+/-- Let R be a ring and let a ∈ R. Show that a · 0 = 0 and 0 · a = 0. -/
+theorem mul_zero_and_zero_mul {R : Type*} [MulZeroClass R] (a : R) : a * (0 : R) = 0 ∧ (0 : R) * a = 0 := by sorry
+"
+jirilebl_ca_ca_2353,Complex Analysis,success,True,3,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+open Complex
+open Complex ContinuousLinearMap
+open scoped ComplexConjugate
+
+/-- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 if and only if f'(z0) ≠ 0. -/
+theorem conformalAt_iff_deriv_ne_zero {f : ℂ → ℂ} {z₀ : ℂ} (hf : DifferentiableAt ℂ f z₀) : ConformalAt f z₀ ↔ deriv f z₀ ≠ 0 := by sorry
+"
+jirilebl_ca_ca_1326,Complex Analysis,success,True,3,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+lemma exp_ne_zero_tac_2110 (f : ℂ → ℂ) (h₁ : ∀ z w : ℂ, f (z + w) = f z * f w) (h₂ : f 0 = 1) : ∀ z : ℂ, f z ≠ 0 := by sorry
+"
+srdoty_alg_linear-gps_713,Algebra,success,True,6,"Show that the product of any two reflection matrices in $\mathrm{O}(2)$ is a rotation matrix (i.e., an element of $\mathrm{SO}(2)$).","import Mathlib
 open Matrix
 open LinearMap
 open Subgroup
 open scoped Classical in
 open scoped MatrixGroups
 open Matrix MatrixGroups SpecialLinearGroup
+open MatrixGroups
+open Matrix Matrix.SpecialLinearGroup
 
-/-- Let F be a field and E(t) = [[1, t], [0, 1]] for t in F. Show that E(s) E(t) = E(s+t) for all s, t in F. -/
-theorem SL2_exp_add_field [Field F] (s t : F) :
-    !![1, s; 0, 1] * !![1, t; 0, 1] = !![1, s + t; 0, 1] := by sorry"
-srdoty_alg_Z_n_505,Algebra,success,True,3,Let $R$ be a ring and let $a\in R$. Show that $a\cdot 0 = 0 = 0\cdot a$.,"import Mathlib
-
-theorem mul_zero_eq {R : Type} [Semiring R] (a : R) : a * 0 = 0 ∧ 0 * a = 0 := by sorry
-"
-srdoty_alg_Z_n_509,Algebra,success,True,5,"Let $R$ be a ring and let $a,b\in R$. Show that $(-a)(-b) = ab$.","import Mathlib
-
-theorem neg_mul_neg_in_ring {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry
-"
-srdoty_alg_Z_n_511,Algebra,success,True,7,"Let $R$ be a ring and let $a,b,c\in R$. Show that $a(b-c) = ab - ac$.","import Mathlib
-
-/-- Let R be a ring and let a,b,c in R. Show that a(b-c) = ab - ac. -/
-theorem mul_sub_right_distrib' {R : Type*} [Ring R] (a b c : R) : a * (b - c) = a * b - a * c := by sorry
-"
-jirilebl_ca_ca_758,Complex Analysis,success,True,3,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
-
--- Polarization identity for complex numbers (translated statement with a placeholder proof)
-theorem polar_identity_four_mul_z_conj_w (z w : ℂ) :
-  4 * z * star w = 
-    ((‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) : ℂ) +
-      Complex.I * (((‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2)) : ℂ) := by sorry
-"
-jirilebl_ca_ca_2353,Complex Analysis,success,True,5,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
-
-/-- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at z0 iff f'(z0) ≠ 0. -/
-theorem conformalAt_iff_deriv_ne_zero_of_holomorphic {f : ℂ → ℂ} {z0 : ℂ}
-  (hf : DifferentiableAt ℂ f z0) : ConformalAt f z0 ↔ deriv f z0 ≠ 0 := by
-  sorry
-"
-srdoty_alg_linear-gps_713,Algebra,success,True,8,"Show that the product of any two reflection matrices in $\mathrm{O}(2)$ is a rotation matrix (i.e., an element of $\mathrm{SO}(2)$).","import Mathlib
+/-- Provide a faithful Lean4 encoding (not a proof) that the product of any two reflection matrices in O(2) is a rotation matrix in SO(2). Use 2x2 real matrices M := Matrix (Fin 2) (Fin 2) ℝ. Define Reflection A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = -1). Define Rotation A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = 1). Then state: for all A B, Reflection A → Reflection B → Rotation (A ⬝ B). End with := by sorry. -/
+lemma reflection_mul_reflection_is_rotation_tac_17266 (A : Matrix (Fin 2) (Fin 2) ℝ) (B : Matrix (Fin 2) (Fin 2) ℝ) : (A.transpose * A = 1 ∧ A.det = -1) → (B.transpose * B = 1 ∧ B.det = -1) → (A * B).transpose * (A * B) = 1 ∧ (A * B).det = 1 := sorry"
+srdoty_alg_linear-gps_836,Algebra,success,True,6,"Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(s)E(t)=E(s+t)$ for all $s,t\in F$.","import Mathlib
 
 section
-variable {F : Type} [Field F]
+variable {F : Type*} [Field F]
 
--- A simple ASCII encoding of a reflection in 2x2 matrices over F: A is a reflection if A * Aᵀ = I and det A = -1.
-def is_reflection (A : Matrix (Fin 2) (Fin 2) F) : Prop :=
-  (A * Matrix.transpose A = 1) ∧ Matrix.det A = -1
+/-- The elementary upper-triangular matrix E(t) = [[1, t], [0, 1]] over a field F. -/
+ def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![ ![1, t], ![0, 1] ]
 
--- A rotation in 2x2 matrices over F: A is a rotation if A * Aᵀ = I and det A = 1.
-def is_rotation (A : Matrix (Fin 2) (Fin 2) F) : Prop :=
-  (A * Matrix.transpose A = 1) ∧ Matrix.det A = 1
-
-/-- Show that the product of any two reflections is a rotation matrix in O(2) (formalized).
-This is a translation of the statement; the proof is left as a sorry.
--/
-theorem isRotation_mul_reflection_mul_reflection_extracted (M N : Matrix (Fin 2) (Fin 2) F)
-  (hM : is_reflection M) (hN : is_reflection N) : is_rotation (M * N) := by
+/-- Show that E(s) * E(t) = E(s + t) for all s, t in F. -/
+theorem E_mul_E_eq (s t : F) : E s * E t = E (s + t) := by
   sorry
 
-end"
-jirilebl_ca_ca_1326,Complex Analysis,success,True,3,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+end
+"
+jirilebl_ca_ca_2441,Complex Analysis,success,True,10,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
 
-lemma exp_ne_zero_tac_911 (f : ℂ → ℂ) (h₁ : ∀ z w, f (z + w) = f z * f w) (h₂ : f 0 = 1) : ∀ z : ℂ, f z ≠ 0 := by
+open Classical
+
+/-- A minimal internal predicate expressing ""locally injective on U"" for functions f : ℂ → ℂ.
+    This is a lightweight encoding to faithfully translate the statement into Lean syntax. -/
+def IsLocallyInjectiveOn (f : ℂ → ℂ) (U : Set ℂ) : Prop :=
+  ∀ z ∈ U, ∃ t : Set ℂ, IsOpen t ∧ z ∈ t ∧ t ⊆ U ∧
+    Function.Injective (fun x : {w // w ∈ t} => f x.1)
+
+/-- Suppose U subset ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U. Show that f is locally injective on U. -/
+theorem isLocallyInjective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f U) (h : ∀ z ∈ U, deriv f z ≠ 0) : IsLocallyInjectiveOn f U := by
   sorry
 "
-benmckay_top_continuity_276,Topology,N/A,False,0,Let $Y$ be a locally compact Hausdorff space and $f \colon X \to Y$ a closed injection. Prove that $f$ is a homeomorphism onto its image.,Lean4 code file not found
-benmckay_top_fundamental-groups_365,Topology,success,True,3,"Show that every compact, locally simply connected topological space has finitely generated fundamental group.","import Mathlib
+benmckay_top_continuity_276,Topology,success,True,8,Let $Y$ be a locally compact Hausdorff space and $f \colon X \to Y$ a closed injection. Prove that $f$ is a homeomorphism onto its image.,"import Mathlib
+open Set Topology
 
-open CategoryTheory Topology CompHausLike
+/-- Let Y be a locally compact Hausdorff space and f : X -> Y a closed injection. Prove that f is a homeomorphism onto its image. -/
+def isHomeomorph_of_isClosed_injection {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
+  [LocallyCompactSpace Y] [T2Space Y] {f : X → Y}
+  (hf : IsClosed (Set.range f)) (hfi : Function.Injective f) :
+  X ≃ₜ Subtype (Set.range f) := by
+  sorry"
+srdoty_alg_Z_n_511,Algebra,max_steps_reached,False,24,"Let $R$ be a ring and let $a,b,c\in R$. Show that $a(b-c) = ab - ac$.","import Mathlib
+open Function
 
-/-- Show that every compact, locally simply connected topological space has finitely generated fundamental group. -/
-theorem finitely_generated_of_compact_ext (X : Type*) [TopologicalSpace X] [CompactSpace X]
-    [LocallySimplyConnectedSpace X] : (FundamentalGroup X).FG := by
+/-- Let R be a ring and let a,b,c∈R. Show that a(b-c) = ab - ac. -/
+theorem mul_sub_right_distrib [NonUnitalNonAssocRing R] (a b c : R) : a * (b - c) = a * b - a * c := by
+  simpa using mul_sub a b c
+"
+benmckay_top_covering-spaces_1164,Topology,max_steps_reached,False,24,"Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated.","import Mathlib
+
+/-- Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated. -/
+theorem of_compact_path_connected_locally_simply_connected (X : Type*) [TopologicalSpace X]
+    [CompactSpace X] [PathConnectedSpace X] [LocallySimplyConnectedSpace X] :
+    Monoid.FG (FundamentalGroup X) := by
   sorry
 "
-jirilebl_ca_ca_997,Complex Analysis,success,True,9,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
-open Complex
-open Matrix
-
-/-- Prove that if the 2 x 2 matrix M represents a complex number a+ib, then M has two eigenvalues: a ± i b with the corresponding eigenvectors [ [1], [∓ i] ]. Save it to: jirilebl_ca_ca_997.lean -/
-theorem hasEigenvalues_complex_of_two_by_two_block_diagonal (a b : ℝ) :
-    (!![a, -b; b, a]).HasEigenvalues (a + i * b) (a - i * b) := sorry"
-srdoty_alg_linear-gps_582,Algebra,success,True,9,"For each $\theta\in\mathbb{R}$, the reflection of $\mathbb{R}^2$ across the line through the origin making angle $\theta$ with the $x$-axis is a linear operator, and its matrix $H_\theta$ is an improper orthogonal matrix (i.e., $H_\theta\in \mathrm{O}(2)$ and $\det H_\theta=-1$).","import Mathlib
-
-/-- For each θ in ℝ, the reflection of ℝ^2 across the line through the origin making angle θ with the x-axis is a linear operator, and its matrix H_θ is an improper orthogonal matrix (i.e., H_θ ∈ O(2) and det H_θ = -1). -/
-theorem reflection_improper_orthogonal (θ : ℝ) :
-  ∃ H : Matrix (Fin 2) (Fin 2) ℝ,
-    Matrix.det H = -1 ∧ Hᵀ ⬝ H = 1 := by
-  sorry
-"
-benmckay_top_continuity_319,Topology,success,True,11,Every proper map $f \colon X \to Y$ to a locally compact Hausdorff space $Y$ is a closed map.,"import Mathlib
+benmckay_top_continuity_319,Topology,success,True,17,Every proper map $f \colon X \to Y$ to a locally compact Hausdorff space $Y$ is a closed map.,"import Mathlib
 open Filter Topology Function Set
 open Prod (fst snd)
 
-/-- Every proper map f : X -> Y to a locally compact Hausdorff space Y is a closed map. -/
+/-- Every proper map f : X → Y to a locally compact Hausdorff space Y is a closed map. -/
 theorem isClosedMap_of_proper_of_t2 {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    [LocallyCompactSpace Y] [T2Space Y] {f : X → Y} (h : IsProperMap f) : IsClosedMap f := sorry
+    [LocallyCompactSpace Y] [T2Space Y] {f : X → Y} (h : IsProperMap f) : IsClosedMap f := by sorry
 "
-jirilebl_ca_ca_2441,Complex Analysis,success,True,11,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
-open Set
+jirilebl_ca_ca_758,Complex Analysis,max_steps_reached,False,24,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
 
-/-- Local injectivity on a set: for each z in U there exists a radius r > 0 such that f is injective on the ball B(z, r) ∩ U. -/
-def LocallyInjectiveOn (f : ℂ → ℂ) (U : Set ℂ) : Prop :=
-  ∀ z ∈ U, ∃ r > 0, ∀ w, dist w z < r → w ∈ U → f w = f z → w = z
-
-/-- Suppose U ⊆ ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U. Show that f is locally injective on U. -/
-theorem locally_injective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f U)
-    (hf' : ∀ z ∈ U, deriv f z ≠ 0) : LocallyInjectiveOn f U := by
+/-- Polarization identity: 4 z conj w = |z+w|^2 - |z-w|^2 + i(|z+ i w|^2 - |z - i w|^2) -/ 
+theorem polarization_identity (z w : ℂ) :
+  4 * z * conj w =
+    (‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) + Complex.I * (‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2) := by
   sorry
 "
-srdoty_alg_linear-gps_838,Algebra,success,True,11,Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(t)^{-1}=E(-t)$ for all $t\in F$.,"import Mathlib
+srdoty_alg_linear-gps_582,Algebra,max_steps_reached,False,24,"For each $\theta\in\mathbb{R}$, the reflection of $\mathbb{R}^2$ across the line through the origin making angle $\theta$ with the $x$-axis is a linear operator, and its matrix $H_\theta$ is an improper orthogonal matrix (i.e., $H_\theta\in \mathrm{O}(2)$ and $\det H_\theta=-1$).","import Mathlib
 
-def E {F : Type*} [Field F] (t : F) : Matrix (Fin 2) (Fin 2) F := ![![1, t], ![0, 1]]
+noncomputable def H_theta (θ : ℝ) : Matrix (Fin 2) (Fin 2) ℝ :=
+  ![![Real.cos (2 * θ), Real.sin (2 * θ)],
+     ![Real.sin (2 * θ), - Real.cos (2 * θ)]]
 
-theorem E_inv_eq_E_neg_t {F : Type*} [Field F] (t : F) : (E (F:=F) t)⁻¹ = E (F:=F) (-t) := by
+/-- A matrix is in the orthogonal group O(2) if Aᵀ ⬝ A = I (the identity matrix). -/
+def is_in_O2 (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop :=
+  Aᵀ ⬝ A = (1 : Matrix (Fin 2) (Fin 2) ℝ)
+
+/-- A matrix is an improper orthogonal matrix if it is in O(2) and has determinant -1. -/
+def is_improper_orthogonal (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop :=
+  (is_in_O2 A) ∧ Matrix.det A = -1
+
+/-- For θ ∈ ℝ, the matrix representing the reflection of R^2 across the line through the origin
+    making angle θ with the x-axis is H_theta. We record its properties below. -/
+theorem reflection_matrix_properties (θ : ℝ) :
+  is_in_O2 (H_theta θ) ∧ Matrix.det (H_theta θ) = -1 := by
   sorry
 "
-benmckay_top_covering-spaces_1164,Topology,max_steps_reached,False,24,"Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated.","import Mathlib
-open CategoryTheory
-open ContinuousMap
-open scoped ContinuousMap
-open Classical in
-open Classical in
-open Classical in
+jirilebl_ca_ca_997,Complex Analysis,max_steps_reached,False,24,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+open Matrix
+open scoped Matrix
+open Complex
 
-/-- Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated. -/
-theorem of_compact_path_connected_locally_simply_connected (Y : Type u) [TopologicalSpace Y]
-    [CompactSpace Y] [PathConnectedSpace Y] [LocallySimplyConnectedSpace Y] :
-    Monoid.FG (FundamentalGroup Y) := by
-  -- placeholder for the actual proof
-  sorry"
-benmckay_top_continuity_232,Topology,success,True,24,Prove that the one-point compactification of $\mathbb{R}^{n}$ is homeomorphic to the unit sphere $S^{n}$.,"import Mathlib
+/-- If a 2x2 real matrix M represents a+ib, i.e. M = !![a, -b; b, a], then M has eigenvalues a±ib with eigenvectors [1; ∓ i]. -/
+theorem hasEigenvalues_complex_number (a b : ℝ) :
+  ∀ (M : Matrix (Fin 2) (Fin 2) ℝ),
+    M = !![a, -b; b, a] →
+      ∃ (λ1 λ2 : ℂ) (v1 v2 : Fin 2 → ℂ),
+        v1 ≠ 0 ∧ v2 ≠ 0 ∧
+        (M.map (algebraMap ℝ ℂ)).mulVec v1 = λ1 • v1 ∧
+        (M.map (algebraMap ℝ ℂ)).mulVec v2 = λ2 • v2 ∧
+        λ1 = a + Complex.I * b ∧ λ2 = a - Complex.I * b
+:= by sorry"
+benmckay_top_continuity_232,Topology,max_steps_reached,False,24,Prove that the one-point compactification of $\mathbb{R}^{n}$ is homeomorphic to the unit sphere $S^{n}$.,"import Mathlib
+open Set Metric TopologicalSpace Filter
+open Topology
 
-/-- Prove that the one-point compactification of ℝ^n is homeomorphic to the unit sphere S^n. -/
-theorem homeomorphic_one_point_compactification_sphere (n : ℕ) :
-    OnePointCompactification (Fin n → ℝ) ≃ₜ Sphere n := by sorry
+/-- Prove that the one-point compactification of R^n is homeomorphic to the unit sphere S^n. -/
+theorem homeomorphic_one_point_compactification_unit_sphere (n : ℕ) :
+  OnePoint ℝ^n ≃ₜ S^n := by sorry
 "
-srdoty_alg_linear-gps_839,Algebra,success,True,22,Let $F$ be a field and $G=\{E(t): t\in F\}$ with $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$. Prove that $G$ is a matrix group under multiplication.,"import Mathlib
+benmckay_top_fundamental-groups_365,Topology,max_steps_reached,False,24,"Show that every compact, locally simply connected topological space has finitely generated fundamental group.","import Mathlib
+
+/-- Show that every compact, locally simply connected topological space has finitely generated fundamental group. -/
+theorem finitely_generated_of_compact_ext (X : Type*) [TopologicalSpace X] [CompactSpace X]
+    [LocallySimplyConnectedSpace X] : (fundamentalGroup X).FG := by sorry
+"
+srdoty_alg_linear-gps_839,Algebra,max_steps_reached,False,24,Let $F$ be a field and $G=\{E(t): t\in F\}$ with $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$. Prove that $G$ is a matrix group under multiplication.,"import Mathlib
 
 open Matrix
 
-section
+variable {F : Type*} [Field F]
 
-variable {F : Type} [Field F]
+/-- E(t) = [[1, t], [0, 1]] over F -/
+def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![![1, t], [0, 1]]!
 
-/-- E(t) is the unipotent upper-triangular 2x2 matrix with t in the (1,2) position -/
-def E (t : F) : Matrix.GeneralLinearGroup 2 F := by
-  refine ⟨![![1, t], [0, 1]], ?_⟩
-  have hdet : Matrix.det ![![1, t], [0, 1]] = (1 : F) := by
-    simp [Matrix.det]
-  have hIsUnit : IsUnit (Matrix.det ![![1, t], [0, 1]]) := by
-    simpa [hdet] using (isUnit_one : IsUnit (1 : F))
-  exact hIsUnit
+/-- G = { E(t) : t ∈ F } -/
+def G : Set (Matrix (Fin 2) (Fin 2) F) := Set.range (E (F := F))
 
-/-- G is the set { E(t) : t ∈ F }, viewed as a subgroup of GL(2,F) -/
-def G : Subgroup (Matrix.GeneralLinearGroup 2 F) :=
-{ carrier := { g : Matrix.GeneralLinearGroup 2 F | ∃ t : F, g = E t },
-  one_mem' := by
-    refine ⟨0, ?_⟩
-    ext i j <;> simp [E],
-  mul_mem' := by
-    intro a ha b hb
-    -- placeholder proof
-    sorry,
-  inv_mem' := by
-    intro g hg
-    -- placeholder proof
-    sorry
-}
-
-end
-
-/-- The statement translated: G is a matrix group under multiplication -/
-theorem matrix_group_G_is_matrix_group {F} [Field F] : True := by
-  sorry
+/-- G is a matrix group under multiplication -/
+theorem G_is_matrix_group : True := by sorry
 "

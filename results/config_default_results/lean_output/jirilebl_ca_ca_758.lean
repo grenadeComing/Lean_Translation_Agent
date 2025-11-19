@@ -1,7 +1,7 @@
 import Mathlib
 
--- Polarization identity for complex numbers (translated statement with a placeholder proof)
-theorem polar_identity_four_mul_z_conj_w (z w : ℂ) :
-  4 * z * star w = 
-    ((‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) : ℂ) +
-      Complex.I * (((‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2)) : ℂ) := by sorry
+/-- Polarization identity: 4 z conj w = |z+w|^2 - |z-w|^2 + i(|z+ i w|^2 - |z - i w|^2) -/ 
+theorem polarization_identity (z w : ℂ) :
+  4 * z * conj w =
+    (‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) + Complex.I * (‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2) := by
+  sorry
