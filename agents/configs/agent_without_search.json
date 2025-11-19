@@ -1,8 +1,0 @@
-{
-  "enabled_tools": [
-    "lean_write_file",
-    "lean4_repl_runner",
-    "lean_check_theorem"
-  ],
-  "system_prompt_file": "../prompts/agent_without_search.txt"
-}

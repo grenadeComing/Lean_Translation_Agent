@@ -1,15 +1,17 @@
 import Mathlib
-open Matrix
-open scoped Matrix
-open Complex
 
-/-- If a 2x2 real matrix M represents a+ib, i.e. M = !![a, -b; b, a], then M has eigenvalues a±ib with eigenvectors [1; ∓ i]. -/
-theorem hasEigenvalues_complex_number (a b : ℝ) :
-  ∀ (M : Matrix (Fin 2) (Fin 2) ℝ),
-    M = !![a, -b; b, a] →
-      ∃ (λ1 λ2 : ℂ) (v1 v2 : Fin 2 → ℂ),
-        v1 ≠ 0 ∧ v2 ≠ 0 ∧
-        (M.map (algebraMap ℝ ℂ)).mulVec v1 = λ1 • v1 ∧
-        (M.map (algebraMap ℝ ℂ)).mulVec v2 = λ2 • v2 ∧
-        λ1 = a + Complex.I * b ∧ λ2 = a - Complex.I * b
-:= by sorry
+/-- If the 2×2 real matrix M represents the complex number a + i b via
+    M = [[a, -b], [b, a]], then M (viewed as a complex matrix) has two
+    eigenpairs: eigenvalue a + i b with eigenvector [1; -i], and
+    eigenvalue a - i b with eigenvector [1; i]. -/
+theorem matrix_repr_complex_eigenpairs (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℝ := fun i j =>
+    match i, j with
+    | 0, 0 => a
+    | 0, 1 => -b
+    | 1, 0 => b
+    | 1, 1 => a
+  let Mc := M.map (algebraMap ℝ ℂ)
+  let v1 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else -Complex.I
+  let v2 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else Complex.I
+  Mc.mulVec v1 = (a + b * Complex.I) • v1 ∧ Mc.mulVec v2 = (a - b * Complex.I) • v2 := by sorry

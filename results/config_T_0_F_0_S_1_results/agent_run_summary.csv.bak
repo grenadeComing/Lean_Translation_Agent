@@ -1,0 +1,122 @@
+name,domain,status,steps,compile_status,io_error,nl_statement,lean4_code
+jirilebl_ca_ca_758,Complex Analysis,success,4,0,,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
+
+/-- Polarization identity for complex numbers:
+    4 z ⬝ conj w = |z+w|^2 - |z-w|^2 + i (|z+iw|^2 - |z-iw|^2)
+-/
+theorem polarization_identity (z w : ℂ) :
+  4 * z * Complex.conj w =
+    (Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2 +
+    Complex.i * ((Complex.abs (z + Complex.i * w)) ^ 2 - (Complex.abs (z - Complex.i * w)) ^ 2) := by sorry
+"
+jirilebl_ca_ca_1326,Complex Analysis,success,2,1,,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+
+/-!
+We state two related lemmas (without proof):
+1) If f : ℂ → ℂ satisfies f(z+w) = f z * f w and f 0 = 1, then f z ≠ 0 for all z.
+2) As a special case, the complex exponential never vanishes: exp z ≠ 0 for all z.
+-/
+
+theorem multiplicative_function_nonzero {f : Complex → Complex}
+  (hf : ∀ z w : Complex, f (z + w) = f z * f w)
+  (h0 : f 0 = 1) : ∀ z : Complex, f z ≠ 0 := by sorry
+
+theorem exp_ne_zero : ∀ z : Complex, Complex.exp z ≠ 0 := by sorry"
+jirilebl_ca_ca_5485,Complex Analysis,success,4,0,,"Suppose $f \colon \mathbb{D} \to \mathbb{D}$ is holomorphic and $f(0) = 0$, then $\lvert f'(0)\rvert \leq 1$.","import Mathlib
+
+/-- Schwarz lemma: if f : 𝔻 → 𝔻 is holomorphic and f(0) = 0 then |f'(0)| ≤ 1. -/
+theorem schwarz_lemma {f : ℂ → ℂ} (h : HolomorphicOn f (metric.ball (0 : ℂ) 1)) (h0 : f 0 = 0) : |deriv f 0| ≤ 1 := by sorry
+"
+jirilebl_ca_ca_2441,Complex Analysis,success,5,0,,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
+
+open Set Function
+
+/--
+If f is holomorphic on an open set U and its complex derivative never vanishes on U,
+then f is locally injective on U: for every z in U there is an open neighbourhood V ⊆ U
+on which f is injective.
+-/
+theorem holomorphic_on_deriv_ne_zero_locally_injective_on {U : Set ℂ} (hU : IsOpen U)
+  {f : ℂ → ℂ} (hf : IsHolomorphicOn f U) (h : ∀ z ∈ U, deriv f z ≠ 0) :
+  ∀ z ∈ U, ∃ V, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ InjectiveOn f V := by sorry"
+jirilebl_ca_ca_2577,Complex Analysis,success,4,0,,"Let $U \subset \mathbb{C}$ be an open set and $f \colon U \to \mathbb{C}$ be a holomorphic function. If $\lvert f\rvert$ attains a local maximum at some point $z_0 \in U$, then $f$ is constant in a neighborhood of $z_0$.","import Mathlib
+
+open Metric Set
+
+/-- Maximum modulus principle (local version).
+If U ⊆ ℂ is open and f : U → ℂ is holomorphic (differentiable on U),
+and |f| attains a local maximum at z0 ∈ U, then f is constant in a neighborhood of z0. -/
+lemma maximum_modulus_principle_local {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f U) {z0 : ℂ} (hz0 : z0 ∈ U)
+  (hmax : ∃ r > 0, ball z0 r ⊆ U ∧ ∀ z ∈ ball z0 r, |f z| ≤ |f z0|) :
+  ∃ r > 0, ∀ z ∈ ball z0 r, f z = f z0 := by sorry
+"
+jirilebl_ca_ca_2353,Complex Analysis,success,5,0,,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+
+open Complex
+
+variable {f : ℂ → ℂ} {z0 : ℂ}
+
+theorem is_holomorphic_at.is_conformal_at_iff_deriv_ne_zero (hf : IsHolomorphicAt f z0) :
+  (IsConformalAt f z0) ↔ deriv f z0 ≠ 0 := by sorry
+"
+jirilebl_ca_ca_5157,Complex Analysis,success,5,0,,"Suppose $U \subset \mathbb{C}$ is open, and $\psi \colon U \times [0,1] \to \mathbb{C}$ is a continuous function such that for each fixed $t \in [0,1]$, the function $z \mapsto \psi(z,t)$ is holomorphic. Then $h(z) = \int_0^1 \psi(z,t) \, dt$ is a holomorphic function on $U$.","import Mathlib
+
+/-!
+Suppose U ⊂ ℂ is open, and ψ : U × [0,1] → ℂ is a continuous function such that for each fixed t ∈ [0,1],
+the function z ↦ ψ(z,t) is holomorphic. Then h(z) = ∫_0^1 ψ(z,t) dt is a holomorphic function on U.
+-/
+
+open Set
+
+theorem is_holomorphic_of_integral_of_holomorphic_family
+  {U : Set ℂ} (psi : ℂ × ℝ → ℂ)
+  (U_open : IsOpen U)
+  (psi_cont : ContinuousOn psi (U ×ˢ (Icc (0 : ℝ) 1)))
+  (psi_holo : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => psi (z, t)) U) :
+  IsHolomorphicOn (fun z => ∫ t in (0 : ℝ)..1, psi (z, t)) U := by sorry
+"
+jirilebl_ca_ca_2718,Complex Analysis,success,5,0,,"Let $U \subset \mathbb{C}$ be a domain and suppose that a holomorphic function $f \colon U \to \mathbb{C}$ is not constant. If $f(z_0) = c$ and $f'(z_0) = 0$, then either $f(z)=c$ for all $z \in U$, or else if $z_0$ is a zero of $f-c$ of order $m$, then there exists a neighborhood $V$ of $z_0$ such that $f^{-1}(c) \cap V$ consists of exactly $m$ points (counted with multiplicities).","import Mathlib
+
+/--
+Let U ⊆ ℂ be a domain and suppose that a holomorphic function f : U → ℂ is not constant.
+If f(z0) = c and f'(z0) = 0, then either f(z) = c for all z ∈ U, or else if z0 is a zero
+of f - c of order m, then there exists a neighborhood V of z0 such that f^{-1}({c}) ∩ V
+consists of exactly m points (counted with multiplicities).
+
+This statement is expressed here in a form asserting the local factorisation
+f(z) - c = (z - z0)^m * g(z) with g holomorphic and g(z0) ≠ 0, which is equivalent
+to the usual formulation about the number of solutions counted with multiplicity.
+-/
+theorem jirilebl_ca_ca_2718 {U : Set ℂ} {f : ℂ → ℂ}
+  (hU_open : IsOpen U) (hU_conn : IsConnected U) (hf : IsHolomorphicOn f U)
+  (hf_nonconst : ¬ IsConstantOn f U) {z0 c : ℂ} (hz0 : z0 ∈ U)
+  (hfv : f z0 = c) (hder : HasDerivAt f (0 : ℂ) z0) :
+  (∀ z ∈ U, f z = c) ∨
+  ∃ (m : ℕ) (hm : 1 ≤ m) (V : Set ℂ) (g : ℂ → ℂ),
+    IsOpen V ∧ z0 ∈ V ∧ V ⊆ U ∧ IsHolomorphicOn g V ∧ g z0 ≠ 0 ∧
+    ∀ z ∈ V, f z - c = (z - z0) ^ m * g z := by sorry
+"
+jirilebl_ca_ca_3078,Complex Analysis,success,6,0,,"If $f \colon U \to \mathbb{C}$ is a holomorphic function on a domain $U \subset \mathbb{C}$, then $f$ is analytic. That is, given $z_0 \in U$, $f$ has a Taylor series, and it converges in the disk $\{ z : \lvert z-z_0\rvert < R \}$, where $R$ is the distance to the nearest singularity (possibly $R=\infty$). Furthermore, the sum of the series is $f$.","import Mathlib
+
+/-- If f is holomorphic on an open domain U ⊆ ℂ, then f is analytic on U. -/
+theorem holomorphic_on_is_analytic {U : Set ℂ} {f : ℂ → ℂ} (hU : IsOpen U)
+  (hf : IsHolomorphicOn f U) : IsAnalyticOn f U := by sorry
+"
+jirilebl_ca_ca_997,Complex Analysis,success,5,0,,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+
+open Complex
+open Matrix
+
+theorem matrix_represents_complex_has_eigenpairs (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℝ :=
+    Matrix.ofFun fun i j =>
+      if i = 0 ∧ j = 0 then a
+      else if i = 0 ∧ j = 1 then -b
+      else if i = 1 ∧ j = 0 then b
+      else a
+  let Mℂ : Matrix (Fin 2) (Fin 2) ℂ := M.map (fun r => (r : ℂ))
+  let v_pos : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else -Complex.I
+  let v_neg : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else Complex.I
+  (∀ i, ∑ j, Mℂ i j * v_pos j = ((a : ℂ) + Complex.I * (b : ℂ)) * v_pos i) ∧
+  (∀ i, ∑ j, Mℂ i j * v_neg j = ((a : ℂ) - Complex.I * (b : ℂ)) * v_neg i) := by sorry"

@@ -7,5 +7,7 @@
     "search_online",
     "lean_check_theorem"
   ],
-  "system_prompt_file": "../prompts/default_system.txt"
+  "system_prompt_file": "../prompts/default_system.txt",
+  "max_steps": 24,
+  "model": "gpt-5-mini"
 }

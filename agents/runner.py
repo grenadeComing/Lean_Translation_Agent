@@ -2,9 +2,10 @@ import os
 import json
 import logging
 import re
+from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple
 from openai import OpenAI
 from agents.tools import *
 
@@ -60,7 +61,6 @@ def _load_runner_config(path_str: str) -> Dict[str, Any]:
     cfg["enabled_tools"] = list(cfg["enabled_tools"])
     return cfg
 
-
 def _tool_spec(tool_obj: Any) -> Dict[str, Any]:
     """
     Generate OpenAI tool specification from a tool object.
@@ -103,16 +103,10 @@ def call_openai_lean_agent(
     file_path: str,
     natural_language_statement: str,
     log_dir: str,
-    model: str = "gpt-5-nano",
-    max_steps: int = 24,
     timeout_sec: float = 180.0,
     config: str = "default",
 ) -> Dict[str, Any]:
-    """
-    Orchestrates the Lean agent. Stops immediately when lean4_repl_runner reports a pass.
-    Tool availability and system prompt are controlled via the ``config`` file.
-    Returns status, step count, log path, and history for auditing.
-    """
+
     log_path = os.path.join(log_dir, f"{Path(file_path).stem}.jsonl")
 
     config_path = _resolve_config_path(config)
@@ -127,12 +121,13 @@ def call_openai_lean_agent(
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(event, ensure_ascii=False) + "\n")
 
-    log("config", path=str(config_path))
+    # log("config", path=str(config_path))
 
     client = OpenAI()
 
     system_prompt = config_data.get("system_prompt")
-    model_to_use = model
+    max_steps = config_data.get("max_steps")
+    model_to_use = config_data.get("model")
 
     agent_tools = {name: TOOLS[name] for name in enabled_tool_names}
     tool_specs = [_tool_spec(t) for t in agent_tools.values()]
@@ -148,44 +143,76 @@ def call_openai_lean_agent(
         },
     ]
 
+    pending_repl_fix = False  # becomes True when last REPL failed
+    repl_tool = lean_repl_tool_instance
+
+    def run_repl_check(reason: str) -> int:
+        try:
+            result = repl_tool.run(path=file_path)
+            passed = False
+            if isinstance(result, dict):
+                passed = result.get("repl_pass") == 1
+            result_snippet = str(result)
+            if not passed:
+                passed = _repl_passed(result_snippet)
+            log("compile_check", step=reason, passed=passed, result=result_snippet[:500])
+            return 1 if passed else 0
+        except Exception as err:
+            log("compile_check_error", step=reason, error=str(err))
+            return 0
+
+    def finish(status: str, step_value: int, outcome: str) -> Dict[str, Any]:
+        compile_status = run_repl_check(outcome)
+        log("run_complete", outcome=outcome, step=step_value, compile_status=compile_status)
+        return {
+            "status": status,
+            "step": step_value,
+            "log_path": log_path,
+            "compile_status": compile_status,
+        }
+
     for step in range(1, max_steps + 1):
         # Call model (retry transient errors up to MAX_MODEL_RETRIES times)
         msg = None
         for attempt in range(1, 4):
             try:
                 response = client.chat.completions.create(
-                    model=model_to_use, tools=tool_specs, tool_choice="auto",
-                    messages=messages, timeout=timeout_sec
+                    model=model_to_use,
+                    tools=tool_specs,
+                    tool_choice="auto",
+                    messages=messages,
+                    timeout=timeout_sec
                 )
                 msg = response.choices[0].message
                 break
             except Exception as e:
                 log("agent_API_error", step=step, attempt=attempt, error=str(e))
-                if attempt == 4:
-                    return {
-                        "status": "agent_API_error",
-                        "step": step,
-                        "log_path": log_path,
-                    }
+                if attempt == 3:
+                    return finish("agent_API_error", step, "agent_API_error")
                 continue
 
         # append the message accordingly
-        messages.append({
+        assistant_msg = {
             "role": "assistant",
-            "content": msg.content or "",
-            "tool_calls": [
+            "content": msg.content or ""
+        }
+        if msg.tool_calls:
+            # Only keep the first tool call to match execution logic
+            tc = msg.tool_calls[0]
+            assistant_msg["tool_calls"] = [
                 {
-                    "id": msg.tool_calls[0].id,
+                    "id": tc.id,
                     "type": "function",
                     "function": {
-                        "name": msg.tool_calls[0].function.name,
-                        "arguments": msg.tool_calls[0].function.arguments
+                        "name": tc.function.name,
+                        "arguments": tc.function.arguments
                     }
                 }
-            ] if msg.tool_calls else None
-        })
+            ]
+        messages.append(assistant_msg)
 
-        log("model_call", step=step, has_tools=bool(msg.tool_calls),
+        log("model_reply:", step=step, 
+            has_tools=bool(msg.tool_calls),
             content=msg.content[:200] if msg.content else None,
             tools_requested=[tc.function.name for tc in msg.tool_calls or []])
 
@@ -203,12 +230,18 @@ def call_openai_lean_agent(
                 explicit_success = True
 
         if explicit_success:
+            if pending_repl_fix:
+                log("success_blocked", step=step, reason="repl_failed")
+                messages.append({
+                    "role": "user",
+                    "content": (
+                        "Lean still reports repl_pass = 0. Fix the Lean file and rerun "
+                        "lean4_repl_runner before declaring success."
+                    )
+                })
+                continue
             log("success", step=step, type="explicit")
-            return {
-                "status": "success",
-                "step": step,
-                "log_path": log_path,
-            }
+            return finish("success", step, "explicit_success")
         
         # if not quit, there should be a tool call
         if msg.tool_calls:
@@ -218,7 +251,7 @@ def call_openai_lean_agent(
                 result_obj = TOOLS[tc.function.name].run(**args)
                 result_str = (result_obj if isinstance(result_obj, str)
                             else json.dumps(result_obj, ensure_ascii=False))
-                log("tool_run", step=step, tool=tc.function.name, ok=True,
+                log("tool_run_result", step=step, tool=tc.function.name, ok=True,
                     args=args, result=result_str[:500])
             except Exception as e:
                 result_str = f"ERROR: {e}"
@@ -228,31 +261,38 @@ def call_openai_lean_agent(
             messages.append({"role": "tool", "tool_call_id": tc.id, "content": result_str})
 
             # Auto-success on REPL pass
-            if tc.function.name == "lean4_repl_runner" and _repl_passed(result_str):
-                log("success", step=step, type="repl_pass")
-                return {
-                    "status": "success",
-                    "step": step,
-                    "log_path": log_path,
-                }
+            is_repl_pass = False
+            if tc.function.name == "lean4_repl_runner":
+                repl_pass_value = None
+                if isinstance(result_obj, dict):
+                    repl_pass_value = result_obj.get("repl_pass")
+                if repl_pass_value is None and _repl_passed(result_str):
+                    repl_pass_value = 1
 
-    repl_tool = TOOLS.get("lean4_repl_runner")
+                if repl_pass_value == 1:
+                    is_repl_pass = True
+                    pending_repl_fix = False
+                else:
+                    pending_repl_fix = True
+            elif tc.function.name == "lean_write_file" and pending_repl_fix:
+                # allow continued editing but still require a successful REPL
+                pass
+            else:
+                # Non-REPL tools do not change the pending flag
+                pass
+
+            if is_repl_pass:
+                log("success", step=step, type="repl_pass")
+                return finish("success", step, "repl_pass")
+
     if repl_tool is not None and Path(file_path).exists():
         try:
             repl_result = repl_tool.run(path=file_path)
             if isinstance(repl_result, dict) and repl_result.get("repl_pass") == 1:
                 log("success", step=max_steps, type="post_repl")
-                return {
-                    "status": "success",
-                    "step": max_steps,
-                    "log_path": log_path,
-                }
+                return finish("success", max_steps, "post_repl")
         except Exception as repl_error:
             log("post_repl_error", step=max_steps, error=str(repl_error))
 
     log("max_steps_reached", steps=max_steps)
-    return {
-        "status": "max_steps_reached",
-        "step": max_steps,
-        "log_path": log_path,
-    }
+    return finish("max_steps_reached", max_steps, "max_steps")

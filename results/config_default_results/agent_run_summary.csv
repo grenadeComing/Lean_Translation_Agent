@@ -1,526 +1,297 @@
-name,domain,status,passed,steps,nl_statement,lean4_code,validate_score,validate_reason,equivalent
-srdoty_alg_Z_n_507,Algebra,success,True,3,"Let $R$ be a ring and let $a,b\in R$. Show that $a(-b) = -(ab) = (-a)b$.","import Mathlib
+name,domain,status,steps,compile_status,io_error,nl_statement,lean4_code,validate_score,validate_reason,equivalent
+jirilebl_ca_ca_2441,Complex Analysis,success,3,1,,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
 
-/-- Let R be a ring and let a,b in R. Show that a(-b) = -(ab) = (-a)b. -/
-theorem neg_mul_extracted [Ring R] (a b : R) : a * -b = -(a * b) ∧ -(a * b) = (-a) * b := by sorry
+open Set Metric
+
+/-- Suppose U ⊂ ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U. Show that f is locally injective on U. -/
+theorem local_injective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f U) (h : ∀ z ∈ U, deriv f z ≠ 0) :
+  ∀ z ∈ U, ∃ r > 0, InjOn f (U ∩ ball z r) := by sorry
 ",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: Use Mathlib library.
-- Comment: States the goal: Let R be a ring and a, b in R. Show a(-b) = -(ab) = (-a)b.
-- `theorem neg_mul_extracted [Ring R] (a b : R) : a * -b = -(a * b) ∧ -(a * b) = (-a) * b := by sorry`
-  Natural language: For any ring R and elements a, b in R, we have the two equalities a·(-b) = −(a·b) and −(a·b) = (−a)·b. The conclusion is stated as a conjunction, which exactly captures the chain equality a(-b) = -(ab) = (-a)b.
+Step 1: Translate the Lean code line by line.
+- `theorem local_injective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f U) (h : ∀ z ∈ U, deriv f z ≠ 0) : ∀ z ∈ U, ∃ r > 0, InjOn f (U ∩ ball z r)`
+  Natural language: Let U be an open subset of ℂ. Let f : ℂ → ℂ be a function that is complex-differentiable on U. Assume that for every z in U, the complex derivative deriv f z is nonzero. Then for every z in U, there exists r > 0 such that f is injective on the set U ∩ ball(z, r).
 
-2) Faithfulness assessment:
-- The hypothesis `[Ring R]` matches “Let R be a ring”.
-- Variables `(a b : R)` match “let a, b in R”.
-- The statement `a * -b = -(a * b) ∧ -(a * b) = (-a) * b` precisely encodes the chain equality a(-b) = -(ab) = (-a)b by asserting both equalities with the same middle term.
-- No auxiliary or vacuous definitions are introduced. The use of `sorry` is only for the proof, not affecting the statement’s faithfulness.
+Step 2: Assess faithfulness to the original statement.
+- Original: U ⊂ ℂ open, f : U → ℂ holomorphic, and f'(z) ≠ 0 for all z ∈ U. Show f is locally injective on U.
+- Lean: Uses f : ℂ → ℂ but only assumes differentiability on U (DifferentiableOn ℂ f U), and nonvanishing deriv on U. Conclusion: for each z ∈ U, there is r > 0 with f injective on U ∩ ball z r. This exactly expresses local injectivity on U (an open neighborhood in the subspace topology of U).
+- The use of f : ℂ → ℂ instead of f : U → ℂ is a standard formalization choice; it’s a slight generalization that does not change the content of the statement since all hypotheses and the conclusion are restricted to U.
 
-3) Final check:
-- The mathematical content of the Lean theorem is exactly the same as the natural language statement. It neither generalizes nor restricts the claim in any problematic way. The noncommutative setting is acceptable since the identities hold in any ring.
+Step 3: Final check for differences.
+- Domain difference (f defined on ℂ vs U) is harmless; the differentiability and nonvanishing derivative are asserted only on U, and the local injectivity is proved on neighborhoods inside U. The intersection U ∩ ball z r is an open neighborhood of z in U, so this matches “locally injective on U.”
+- No vacuous or placeholder definitions; standard Mathlib notions are used (IsOpen, DifferentiableOn, deriv, InjOn, ball).
 
-Conclusion: The translation is faithful.
+Conclusion: The Lean statement is a faithful formalization of the natural language statement.
 ### END THOUGHT",1
-srdoty_alg_Z_n_513,Algebra,success,True,3,Let $R$ be a ring and let $a\in R$. Show that $(-1)a = -a$.,"import Mathlib
-
-/-- Let R be a ring and let a∈R. Show that (-1)a = -a. -/
-theorem neg_one_mul_ext (R : Type*) [Ring R] (a : R) : (-1 : R) * a = -a := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: Load Mathlib, providing standard algebraic structures and lemmas.
-- `/-- Let R be a ring and let a∈R. Show that (-1)a = -a. -/` A docstring restating the natural language problem.
-- `theorem neg_one_mul_ext (R : Type*) [Ring R] (a : R) : (-1 : R) * a = -a := by sorry` This declares a theorem: for any type R equipped with a ring structure and any element a in R, the product of −1 (in R) and a equals the additive inverse of a.
-
-2) Faithfulness assessment:
-The Lean theorem precisely states: for any ring R and element a ∈ R, (-1) * a = -a. This matches the natural language statement exactly. No extra assumptions (e.g., commutativity) are added; using `[Ring R]` is appropriate for the context. The type annotation `(-1 : R)` simply clarifies the element −1 in R.
-
-3) Final comparison:
-The two statements are the same. There are no auxiliary/vacuous definitions; only the theorem statement, which is faithful to the original problem. The presence of `sorry` is acceptable for this audit since we only check the translation of the statement, not the proof.
-### END THOUGHT",1
-srdoty_alg_linear-gps_838,Algebra,success,True,3,Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(t)^{-1}=E(-t)$ for all $t\in F$.,"import Mathlib
-
-/-- Let F be a field and E(t) = [[1, t], [0, 1]] for t in F. Show that E(t)^{-1} = E(-t) for all t in F. -/
-theorem SL2_inv_single_extracted [Field F] (t : F) : (!![1, t; 0, 1])⁻¹ = !![1, -t; 0, 1] := by
-  sorry",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: brings in Mathlib.
-- `/-- ... -/` comment restates the natural language goal.
-- `theorem SL2_inv_single_extracted [Field F] (t : F) : (!![1, t; 0, 1])⁻¹ = !![1, -t; 0, 1] := by sorry`
-  Natural language: Let F be a field and t an element of F. Consider the 2×2 matrix with entries [[1, t], [0, 1]]. Then its inverse is the matrix [[1, -t], [0, 1]]. The proof is omitted (sorry), but the statement is clear.
-
-2) Faithfulness assessment:
-- The Lean statement universally quantifies over a field F and element t : F, and asserts exactly that the inverse of the unipotent upper-triangular matrix E(t) = [[1, t], [0, 1]] is E(−t) = [[1, −t], [0, 1]].
-- The matrix literal `!![1, t; 0, 1]` denotes the 2×2 matrix over F with those entries, and `⁻¹` is the matrix inverse. This matches the natural language statement precisely.
-- There are no auxiliary/vacuous definitions; only the theorem statement. The name suggests SL2 but does not affect the content.
-
-3) Final check of equivalence:
-- The natural language claim and the Lean theorem assert the same mathematical fact: for all t in a field F, E(t)^{-1} = E(−t). There are no extra hypotheses or missing conditions.
-- No discrepancies found.
-
-Therefore, the translation is faithful.
-### END THOUGHT",1
-srdoty_alg_Z_n_509,Algebra,success,True,5,"Let $R$ be a ring and let $a,b\in R$. Show that $(-a)(-b) = ab$.","import Mathlib
-
-/-- Let R be a ring and let a,b in R. Show that (-a)(-b) = ab. -/
-theorem neg_mul_neg_eq {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: Imports the Mathlib library.
-- Comment: States the goal: for a ring R and elements a, b in R, show (-a)(-b) = ab.
-- `theorem neg_mul_neg_eq {R : Type*} [Ring R] (a b : R) : (-a) * (-b) = a * b := by sorry`: For any type R with a ring structure, and any elements a, b in R, the theorem claims that the product of the negatives equals the product ab.
-
-2) Faithfulness to the natural language statement:
-- The natural language statement: Let R be a ring and a, b ∈ R. Show that (-a)(-b) = ab.
-- The Lean statement matches precisely: It quantifies over a ring R and elements a, b, and asserts the same equality.
-
-3) Final check and differences:
-- The only potential nuance is that Mathlib's `Ring R` typically includes a multiplicative identity (1), whereas some texts define rings possibly without 1. This is a slight specialization of assumptions but does not change the content of the claimed equality and is standard in Mathlib. No auxiliary or vacuous definitions are introduced. The theorem statement is exactly the desired mathematical statement.
-
-Conclusion: The translation is faithful.
-### END THOUGHT",1
-srdoty_alg_Z_n_505,Algebra,success,True,4,Let $R$ be a ring and let $a\in R$. Show that $a\cdot 0 = 0 = 0\cdot a$.,"import Mathlib
-
-/-- Let R be a ring and let a ∈ R. Show that a · 0 = 0 and 0 · a = 0. -/
-theorem mul_zero_and_zero_mul {R : Type*} [MulZeroClass R] (a : R) : a * (0 : R) = 0 ∧ (0 : R) * a = 0 := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: Use Mathlib.
-- Docstring: ""Let R be a ring and let a ∈ R. Show that a · 0 = 0 and 0 · a = 0."" This matches the natural language statement.
-- `theorem mul_zero_and_zero_mul {R : Type*} [MulZeroClass R] (a : R) : a * (0 : R) = 0 ∧ (0 : R) * a = 0 := by sorry` translates to: For any type R with a zero and a multiplication where zero annihilates multiplication on both sides (MulZeroClass), and any element a : R, we have a * 0 = 0 and 0 * a = 0. The `by sorry` is an unfinished proof, but per instructions we only check the statement.
-
-2) Faithfulness to the original statement:
-- Original: ""Let R be a ring and let a ∈ R. Show that a·0 = 0 = 0·a."" This asserts both equalities in a ring.
-- Lean code: States the two equalities separately as a conjunction under the assumption `[MulZeroClass R]`.
-- Since every ring is a MulZeroClass, this is a slight generalization (weaker assumptions), not a restriction. The conjunction `a*0=0 ∧ 0*a=0` is equivalent to the chain equality `a*0 = 0 = 0*a` in content.
-
-3) Final check for differences:
-- Difference: The code assumes `[MulZeroClass R]` rather than `[Ring R]`. This is a permissible generalization and still faithfully captures the intended statement.
-- No auxiliary/vacuous definitions; only a theorem declaration. The presence of `sorry` is acceptable per the task’s focus on the statement.
-- The mathematical content matches exactly: both equalities are asserted.
-
-Conclusion: The code is a faithful (slightly more general) translation of the natural language statement.
-### END THOUGHT",1
-jirilebl_ca_ca_2353,Complex Analysis,success,True,3,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+jirilebl_ca_ca_2353,Complex Analysis,success,3,1,,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
 open Complex
 open Complex ContinuousLinearMap
 open scoped ComplexConjugate
 
-/-- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 if and only if f'(z0) ≠ 0. -/
-theorem conformalAt_iff_deriv_ne_zero {f : ℂ → ℂ} {z₀ : ℂ} (hf : DifferentiableAt ℂ f z₀) : ConformalAt f z₀ ↔ deriv f z₀ ≠ 0 := by sorry
+/-- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 iff f'(z0) ≠ 0. -/
+theorem conformalAt_iff_deriv_ne_zero {f : ℂ → ℂ} {z₀ : ℂ} (hf : DifferentiableAt ℂ f z₀) :
+    ConformalAt f z₀ ↔ deriv f z₀ ≠ 0 := by sorry
 ",10,"### BEGIN THOUGHT
 1) Line-by-line translation:
-- `theorem conformalAt_iff_deriv_ne_zero {f : ℂ → ℂ} {z₀ : ℂ} (hf : DifferentiableAt ℂ f z₀) : ConformalAt f z₀ ↔ deriv f z₀ ≠ 0 := ...`
-  This states: For a complex function f and a point z₀, assuming f is complex-differentiable at z₀ (i.e., holomorphic at that point), f is conformal at z₀ if and only if the complex derivative at z₀ is nonzero.
+- `import Mathlib` and the `open` lines: just setup, no mathematical content.
+- The theorem statement:
+  `theorem conformalAt_iff_deriv_ne_zero {f : ℂ → ℂ} {z₀ : ℂ} (hf : DifferentiableAt ℂ f z₀) : ConformalAt f z₀ ↔ deriv f z₀ ≠ 0`.
+  This says: For a complex function f and a point z₀, assuming f is complex-differentiable at z₀ (i.e., holomorphic at z₀), f is conformal at z₀ if and only if the complex derivative at z₀ is nonzero.
 
-2) Faithfulness to the natural language statement:
-- The natural language statement: “Suppose f: ℂ → ℂ is holomorphic. Show that f is conformal at a point z₀ iff f′(z₀) ≠ 0.”
-- The Lean statement assumes `DifferentiableAt ℂ f z₀` rather than global holomorphy on ℂ. This is a slight generalization (weaker hypothesis) but entirely consistent: being holomorphic on ℂ implies being differentiable at every point, in particular at z₀. The conclusion exactly matches “conformal at z₀ iff derivative at z₀ is nonzero.”
-- The objects match standard mathlib notions: `ConformalAt f z₀` is conformality at a point; `deriv f z₀` is the complex derivative; `DifferentiableAt ℂ f z₀` means complex differentiable at z₀. No auxiliary vacuous definitions are introduced.
+2) Overall faithfulness:
+The natural language statement: “Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z₀ iff f′(z₀) ≠ 0.” The Lean statement assumes f is complex-differentiable at z₀ (a local holomorphic assumption) and concludes the equivalence between conformality at z₀ and nonvanishing derivative. This matches the intended theorem exactly, since the property is local and global holomorphic implies differentiable at every point. The Lean theorem is a slight generalization (only local differentiability is assumed), which is acceptable and faithful to the mathematical meaning.
 
-3) Final comparison:
-- The only difference is the hypothesis scope: global “holomorphic on ℂ” in the natural language vs. local “differentiable at z₀” in Lean. Since the theorem is local, this is a benign (acceptable) generalization per the guidelines. The equivalence stated is exactly the same.
-
-Conclusion: The Lean statement is a faithful (slightly generalized) translation of the natural language statement.
+3) Final check and differences:
+- Difference: The English says “f is holomorphic” (which can be read as globally holomorphic), while the Lean statement only assumes `DifferentiableAt ℂ f z₀`. This is a standard and harmless generalization, fully consistent with the theorem’s local nature.
+- No auxiliary/vacuous definitions are introduced; all notions (ConformalAt, deriv, DifferentiableAt) are standard Mathlib concepts.
+Thus the translation is faithful.
 ### END THOUGHT",1
-jirilebl_ca_ca_1326,Complex Analysis,success,True,3,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
-lemma exp_ne_zero_tac_2110 (f : ℂ → ℂ) (h₁ : ∀ z w : ℂ, f (z + w) = f z * f w) (h₂ : f 0 = 1) : ∀ z : ℂ, f z ≠ 0 := by sorry
+jirilebl_ca_ca_1326,Complex Analysis,success,3,1,,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+
+/-- If f : Complex → Complex satisfies f (z + w) = f z * f w and f 0 = 1, then f z ≠ 0 for all z. -/
+theorem multiplicative_function_nowhere_zero {f : Complex → Complex}
+  (hMul : ∀ z w, f (z + w) = f z * f w)
+  (h0 : f 0 = 1) : ∀ z, f z ≠ 0 := by sorry
+
+/-- In particular, the complex exponential is nowhere zero. -/
+theorem exp_nonzero (z : Complex) : Complex.exp z ≠ 0 := by sorry
 ",10,"### BEGIN THOUGHT
 1) Line-by-line translation:
-- `import Mathlib`: Use Mathlib's library.
-- `lemma exp_ne_zero_tac_2110 (f : ℂ → ℂ) (h₁ : ∀ z w : ℂ, f (z + w) = f z * f w) (h₂ : f 0 = 1) : ∀ z : ℂ, f z ≠ 0 := by sorry`
-  This states: Let f be a function from the complex numbers to the complex numbers. Assume (h₁) that for all complex z, w, f(z + w) = f(z) * f(w), and (h₂) that f(0) = 1. Then for all complex z, f(z) ≠ 0. The proof is omitted (`sorry`).
+- `import Mathlib`: Bring in Mathlib; no mathematical content.
+- `/-- If f : Complex → Complex satisfies f (z + w) = f z * f w and f 0 = 1, then f z ≠ 0 for all z. -/ theorem multiplicative_function_nowhere_zero {f : Complex → Complex} (hMul : ∀ z w, f (z + w) = f z * f w) (h0 : f 0 = 1) : ∀ z, f z ≠ 0 := by sorry`
+  Natural language: Let f: ℂ → ℂ be a function such that for all z, w ∈ ℂ, f(z + w) = f(z) f(w), and f(0) = 1. Then for all z ∈ ℂ, f(z) ≠ 0.
+- `/-- In particular, the complex exponential is nowhere zero. -/ theorem exp_nonzero (z : Complex) : Complex.exp z ≠ 0 := by sorry`
+  Natural language: For every z ∈ ℂ, e^z ≠ 0.
 
-2) Faithfulness assessment:
-- The natural language statement asks to show e^z ≠ 0 using e^{z+w} = e^z e^w and e^0 = 1 ≠ 0, and then reformulates it: if a function f satisfies f(z+w) = f(z) f(w) and f(0) = 1, then f(z) ≠ 0 for all z.
-- The Lean lemma precisely formalizes the “in other words” formulation over ℂ: a function with the exponential Cauchy equation and normalization at 0 equals 1 is nowhere zero.
-- Using ℂ is appropriate and matches the context. The fact 1 ≠ 0 in ℂ is built-in and does not need to be stated as a hypothesis.
-- There are no auxiliary or vacuous definitions; only a single lemma statement is given. The presence of `sorry` is acceptable for translation auditing since the task focuses on the correctness of the statement, not the proof.
+2) Faithfulness to the original statement:
+- The first theorem exactly formalizes the “In other words” part: if a function f satisfies f(z+w)=f(z)f(w) and f(0)=1, then f(z)≠0 for all z. The codomain/domain are Complex as in the context. No extra or missing hypotheses.
+- The second theorem captures the specific conclusion about the complex exponential being nowhere zero.
+- The natural language mentions “use e^{z+w} = e^z e^w and e^0 = 1 ≠ 0”; in Lean, the general theorem uses f(0)=1 and relies on the fact that in ℂ, 1 ≠ 0 is standard, so no need to assume it explicitly. This is a harmless and standard omission.
 
 3) Final check:
-- The Lean statement matches exactly the restated general functional equation version in the natural language and hence implies the specific case for the exponential function. There are no discrepancies or extra/unmet conditions.
-
-Conclusion: The translation is faithful.
+- No auxiliary vacuous definitions are introduced. The statements are precise and standard Mathlib entities (Complex, Complex.exp). Theorems match the intended mathematics. Therefore, the translation is faithful.
 ### END THOUGHT",1
-srdoty_alg_linear-gps_713,Algebra,success,True,6,"Show that the product of any two reflection matrices in $\mathrm{O}(2)$ is a rotation matrix (i.e., an element of $\mathrm{SO}(2)$).","import Mathlib
-open Matrix
-open LinearMap
-open Subgroup
-open scoped Classical in
-open scoped MatrixGroups
-open Matrix MatrixGroups SpecialLinearGroup
-open MatrixGroups
-open Matrix Matrix.SpecialLinearGroup
+jirilebl_ca_ca_3078,Complex Analysis,success,3,1,,"If $f \colon U \to \mathbb{C}$ is a holomorphic function on a domain $U \subset \mathbb{C}$, then $f$ is analytic. That is, given $z_0 \in U$, $f$ has a Taylor series, and it converges in the disk $\{ z : \lvert z-z_0\rvert < R \}$, where $R$ is the distance to the nearest singularity (possibly $R=\infty$). Furthermore, the sum of the series is $f$.","import Mathlib
+open Set Filter Metric Complex
+open scoped Topology
 
-/-- Provide a faithful Lean4 encoding (not a proof) that the product of any two reflection matrices in O(2) is a rotation matrix in SO(2). Use 2x2 real matrices M := Matrix (Fin 2) (Fin 2) ℝ. Define Reflection A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = -1). Define Rotation A : Prop as (Matrix.transpose A ⬝ A = 1) ∧ (Matrix.det A = 1). Then state: for all A B, Reflection A → Reflection B → Rotation (A ⬝ B). End with := by sorry. -/
-lemma reflection_mul_reflection_is_rotation_tac_17266 (A : Matrix (Fin 2) (Fin 2) ℝ) (B : Matrix (Fin 2) (Fin 2) ℝ) : (A.transpose * A = 1 ∧ A.det = -1) → (B.transpose * B = 1 ∧ B.det = -1) → (A * B).transpose * (A * B) = 1 ∧ (A * B).det = 1 := sorry",10,"### BEGIN THOUGHT
+/-- If f : U → ℂ is a holomorphic function on a domain U ⊂ ℂ, then f is analytic. That is, given z0 ∈ U, f has a Taylor series, and it converges in the disk {z : |z - z0| < R}, where R is the distance to the nearest singularity (possibly R = ∞). Furthermore, the sum of the series is f. -/
+theorem analyticAt_of_mem_nhds {f : ℂ → ℂ} {z : ℂ} {U : Set ℂ} (h : DifferentiableOn ℂ f U)
+    (hz : z ∈ U) (hU : IsOpen U) : AnalyticAt ℂ f z := by sorry
+",8,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- The theorem `analyticAt_of_mem_nhds` states: Let f : ℂ → ℂ, z : ℂ, U : Set ℂ. If (i) f is complex differentiable on U (`DifferentiableOn ℂ f U`), (ii) z ∈ U, and (iii) U is open (`IsOpen U`), then f is analytic at z (`AnalyticAt ℂ f z`). There are no auxiliary definitions; the statement uses standard Mathlib predicates: `DifferentiableOn` (holomorphic on a set) and `AnalyticAt` (existence of a convergent power series at a point whose sum agrees with f in a neighborhood).
+
+2) Comparison to the natural language statement:
+- The natural language statement asserts: If f is holomorphic on a domain U ⊂ ℂ, then f is analytic; more specifically, for any z0 ∈ U, f has a Taylor series that converges in the disk {z : |z − z0| < R}, where R is the distance to the nearest singularity (possibly ∞), and the sum equals f.
+- The Lean statement captures the core implication “holomorphic on an open set implies analytic at each point of that set” (since z ∈ U and U open), matching the basic holomorphic ⇒ analytic claim.
+- However, the Lean theorem does not state the additional and stronger information about the precise radius of convergence being the distance to the nearest singularity (or equivalently, to the complement of the maximal domain of holomorphy), nor does it quantify over all z ∈ U explicitly (though it is parameterized in z, so it can be applied pointwise). It also does not mention connectedness (“domain” in complex analysis usually means open and connected); although connectedness is not needed for analyticity at a point, it is part of the original context.
+- The Lean statement concludes only `AnalyticAt ℂ f z`, which ensures existence of a power series representing f in some neighborhood of z and that the series sums to f locally, but it does not assert the radius equals the distance to the nearest singularity.
+
+3) Final check:
+- Same or different? They are different. The Lean code faithfully states a weaker, standard result (holomorphic on open set ⇒ analytic at the point). The natural language statement includes the stronger, more precise radius-of-convergence characterization tied to nearest singularities. Thus, while the core implication is present, the specific radius claim is missing. No vacuous placeholders are used; the terms are standard Mathlib. Hence the translation is not fully faithful, but it is close.
+
+### END THOUGHT",0
+jirilebl_ca_ca_758,Complex Analysis,success,7,1,,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
+
+/-- Polarization identity for complex numbers: for all z w : ℂ,
+    4 * z * star w = |z + w|^2 - |z - w|^2 + i * (|z + i w|^2 - |z - i w|^2).
+-/
+theorem polarization_identity (z w : ℂ) :
+  (4 : ℂ) * z * star w =
+    (Complex.normSq (z + w) - Complex.normSq (z - w)) +
+      Complex.I * (Complex.normSq (z + Complex.I * w) - Complex.normSq (z - Complex.I * w)) := by sorry
+",10,"### BEGIN THOUGHT
 1) Line-by-line translation:
-- Imports and `open` statements: bring Mathlib matrix and group namespaces into scope; they do not affect the mathematical content of the statement.
-- Lemma `reflection_mul_reflection_is_rotation_tac_17266 (A : Matrix (Fin 2) (Fin 2) ℝ) (B : Matrix (Fin 2) (Fin 2) ℝ)` states a property about 2×2 real matrices A and B.
-- Hypotheses: `(A.transpose * A = 1 ∧ A.det = -1)` and `(B.transpose * B = 1 ∧ B.det = -1)` mean A and B are orthogonal matrices (AᵀA = I, BᵀB = I) with determinant −1; i.e., reflections in O(2).
-- Conclusion: `(A * B).transpose * (A * B) = 1 ∧ (A * B).det = 1` says that AB is orthogonal and has determinant +1; i.e., AB ∈ SO(2), a rotation matrix.
-- The proof is omitted via `:= sorry`, which is acceptable for a statement-only encoding.
+- `import Mathlib`: Use Mathlib's complex number and norm machinery.
+- Docstring: States the polarization identity for complex numbers exactly as in the natural language statement, interpreting |·|^2 as the squared modulus.
+- `theorem polarization_identity (z w : ℂ) : ... := by sorry`: For all complex z, w, it asserts the equality
+  (4 : ℂ) * z * star w = (Complex.normSq (z + w) - Complex.normSq (z - w)) + Complex.I * (Complex.normSq (z + Complex.I * w) - Complex.normSq (z - Complex.I * w)).
+  Here:
+  - `star w` is the complex conjugate of w.
+  - `Complex.normSq z` is |z|^2 (a real number), coerced to ℂ when used in the complex sum; this matches the squared modulus in the statement.
+  - `Complex.I` is i, and `Complex.I * w` is i w.
 
-2) Faithfulness to the natural language statement:
-The natural language statement: “Show that the product of any two reflection matrices in O(2) is a rotation matrix (i.e., an element of SO(2)).” The Lean lemma precisely encodes this in terms of 2×2 real matrices with orthogonality and determinant conditions: A and B are reflections (orthogonal with det −1), and AB is a rotation (orthogonal with det +1). This matches exactly the intended content.
+2) Whole translation faithfulness:
+The Lean statement captures exactly the polarization identity: 4 z \bar{w} equals the given combination of squared moduli. The use of `Complex.normSq` for |·|^2 is standard and faithful. The coercions from ℝ to ℂ are implicit but mathematically identical to the intended expression. The order of multiplication is immaterial in ℂ.
 
 3) Final check for differences:
-- Dimension and field: Lean uses 2×2 real matrices, matching O(2), SO(2) over ℝ.
-- Definitions: The lemma inlines the predicates instead of naming them Reflection/Rotation; this is equivalent and does not change the meaning.
-- No auxiliary or vacuous definitions are introduced. There is no mismatch or weakening/strengthening. The statement is faithful.
+- Natural language uses |·|^2; Lean uses `Complex.normSq` which equals |·|^2. No discrepancy.
+- Uses i and conjugation consistently (`Complex.I`, `star`).
+- Universally quantified over z, w: matches ""for all z, w"".
+No differences found.
 
-Thus, the code is a faithful encoding of the natural language statement.
+Conclusion: The code is a faithful formal statement of the given identity.
 ### END THOUGHT",1
-srdoty_alg_linear-gps_836,Algebra,success,True,6,"Let $F$ be a field and $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$ for $t\in F$. Show that $E(s)E(t)=E(s+t)$ for all $s,t\in F$.","import Mathlib
+jirilebl_ca_ca_2577,Complex Analysis,success,12,1,,"Let $U \subset \mathbb{C}$ be an open set and $f \colon U \to \mathbb{C}$ be a holomorphic function. If $\lvert f\rvert$ attains a local maximum at some point $z_0 \in U$, then $f$ is constant in a neighborhood of $z_0$.","import Mathlib
+open Set Filter
+open scoped Topology
 
-section
-variable {F : Type*} [Field F]
+/-- Let U ⊂ ℂ be an open set and f : U → ℂ be a holomorphic function. If |f| attains a local maximum at some point z0 ∈ U, then f is constant in a neighborhood of z0. -/
+theorem maximum_modulus_local {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f U) {z0 : ℂ} (hz0 : z0 ∈ U)
+  (hmax : IsLocalMax (fun z => ‖f z‖) z0) : ∀ᶠ z in 𝓝 z0, f z = f z0 := by sorry
+",9,"### BEGIN THOUGHT
+Step 1: Translate the Lean code line by line.
+- Context: U : Set ℂ with hU : IsOpen U. f : ℂ → ℂ is a complex-valued function on the whole plane. hf : DifferentiableOn ℂ f U means f is holomorphic on U (no claim outside U). z0 : ℂ with hz0 : z0 ∈ U.
+- Hypothesis hmax : IsLocalMax (fun z => ‖f z‖) z0 means |f| has a local maximum at z0 as a function on the entire ℂ (i.e., there exists a neighborhood in ℂ around z0 on which ‖f z‖ ≤ ‖f z0‖).
+- Conclusion: ∀ᶠ z in 𝓝 z0, f z = f z0 means f is constant in a (ambient) neighborhood of z0 in ℂ; i.e., there exists a neighborhood V of z0 in ℂ such that for all z ∈ V, f z = f z0.
 
-/-- The elementary upper-triangular matrix E(t) = [[1, t], [0, 1]] over a field F. -/
- def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![ ![1, t], ![0, 1] ]
+Step 2: Compare to the natural language statement.
+- NL statement: U ⊂ ℂ open, f : U → ℂ holomorphic. If |f| attains a local maximum at z0 ∈ U (i.e., relative to U), then f is constant in a neighborhood of z0 (typically meaning in some neighborhood within U, equivalently on U ∩ B(z0, r)).
 
-/-- Show that E(s) * E(t) = E(s + t) for all s, t in F. -/
-theorem E_mul_E_eq (s t : F) : E s * E t = E (s + t) := by
-  sorry
+Step 3: Identify differences.
+- Domain of f: NL has f : U → ℂ; Lean uses f : ℂ → ℂ with DifferentiableOn on U. This is a common formalization and fine in itself.
+- Local maximum condition: NL intends a local maximum relative to U. Lean uses IsLocalMax on ℂ (no restriction to U). This is strictly stronger than the intended hypothesis (a specialization), not just a technical reformulation.
+- Conclusion: NL requires constancy in a neighborhood within U. Lean concludes constancy on an ambient neighborhood in ℂ (filter 𝓝 z0 rather than 𝓝[U] z0). This is stronger than necessary. While U is open and the Lean conclusion implies the NL conclusion by intersecting with U, the statement as written asserts more than the NL statement.
 
-end
+Overall assessment:
+- The code states a stronger hypothesis (local max in ℂ rather than in U) and a stronger conclusion (constancy on an ambient neighborhood rather than relative to U). Although this is a reasonable specialization and implies the original claim, it is not a faithful translation of the original statement as-is. A faithful formalization would use IsLocalMaxOn (fun z => ‖f z‖) U z0 and conclude eventually on 𝓝[U] z0 (or equivalently: ∃ r > 0, ∀ z ∈ U ∩ ball z0 r, f z = f z0).
+
+Therefore, while close and mathematically sensible, it is not faithful to the exact natural language statement.
+### END THOUGHT",0
+jirilebl_ca_ca_2718,Complex Analysis,success,7,1,,"Let $U \subset \mathbb{C}$ be a domain and suppose that a holomorphic function $f \colon U \to \mathbb{C}$ is not constant. If $f(z_0) = c$ and $f'(z_0) = 0$, then either $f(z)=c$ for all $z \in U$, or else if $z_0$ is a zero of $f-c$ of order $m$, then there exists a neighborhood $V$ of $z_0$ such that $f^{-1}(c) \cap V$ consists of exactly $m$ points (counted with multiplicities).","import Mathlib
+
+/-- Abstract version of the classical fact about zeros of a nonconstant holomorphic function.
+    We parametrize the notions of holomorphicity, vanishing derivative, order of a zero, and
+    counting zeros with multiplicity so that the statement mirrors the mathematical one but
+    does not depend on particular mathlib identifiers. -/
+
+theorem jirilebl_ca_ca_2718
+  (IsHolomorphicOn : Set ℂ → (ℂ → ℂ) → Prop)
+  (HasZeroDerivativeAt : (ℂ → ℂ) → ℂ → Prop)
+  (ZeroOfOrder : (ℂ → ℂ) → ℂ → ℕ → Prop)
+  (zeros_count_mult : (ℂ → ℂ) → Set ℂ → ℕ → Prop)
+  (U : Set ℂ) (hU_open : IsOpen U) (hU_conn : IsPreconnected U)
+  {f : ℂ → ℂ} (c : ℂ)
+  (hhol : IsHolomorphicOn U f) (h_not_const : ¬ (∀ z ∈ U, f z = c))
+  (z0 : ℂ) (hz0 : z0 ∈ U) (hfz0 : f z0 = c) (hder0 : HasZeroDerivativeAt f z0) :
+  (∀ z ∈ U, f z = c) ∨
+  (∃ m : ℕ, 0 < m ∧ ZeroOfOrder (fun z => f z - c) z0 m ∧
+    ∃ V : Set ℂ, IsOpen V ∧ z0 ∈ V ∧ V ⊆ U ∧ zeros_count_mult (fun z => f z - c) V m) := by sorry
+",6,"### BEGIN THOUGHT
+Step-by-step translation of the Lean code:
+- The theorem is named `jirilebl_ca_ca_2718` and it is stated over ℂ.
+- It takes as parameters four completely abstract predicates/functions:
+  • IsHolomorphicOn : Set ℂ → (ℂ → ℂ) → Prop (intended to mean f is holomorphic on U)
+  • HasZeroDerivativeAt : (ℂ → ℂ) → ℂ → Prop (intended to mean f'(z0) = 0)
+  • ZeroOfOrder : (ℂ → ℂ) → ℂ → ℕ → Prop (intended to mean z0 is a zero of order m of a function)
+  • zeros_count_mult : (ℂ → ℂ) → Set ℂ → ℕ → Prop (intended to mean the number of zeros in a set counted with multiplicity)
+- Hypotheses on the domain U: hU_open : IsOpen U and hU_conn : IsPreconnected U. This is an attempt to encode “U is a domain” (open and connected/nonempty; IsPreconnected is a connectedness-like condition, but not exactly the same as IsConnected and allows the empty set).
+- f : ℂ → ℂ and c : ℂ are given. The function is assumed holomorphic on U via hhol : IsHolomorphicOn U f.
+- There is an assumption h_not_const : ¬ (∀ z ∈ U, f z = c), i.e., f is not identically equal to c on U. Note this is weaker and different from “f is not constant” in the usual sense; it only forbids the constant function equal to c, but allows other constant functions ≠ c.
+- A point z0 ∈ U is given with hfz0 : f z0 = c and hder0 : HasZeroDerivativeAt f z0 (intended: f'(z0) = 0).
+- Conclusion: Either
+  (1) ∀ z ∈ U, f z = c (f is identically c on U), or
+  (2) there exists m > 0 with ZeroOfOrder (f - c) z0 m and an open neighborhood V of z0 with V ⊆ U such that zeros_count_mult (f - c) V m holds (intended: f^{-1}(c) ∩ V consists of exactly m zeros counted with multiplicity).
+
+Assessment of faithfulness to the natural language statement:
+- Major issue: The key analytic notions are not Mathlib definitions; they are arbitrary parameters (placeholders). This means the statement does not actually assert the intended complex analysis fact within Mathlib’s framework. It quantifies over arbitrary predicates with suggestive names, so the statement is not a faithful formalization.
+- The hypothesis “f is not constant” in the natural language statement is replaced by h_not_const: ¬ ∀ z ∈ U, f z = c, which only states “f is not identically equal to c,” not “f is not constant.” This is weaker and different. Moreover, the conclusion includes the disjunct that f ≡ c, which contradicts h_not_const, making the overall shape mismatch the intended logic of the natural statement (where the nonconstant assumption would rule out the identically-c alternative).
+- The natural language statement specifies: if z0 is a zero of order m of f − c, then there exists a neighborhood V of z0 such that f^{-1}(c) ∩ V consists of exactly m points (with multiplicity). The code tries to mirror this via ZeroOfOrder and zeros_count_mult, but since these are arbitrary predicates, there is no guarantee they actually mean what they purport to mean.
+- Domain: The code requires U to be open and preconnected; a domain is usually open and connected (nonempty). Using IsPreconnected instead of IsConnected is a minor technical deviation; this is acceptable, but still not precise.
+- The function is modeled as f : ℂ → ℂ with a predicate IsHolomorphicOn U f, which is a reasonable modeling choice, but again it’s just a placeholder, not Mathlib’s HolomorphicOn.
+- The conclusion claims the existence of m > 0 and a neighborhood V with a counting property, but because zeros_count_mult is an arbitrary predicate, this does not actually enforce “exactly m points counted with multiplicities” as in Mathlib.
+
+Final comparison:
+- The code does not use actual Mathlib notions of holomorphic functions, derivatives, order of zeros, or counting zeros with multiplicity; it parameterizes them abstractly. This violates the requirement that auxiliary definitions be legitimate and not vacuous placeholders.
+- There’s also a logical mismatch on the “nonconstant” vs “not identically c” condition and the inclusion of the identically-c alternative in the conclusion despite the hypothesis.
+- Therefore, the Lean code is not a faithful translation of the natural language statement.
+
+Grade justification:
+- Because the core notions are placeholders/parameters rather than Mathlib concepts, the translation fails. If those placeholders were replaced by proper Mathlib definitions, the shape of the theorem would be close to the intended statement (modulo the minor logical mismatch about non-constancy and connectedness). Hence, this fits the rubric “makes up vacuous definitions but if that were fixed, then the final theorem/definition is faithful,” resulting in a grade around 6.
+### END THOUGHT",0
+jirilebl_ca_ca_5157,Complex Analysis,success,15,1,,"Suppose $U \subset \mathbb{C}$ is open, and $\psi \colon U \times [0,1] \to \mathbb{C}$ is a continuous function such that for each fixed $t \in [0,1]$, the function $z \mapsto \psi(z,t)$ is holomorphic. Then $h(z) = \int_0^1 \psi(z,t) \, dt$ is a holomorphic function on $U$.","import Mathlib
+
+open Set
+
+/-- Suppose U ⊂ ℂ is open, and ψ : U × [0,1] → ℂ is continuous such that for each fixed t ∈ [0,1], the function z ↦ ψ(z,t) is holomorphic. Then h(z) = ∫_0^1 ψ(z,t) dt is holomorphic on U. -/
+theorem analytic_on_integral_param {U : Set Complex}
+  (hU : IsOpen U)
+  {ψ : Complex × ℝ → Complex}
+  (hψ : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1))
+  (hhol : ∀ t ∈ Icc (0 : ℝ) 1, AnalyticOn ℂ (fun z => ψ (z, t)) U) :
+  AnalyticOn ℂ (fun z => ∫ t in 0..1, ψ (z, t)) U := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `theorem analytic_on_integral_param {U : Set Complex} (hU : IsOpen U)`:
+  Let U be a subset of the complex plane ℂ, and assume U is open.
+- `{ψ : Complex × ℝ → Complex}`:
+  Let ψ be a function from ℂ × ℝ to ℂ (defined on all pairs, but we will only require properties on U × [0,1]).
+- `(hψ : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1))`:
+  ψ is continuous on the set U × [0,1] (with [0,1] represented as Icc (0) 1).
+- `(hhol : ∀ t ∈ Icc (0 : ℝ) 1, AnalyticOn ℂ (fun z => ψ (z, t)) U)`:
+  For each t in [0,1], the function z ↦ ψ(z, t) is complex-analytic on U (i.e., holomorphic on U).
+- `AnalyticOn ℂ (fun z => ∫ t in 0..1, ψ (z, t)) U`:
+  The function h(z) = ∫ from 0 to 1 of ψ(z, t) dt is complex-analytic (holomorphic) on U.
+
+2) Faithfulness to the natural language statement:
+- The natural statement: U ⊂ ℂ open; ψ: U × [0,1] → ℂ continuous; for each fixed t ∈ [0,1], z ↦ ψ(z, t) is holomorphic; then h(z) = ∫_0^1 ψ(z, t) dt is holomorphic on U.
+- The Lean code encodes exactly these hypotheses and conclusion, using ContinuousOn on U × [0,1] and AnalyticOn ℂ for holomorphicity. The integrand and integral bounds match [0,1]. The slight technical choice of ψ : ℂ × ℝ → ℂ together with a ContinuityOn restriction to U × [0,1] faithfully models a function defined on U × [0,1]. Using AnalyticOn ℂ instead of “holomorphic” is standard and appropriate; on open sets in ℂ these notions coincide in Mathlib.
+
+3) Final comparison:
+- No extraneous or vacuous definitions; all terms are standard Mathlib.
+- No mismatch in domains, continuity, or the integral expression.
+- The use of AnalyticOn versus holomorphic is either equivalent or a harmless standard reformulation. The statement is a faithful formalization of the original.
+
+Hence, the translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_997,Complex Analysis,success,10,1,,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+
+/-- If the 2×2 real matrix M represents the complex number a + i b via
+    M = [[a, -b], [b, a]], then M (viewed as a complex matrix) has two
+    eigenpairs: eigenvalue a + i b with eigenvector [1; -i], and
+    eigenvalue a - i b with eigenvector [1; i]. -/
+theorem matrix_repr_complex_eigenpairs (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℝ := fun i j =>
+    match i, j with
+    | 0, 0 => a
+    | 0, 1 => -b
+    | 1, 0 => b
+    | 1, 1 => a
+  let Mc := M.map (algebraMap ℝ ℂ)
+  let v1 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else -Complex.I
+  let v2 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else Complex.I
+  Mc.mulVec v1 = (a + b * Complex.I) • v1 ∧ Mc.mulVec v2 = (a - b * Complex.I) • v2 := by sorry
 ",10,"### BEGIN THOUGHT
-Step 1: Translate each line of the Lean code into natural language.
-- import Mathlib: Brings in mathlib’s standard library.
-- section / variable {F : Type*} [Field F]: Let F be a field.
-- def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![ ![1, t], ![0, 1] ]: Define E(t) to be the 2×2 matrix over F indexed by Fin 2 × Fin 2 with entries [[1, t], [0, 1]]. This matches the given E(t) = [[1, t], [0, 1]].
-- theorem E_mul_E_eq (s t : F) : E s * E t = E (s + t) := by sorry: States that for all s, t in F, the product of E(s) and E(t) equals E(s + t). The proof is omitted (sorry), but the statement is exactly the desired equality.
+Step-by-step translation of the Lean code:
+- The theorem `matrix_repr_complex_eigenpairs (a b : ℝ)` fixes real numbers a and b.
+- It defines a 2×2 real matrix M by cases on indices i, j ∈ Fin 2, yielding M = [[a, -b], [b, a]]. This is exactly the standard real 2×2 matrix representing the complex number a + i b (multiplication by a + ib on ℝ² ≅ ℂ).
+- It then defines Mc := M.map (algebraMap ℝ ℂ), i.e., the same matrix but regarded as a complex matrix by embedding ℝ into ℂ entrywise.
+- It defines two complex vectors v1 and v2 in ℂ² (as functions Fin 2 → ℂ):
+  • v1(i) = 1 if i = 0, and -i otherwise, i.e., v1 = [1; -i].
+  • v2(i) = 1 if i = 0, and i otherwise, i.e., v2 = [1; i].
+- The conclusion is a conjunction of two equalities:
+  • Mc.mulVec v1 = (a + b * i) • v1
+  • Mc.mulVec v2 = (a - b * i) • v2
+  These equations state exactly that v1 is an eigenvector of Mc with eigenvalue a + i b, and v2 is an eigenvector with eigenvalue a − i b.
 
-Step 2: Assess if the whole translation is faithful to the original statement.
-The natural language statement: Let F be a field and E(t) = [[1, t], [0, 1]] for t ∈ F. Show that E(s) E(t) = E(s + t) for all s, t ∈ F. The Lean code defines the same E(t) and states the exact same equality for all s, t ∈ F. No extra or missing hypotheses.
+Faithfulness to the natural language statement:
+- The natural language statement: If the 2×2 matrix M represents the complex number a+ib, then M has eigenvalues a ± i b with corresponding eigenvectors [1; ∓ i]. The code instantiates M as [[a, -b], [b, a]], which is exactly the representation of a+ib, then asserts the eigenpair relations over ℂ after embedding. The vectors [1; -i] for eigenvalue a+ib and [1; i] for eigenvalue a−ib match the “∓” correspondence.
+- The code uses let-bindings to define M and the vectors; there are no vacuous placeholders, and no auxiliary fake definitions. The proof is omitted (by sorry), which is acceptable for auditing the statement.
+- The slight formalization detail of mapping M to ℂ via algebraMap is appropriate and faithful to “viewed as a complex matrix.”
 
-Step 3: Final check: are the two math problems the same?
-Yes. The definition of E and the claimed equality match exactly. There are no auxiliary vacuous definitions, and the only auxiliary definition E is legitimate. The presence of `sorry` only omits the proof but does not affect the faithfulness of the statement.
+Final check:
+- The mathematical content matches exactly: same matrix form, same eigenvalues, same eigenvectors with the correct sign pairing. There are no extraneous assumptions or generalizations that change the meaning.
+
+### END THOUGHT",1
+jirilebl_ca_ca_5485,Complex Analysis,success,19,1,,"Suppose $f \colon \mathbb{D} \to \mathbb{D}$ is holomorphic and $f(0) = 0$, then $\lvert f'(0)\rvert \leq 1$.","import Mathlib
+
+/-- Suppose f : 𝔻 → 𝔻 is holomorphic and f(0) = 0, then ‖f'(0)‖ ≤ 1. -/
+theorem abs_deriv_le_one_of_holomorphic_on_unit_disk {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f (Metric.ball (0 : ℂ) 1))
+  (hmap : ∀ z, z ∈ Metric.ball (0 : ℂ) 1 → f z ∈ Metric.ball (0 : ℂ) 1)
+  (h0 : f 0 = 0) :
+  ‖deriv f 0‖ ≤ 1 := by sorry
+",10,"### BEGIN THOUGHT
+1) Line-by-line translation:
+- import Mathlib: Using mathlib.
+- The theorem statement: Given f : ℂ → ℂ, if (i) f is complex differentiable on the open unit disk Metric.ball (0 : ℂ) 1 (this matches holomorphic on 𝔻), (ii) f maps the open unit disk into itself (hmap: ∀ z ∈ 𝔻, f z ∈ 𝔻), and (iii) f 0 = 0, then ‖deriv f 0‖ ≤ 1. Here deriv f 0 is the complex derivative at 0, and ‖·‖ is the complex absolute value.
+
+2) Assessing faithfulness:
+- The natural language statement: Suppose f : 𝔻 → 𝔻 is holomorphic and f(0) = 0, then |f'(0)| ≤ 1. 
+- The code assumes: f is defined on ℂ but only required to be differentiable on 𝔻 (an open set), and maps 𝔻 into 𝔻. This matches the idea of a holomorphic map f : 𝔻 → 𝔻 without imposing conditions outside 𝔻. Since 𝔻 is open, DifferentiableOn on 𝔻 ensures DifferentiableAt at 0, so deriv f 0 is the usual complex derivative at 0. The mapping condition hmap encodes f(𝔻) ⊆ 𝔻. The statement ‖deriv f 0‖ ≤ 1 matches |f'(0)| ≤ 1.
+
+3) Final check:
+- The mathematical content is the same: Schwarz's lemma bound for the derivative at 0. No extra/vacuous definitions are introduced; the only differences are formalizations (full-domain function with DifferentiableOn on the open disk), which are standard and faithful. No mismatch in open vs closed disk: Metric.ball is the open unit disk as in the statement.
 
 Conclusion: The code is a faithful formalization of the natural language statement.
 ### END THOUGHT",1
-jirilebl_ca_ca_2441,Complex Analysis,success,True,10,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
-
-open Classical
-
-/-- A minimal internal predicate expressing ""locally injective on U"" for functions f : ℂ → ℂ.
-    This is a lightweight encoding to faithfully translate the statement into Lean syntax. -/
-def IsLocallyInjectiveOn (f : ℂ → ℂ) (U : Set ℂ) : Prop :=
-  ∀ z ∈ U, ∃ t : Set ℂ, IsOpen t ∧ z ∈ t ∧ t ⊆ U ∧
-    Function.Injective (fun x : {w // w ∈ t} => f x.1)
-
-/-- Suppose U subset ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U. Show that f is locally injective on U. -/
-theorem isLocallyInjective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ}
-  (hf : DifferentiableOn ℂ f U) (h : ∀ z ∈ U, deriv f z ≠ 0) : IsLocallyInjectiveOn f U := by
-  sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `def IsLocallyInjectiveOn (f : ℂ → ℂ) (U : Set ℂ) : Prop := ∀ z ∈ U, ∃ t : Set ℂ, IsOpen t ∧ z ∈ t ∧ t ⊆ U ∧ Function.Injective (fun x : {w // w ∈ t} => f x.1)`
-  This defines “f is locally injective on U” to mean: for every point z in U, there exists an open set t in ℂ with z ∈ t and t ⊆ U such that the restriction of f to t (expressed via the subtype {w // w ∈ t}) is injective. This matches the usual meaning of local injectivity on U.
-
-- The theorem 
-  `theorem isLocallyInjective_of_deriv_ne_zero {U : Set ℂ} (hU : IsOpen U) {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f U) (h : ∀ z ∈ U, deriv f z ≠ 0) : IsLocallyInjectiveOn f U := by sorry`
-  states: Let U be an open subset of ℂ, let f : ℂ → ℂ be differentiable (holomorphic) on U, and suppose the complex derivative deriv f z is nonzero for every z ∈ U. Then f is locally injective on U. This matches the standard result that a holomorphic function with nonvanishing derivative is locally injective.
-
-2) Faithfulness to the original statement:
-- Original: U ⊆ ℂ open, f : U → ℂ holomorphic, and f'(z) ≠ 0 for all z ∈ U; conclude f is locally injective on U.
-- Lean: U open, f : ℂ → ℂ, DifferentiableOn ℂ f U (i.e., holomorphic on U), deriv f z ≠ 0 for z ∈ U; conclude local injectivity on U.
-- The slight difference is the domain of f: the original has f defined only on U, while the Lean statement takes f defined on all of ℂ but only assumes differentiability on U. This is a standard and harmless formalization. The derivative used is `deriv f z` (global derivative) rather than a within-derivative; since U is open and we assume differentiability on U, this corresponds to the usual complex derivative at z ∈ U. 
-- The definition of local injectivity requires t to be open in ℂ and contained in U. Since U is open, this is equivalent to being open in the subspace topology of U, so it faithfully captures “locally injective on U”.
-
-3) Final check/comparison:
-- Hypotheses: match (U open; f holomorphic on U; f' ≠ 0 on U).
-- Conclusion: matches (f locally injective on U), with a precise and standard formalization.
-- No vacuous or placeholder definitions; the auxiliary predicate is legitimate and exactly encodes the intended notion. The proof is omitted (sorry), which is acceptable for translation auditing.
-
-Conclusion: The Lean statement is a faithful formalization of the natural language statement, with only standard, acceptable formalization differences (global f, open-in-ℂ neighborhoods), and no substantive change in meaning.
-### END THOUGHT",1
-benmckay_top_continuity_276,Topology,success,True,8,Let $Y$ be a locally compact Hausdorff space and $f \colon X \to Y$ a closed injection. Prove that $f$ is a homeomorphism onto its image.,"import Mathlib
-open Set Topology
-
-/-- Let Y be a locally compact Hausdorff space and f : X -> Y a closed injection. Prove that f is a homeomorphism onto its image. -/
-def isHomeomorph_of_isClosed_injection {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-  [LocallyCompactSpace Y] [T2Space Y] {f : X → Y}
-  (hf : IsClosed (Set.range f)) (hfi : Function.Injective f) :
-  X ≃ₜ Subtype (Set.range f) := by
-  sorry",4,"### BEGIN THOUGHT
-1) Line-by-line translation of the Lean code:
-- Assumptions: X and Y are types with topological spaces. Y is locally compact (LocallyCompactSpace Y) and Hausdorff (T2Space Y). There is a function f : X → Y.
-- Hypotheses: hf : IsClosed (Set.range f) means the image f(X) is a closed subset of Y. hfi : Function.Injective f means f is injective.
-- Conclusion: X ≃ₜ Subtype (Set.range f) is a homeomorphism between X and the subtype of Y consisting of elements in the range of f. Note: The statement only asserts the existence of a homeomorphism between X and its image as a subtype, not that the homeomorphism is induced by f. Also no continuity of f is assumed.
-
-2) Compare with the natural language statement:
-- NL statement: ""Let Y be a locally compact Hausdorff space and f : X → Y a closed injection. Prove that f is a homeomorphism onto its image.""
-- Usual interpretation: ""closed injection"" typically means f is a closed map and injective, and (usually) continuous, so that the claim is that the specific map f, regarded as a map X → f(X) with the subspace topology, is a homeomorphism (i.e., f is an embedding and a topological isomorphism onto its image). The locally compact Hausdorff hypothesis on Y is relevant to promoting closed injective continuous maps to embeddings.
-- Discrepancies:
-  - The code assumes only that the image Set.range f is closed (IsClosed (range f)), not that f is a closed map (IsClosedMap f). These are very different conditions; ""closed injection"" refers to the map being closed, not merely having closed image.
-  - The code does not assume f is continuous at all, yet the conclusion produces a homeomorphism. A homeomorphism onto the image would force f to be continuous, so the code's statement is strictly weaker and, as stated, generally false.
-  - The conclusion in the code asserts the existence of some homeomorphism X ≃ₜ range f, without asserting that this homeomorphism is given by f (i.e., that the underlying function is x ↦ ⟨f x, _⟩). The natural language statement wants that f itself (as a map into its image) is a homeomorphism.
-
-3) Final check:
-- The math problems are different. The Lean code replaces ""closed injection"" by ""injective with closed image"", drops continuity and closed-map assumptions, and weakens the conclusion to existence of some homeomorphism rather than f itself being the homeomorphism onto its image. Therefore, the translation is not faithful.
-
-Additional note: The proof is left as `sorry`, but per the auditing guidelines the key issue is the mismatch in hypotheses and the conclusion targeting mere existence rather than identifying f as the homeomorphism. Hence it fails the faithfulness check.
-### END THOUGHT",0
-srdoty_alg_Z_n_511,Algebra,max_steps_reached,False,24,"Let $R$ be a ring and let $a,b,c\in R$. Show that $a(b-c) = ab - ac$.","import Mathlib
-open Function
-
-/-- Let R be a ring and let a,b,c∈R. Show that a(b-c) = ab - ac. -/
-theorem mul_sub_right_distrib [NonUnitalNonAssocRing R] (a b c : R) : a * (b - c) = a * b - a * c := by
-  simpa using mul_sub a b c
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation of the Lean code:
-- `import Mathlib` and `open Function` just bring in Mathlib and open a namespace; they don't affect the mathematical content of the statement.
-- The docstring `/-- Let R be a ring and let a,b,c∈R. Show that a(b-c) = ab - ac. -/` states the intended natural language proposition.
-- `theorem mul_sub_right_distrib [NonUnitalNonAssocRing R] (a b c : R) : a * (b - c) = a * b - a * c := by simpa using mul_sub a b c`
-  This declares a type `R` equipped with the structure `[NonUnitalNonAssocRing R]` (a general algebraic structure with addition forming an additive group, multiplication not assumed unital nor associative, but distributive; subtraction is available). It then states and proves the equality `a * (b - c) = a * b - a * c` for all `a b c : R`. The proof is `simpa using mul_sub a b c`, which applies the existing Mathlib lemma `mul_sub` that states exactly this distributivity identity.
-
-2) Faithfulness to the original statement:
-- The natural language statement: ""Let R be a ring and let a,b,c in R. Show that a(b-c) = ab - ac."" This is the standard left distributivity of multiplication over subtraction on the right.
-- The Lean code proves exactly `a * (b - c) = a * b - a * c` under the assumption `[NonUnitalNonAssocRing R]`. This is a slight generalization of ""ring"" (it does not require a multiplicative identity or associativity), but the identity remains valid in that more general context.
-- No auxiliary or vacuous definitions are introduced; the code relies on a standard Mathlib lemma `mul_sub` and uses `simpa` to match the exact syntactic form.
-
-3) Comparison and differences:
-- The only difference is generality: the code assumes `R` is a `NonUnitalNonAssocRing`, which is weaker than the usual (unital, associative) ring. This is a permissible and faithful generalization; it does not change the content of the statement being proved, and in fact proves a stronger result than requested.
-- The equality itself matches exactly.
-
-Conclusion: The translation is faithful (indeed slightly stronger) and uses legitimate Mathlib content with no placeholders.
-### END THOUGHT",1
-benmckay_top_covering-spaces_1164,Topology,max_steps_reached,False,24,"Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated.","import Mathlib
-
-/-- Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated. -/
-theorem of_compact_path_connected_locally_simply_connected (X : Type*) [TopologicalSpace X]
-    [CompactSpace X] [PathConnectedSpace X] [LocallySimplyConnectedSpace X] :
-    Monoid.FG (FundamentalGroup X) := by
-  sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib`: Brings in Mathlib library.
-- The theorem statement: `theorem of_compact_path_connected_locally_simply_connected (X : Type*) [TopologicalSpace X] [CompactSpace X] [PathConnectedSpace X] [LocallySimplyConnectedSpace X] : Monoid.FG (FundamentalGroup X) := by sorry`
-  translates to: For any type X equipped with a topological space structure, if X is compact, path connected, and locally simply connected, then its fundamental group is finitely generated. Here, `FundamentalGroup X` denotes the fundamental group of X (with an implicit/basepoint choice as per Mathlib conventions), and `Monoid.FG` asserts finite generation. No auxiliary definitions are introduced; the proof is omitted (`sorry`) but that does not affect the faithfulness of the statement itself.
-
-2) Whole translation assessment:
-- The natural language statement is exactly: “Prove that the fundamental group of any compact, path connected, and locally simply connected topological space is finitely generated.”
-- The Lean theorem matches this precisely: it assumes X is a topological space that is compact, path connected, and locally simply connected, and concludes the fundamental group is finitely generated.
-- The use of `FundamentalGroup X` (with an implicit basepoint) is standard; in a path connected space, the fundamental groups at different basepoints are isomorphic, so this matches the informal usage of “the” fundamental group.
-- Using `Monoid.FG` to state finite generation for a group is acceptable (groups are monoids and finite generation as a monoid/group coincide), so it faithfully captures “finitely generated.”
-
-3) Final check for differences:
-- No extra hypotheses are added; the three listed properties match the natural-language statement.
-- No weakening/strengthening: “locally simply connected” is used in both.
-- No vacuous or placeholder definitions are introduced.
-- Therefore, the Lean statement is a faithful formalization of the natural-language statement.
-
-Conclusion: The code faithfully translates the statement.
-### END THOUGHT",1
-benmckay_top_continuity_319,Topology,success,True,17,Every proper map $f \colon X \to Y$ to a locally compact Hausdorff space $Y$ is a closed map.,"import Mathlib
-open Filter Topology Function Set
-open Prod (fst snd)
-
-/-- Every proper map f : X → Y to a locally compact Hausdorff space Y is a closed map. -/
-theorem isClosedMap_of_proper_of_t2 {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y]
-    [LocallyCompactSpace Y] [T2Space Y] {f : X → Y} (h : IsProperMap f) : IsClosedMap f := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation:
-- `import Mathlib` and the `open` lines just bring in libraries and namespaces; they do not affect the mathematical content.
-- `theorem isClosedMap_of_proper_of_t2 {X Y : Type*} [TopologicalSpace X] [TopologicalSpace Y] [LocallyCompactSpace Y] [T2Space Y] {f : X → Y} (h : IsProperMap f) : IsClosedMap f := by sorry`
-  This states: For any topological spaces X and Y, assuming Y is locally compact (`[LocallyCompactSpace Y]`) and Hausdorff (`[T2Space Y]`), if `f : X → Y` is a proper map (`IsProperMap f`), then `f` is a closed map (`IsClosedMap f`). The `by sorry` indicates the proof is omitted, but the statement is clear.
-
-2) Faithfulness to the natural language:
-- Natural language: ""Every proper map f : X → Y to a locally compact Hausdorff space Y is a closed map.""
-- Lean: Exactly the same: target Y is assumed locally compact and Hausdorff; `IsProperMap f` is the standard Mathlib predicate for a proper map; conclusion is `IsClosedMap f`.
-- No additional hidden assumptions on X; the statement does not introduce extraneous constraints beyond Y being locally compact Hausdorff.
-
-3) Final check:
-- The two statements coincide in meaning. Using `[T2Space Y]` is precisely the Hausdorff condition. There are no auxiliary or vacuous definitions. Slight definitional nuances about whether ""proper map"" includes continuity are standard in Mathlib (IsProperMap is the intended notion) and are acceptable.
-
-Conclusion: The Lean theorem is a faithful formalization of the given statement.
-### END THOUGHT",1
-jirilebl_ca_ca_758,Complex Analysis,max_steps_reached,False,24,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
-
-/-- Polarization identity: 4 z conj w = |z+w|^2 - |z-w|^2 + i(|z+ i w|^2 - |z - i w|^2) -/ 
-theorem polarization_identity (z w : ℂ) :
-  4 * z * conj w =
-    (‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) + Complex.I * (‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2) := by
-  sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation of the Lean code:
-- `import Mathlib`: Use Mathlib's definitions and theorems.
-- `theorem polarization_identity (z w : ℂ) : ... := by sorry`: States a theorem for complex numbers z, w.
-- Left-hand side: `4 * z * conj w` means 4 times z times the complex conjugate of w, i.e., 4 z \bar{w}.
-- Right-hand side: `(‖z + w‖ ^ 2 - ‖z - w‖ ^ 2) + Complex.I * (‖z + Complex.I * w‖ ^ 2 - ‖z - Complex.I * w‖ ^ 2)` means |z+w|^2 - |z-w|^2 + i(|z+iw|^2 - |z-iw|^2), since `‖·‖` is the complex modulus and `Complex.I` is i.
-
-2) Faithfulness to the natural language statement:
-The natural language statement is exactly the polarization identity: 4 z\bar{w} = |z+w|^2 - |z-w|^2 + i ( |z+ i w|^2 - |z - i w|^2 ). The Lean statement matches this precisely: same left-hand side, same right-hand side with correct use of norm for modulus on ℂ and `Complex.I` for i.
-
-3) Final check for differences:
-- Notational correspondence: `‖·‖` = |·| on ℂ; `conj w` = \bar{w}; `Complex.I` = i; arithmetic structure and parentheses match exactly.
-- No auxiliary or vacuous definitions are introduced; only a theorem statement is given.
-- The presence of `sorry` affects proof, not the statement. The task concerns translation of the statement, which is accurate.
-
-Conclusion: The Lean theorem statement is a faithful translation of the given polarization identity.
-### END THOUGHT",1
-srdoty_alg_linear-gps_582,Algebra,max_steps_reached,False,24,"For each $\theta\in\mathbb{R}$, the reflection of $\mathbb{R}^2$ across the line through the origin making angle $\theta$ with the $x$-axis is a linear operator, and its matrix $H_\theta$ is an improper orthogonal matrix (i.e., $H_\theta\in \mathrm{O}(2)$ and $\det H_\theta=-1$).","import Mathlib
-
-noncomputable def H_theta (θ : ℝ) : Matrix (Fin 2) (Fin 2) ℝ :=
-  ![![Real.cos (2 * θ), Real.sin (2 * θ)],
-     ![Real.sin (2 * θ), - Real.cos (2 * θ)]]
-
-/-- A matrix is in the orthogonal group O(2) if Aᵀ ⬝ A = I (the identity matrix). -/
-def is_in_O2 (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop :=
-  Aᵀ ⬝ A = (1 : Matrix (Fin 2) (Fin 2) ℝ)
-
-/-- A matrix is an improper orthogonal matrix if it is in O(2) and has determinant -1. -/
-def is_improper_orthogonal (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop :=
-  (is_in_O2 A) ∧ Matrix.det A = -1
-
-/-- For θ ∈ ℝ, the matrix representing the reflection of R^2 across the line through the origin
-    making angle θ with the x-axis is H_theta. We record its properties below. -/
-theorem reflection_matrix_properties (θ : ℝ) :
-  is_in_O2 (H_theta θ) ∧ Matrix.det (H_theta θ) = -1 := by
-  sorry
-",9,"### BEGIN THOUGHT
-Line-by-line translation of the Lean code:
-- `noncomputable def H_theta (θ : ℝ) : Matrix (Fin 2) (Fin 2) ℝ := ![![Real.cos (2 * θ), Real.sin (2 * θ)], ![Real.sin (2 * θ), - Real.cos (2 * θ)]]`
-  This defines the 2×2 real matrix H_θ = [[cos(2θ), sin(2θ)], [sin(2θ), -cos(2θ)]]. This is the standard formula for the reflection matrix across the line through the origin making angle θ with the x-axis (R(θ) diag(1, -1) R(-θ)).
-
-- `def is_in_O2 (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop := Aᵀ ⬝ A = (1 : Matrix (Fin 2) (Fin 2) ℝ)`
-  This defines a predicate meaning A is orthogonal: A^T A = I. This is a legitimate and standard characterization of O(2).
-
-- `def is_improper_orthogonal (A : Matrix (Fin 2) (Fin 2) ℝ) : Prop := (is_in_O2 A) ∧ Matrix.det A = -1`
-  This defines “improper orthogonal” as being orthogonal with determinant −1. This matches the usual definition.
-
-- `theorem reflection_matrix_properties (θ : ℝ) : is_in_O2 (H_theta θ) ∧ Matrix.det (H_theta θ) = -1 := by sorry`
-  This theorem asserts that H_θ is orthogonal and has determinant −1, i.e., H_θ is improper orthogonal. The proof is omitted with `sorry`, but the statement is precise and non-vacuous.
-
-Assessment of faithfulness to the natural language statement:
-- The natural language statement has two parts:
-  1) The reflection across the line through the origin at angle θ is a linear operator.
-  2) Its matrix H_θ is an improper orthogonal matrix (i.e., H_θ ∈ O(2) and det H_θ = −1).
-
-- The code correctly defines the standard reflection matrix H_θ and asserts that it is orthogonal with determinant −1. This matches part (2). The auxiliary definitions are legitimate and standard.
-
-- Missing/implicit aspects:
-  • The code does not define the reflection map as a linear operator nor explicitly state its linearity. While any matrix induces a linear map, the code does not introduce the actual reflection operator or prove that its matrix in the standard basis is H_θ. The comment says “the matrix representing the reflection … is H_theta,” but that link is not formalized.
-  • Thus, the “is a linear operator” part is not explicitly captured, and the identification of H_θ specifically as the reflection matrix is only in a docstring comment, not a proven statement.
-
-Conclusion:
-- The core mathematical property “H_θ is improper orthogonal” is formalized faithfully. However, the statement that the reflection is a linear operator and that H_θ is indeed its matrix is not formally expressed. Therefore, the translation is very close but not fully faithful to the entire natural language statement.
-
-### END THOUGHT",0
-jirilebl_ca_ca_997,Complex Analysis,max_steps_reached,False,24,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
-open Matrix
-open scoped Matrix
-open Complex
-
-/-- If a 2x2 real matrix M represents a+ib, i.e. M = !![a, -b; b, a], then M has eigenvalues a±ib with eigenvectors [1; ∓ i]. -/
-theorem hasEigenvalues_complex_number (a b : ℝ) :
-  ∀ (M : Matrix (Fin 2) (Fin 2) ℝ),
-    M = !![a, -b; b, a] →
-      ∃ (λ1 λ2 : ℂ) (v1 v2 : Fin 2 → ℂ),
-        v1 ≠ 0 ∧ v2 ≠ 0 ∧
-        (M.map (algebraMap ℝ ℂ)).mulVec v1 = λ1 • v1 ∧
-        (M.map (algebraMap ℝ ℂ)).mulVec v2 = λ2 • v2 ∧
-        λ1 = a + Complex.I * b ∧ λ2 = a - Complex.I * b
-:= by sorry",8,"### BEGIN THOUGHT
-Step 1: Translate the Lean code.
-- Imports and openings are standard: we work with matrices and complex numbers.
-- The theorem `hasEigenvalues_complex_number (a b : ℝ)` states: for any 2×2 real matrix `M` such that `M = !![a, -b; b, a]`, there exist complex numbers `λ1`, `λ2` and nonzero complex vectors `v1`, `v2 : Fin 2 → ℂ` such that
-  - `(M.map (algebraMap ℝ ℂ)).mulVec v1 = λ1 • v1` and `(M.map (algebraMap ℝ ℂ)).mulVec v2 = λ2 • v2` (i.e., `v1`, `v2` are eigenvectors of `M` viewed over ℂ), and
-  - `λ1 = a + I * b` and `λ2 = a - I * b`.
-So the code asserts: if M represents a+ib via the usual 2×2 real matrix, then M (as a complex matrix via coercion) has eigenvalues a±ib and corresponding nonzero eigenvectors exist (unspecified).
-
-Step 2: Compare to the natural language statement.
-The natural language statement says: If M represents a+ib (i.e., M = [[a, -b], [b, a]]), then M has two eigenvalues a ± i b with the corresponding eigenvectors [1; ∓ i]. This includes both the eigenvalues and explicit eigenvectors: [1; -i] for a+ib and [1; i] for a-ib.
-
-The Lean theorem correctly captures the matrix form and the eigenvalues a ± i b, and it asserts the existence of nonzero eigenvectors for these eigenvalues. However, it does not specify what these eigenvectors are. In particular, it does not assert that the eigenvectors are exactly [1; ∓ i], or even that they are scalar multiples of those vectors. It only gives existential quantifiers for some eigenvectors.
-
-Step 3: Final check.
-- Matching parts:
-  - The matrix form M = [[a, -b], [b, a]] is correct.
-  - The eigenvalues a ± i b are correctly specified.
-  - Eigenvectors are required to be nonzero and satisfy the eigenvector equation over ℂ.
-- Differences:
-  - The natural language statement specifies the explicit eigenvectors [1; ∓ i]. The Lean code does not state these vectors; it only asserts that some eigenvectors exist. Therefore, the code proves a weaker statement than the original: it omits the explicit identification of eigenvectors.
-
-Conclusion: The translation is close but not faithful because it lacks the explicit eigenvector identification [1; ∓ i].
-### END THOUGHT",0
-benmckay_top_continuity_232,Topology,max_steps_reached,False,24,Prove that the one-point compactification of $\mathbb{R}^{n}$ is homeomorphic to the unit sphere $S^{n}$.,"import Mathlib
-open Set Metric TopologicalSpace Filter
-open Topology
-
-/-- Prove that the one-point compactification of R^n is homeomorphic to the unit sphere S^n. -/
-theorem homeomorphic_one_point_compactification_unit_sphere (n : ℕ) :
-  OnePoint ℝ^n ≃ₜ S^n := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation of the Lean code:
-- `import Mathlib` and the subsequent `open` lines just bring Mathlib and some namespaces into scope; they don't affect the mathematical content of the statement.
-- The theorem declaration:
-  `theorem homeomorphic_one_point_compactification_unit_sphere (n : ℕ) : OnePoint ℝ^n ≃ₜ S^n := by sorry`
-  reads as: For any natural number n, there is a homeomorphism (≃ₜ) between the one-point compactification of ℝ^n (denoted `OnePoint ℝ^n`) and the n-sphere (denoted `S^n`). There are no auxiliary or placeholder definitions; `OnePoint` and (presumably) `S^n` are standard Mathlib notions, and `≃ₜ` is the type of homeomorphisms.
-
-2) Faithfulness to the original statement:
-- The natural language statement is: “Prove that the one-point compactification of ℝ^n is homeomorphic to the unit sphere S^n.”
-- The Lean theorem states exactly that: `OnePoint ℝ^n ≃ₜ S^n` for each n. In common mathematical notation, `S^n` denotes the unit n-sphere (as a subspace of ℝ^{n+1}), so the Lean formulation faithfully captures the intended meaning.
-- No extra assumptions or constraints are added; no weakening or strengthening occurs. The statement is precisely the same mathematical content.
-
-3) Final check for discrepancies:
-- No vacuous or auxiliary definitions are introduced; there is only the theorem statement.
-- Notationally, `S^n` is standard for the unit n-sphere; `OnePoint` is the Alexandroff one-point compactification. Assuming (as stated) that the code compiles, these are legitimate Mathlib concepts.
-- Therefore, there is no discrepancy between the Lean statement and the natural language statement.
-
-Conclusion: The translation is faithful.
-### END THOUGHT",1
-benmckay_top_fundamental-groups_365,Topology,max_steps_reached,False,24,"Show that every compact, locally simply connected topological space has finitely generated fundamental group.","import Mathlib
-
-/-- Show that every compact, locally simply connected topological space has finitely generated fundamental group. -/
-theorem finitely_generated_of_compact_ext (X : Type*) [TopologicalSpace X] [CompactSpace X]
-    [LocallySimplyConnectedSpace X] : (fundamentalGroup X).FG := by sorry
-",10,"### BEGIN THOUGHT
-1) Line-by-line translation of the Lean code:
-- `theorem finitely_generated_of_compact_ext (X : Type*) [TopologicalSpace X] [CompactSpace X] [LocallySimplyConnectedSpace X] : (fundamentalGroup X).FG := by sorry`
-  Natural language: For any type X equipped with a topological space structure, if X is compact and locally simply connected, then the fundamental group of X is finitely generated. The proof is omitted (sorry), but the statement is the relevant part for translation.
-
-2) Assessment of faithfulness to the original statement:
-- The original statement says: ""Show that every compact, locally simply connected topological space has finitely generated fundamental group.""
-- The Lean theorem quantifies over an arbitrary topological space X with assumptions [CompactSpace X] and [LocallySimplyConnectedSpace X], and concludes that the fundamental group of X is finitely generated, expressed as `(fundamentalGroup X).FG`.
-- This matches the natural language statement in content: the same hypotheses (compact, locally simply connected) and the same conclusion (fundamental group is finitely generated). There are no extra or missing hypotheses relative to the wording.
-
-3) Final check and potential nuances:
-- The only subtlety one might note in general is that the fundamental group usually depends on a basepoint; however, the natural language statement typically suppresses this when not essential. Given the instruction that the code compiles, we accept that `fundamentalGroup X` is a valid mathlib notion here. The statement does not introduce any extraneous constraints (e.g., path connectedness) or weaken the claim.
-- No auxiliary definitions are introduced; no vacuous placeholders are present. The use of `sorry` is acceptable for our task since we are only auditing the statement, not the proof.
-
-Conclusion: The Lean statement is a faithful formalization of the natural language statement.
-### END THOUGHT",1
-srdoty_alg_linear-gps_839,Algebra,max_steps_reached,False,24,Let $F$ be a field and $G=\{E(t): t\in F\}$ with $E(t)=\begin{bmatrix}1&t\\0&1\end{bmatrix}$. Prove that $G$ is a matrix group under multiplication.,"import Mathlib
-
-open Matrix
-
-variable {F : Type*} [Field F]
-
-/-- E(t) = [[1, t], [0, 1]] over F -/
-def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![![1, t], [0, 1]]!
-
-/-- G = { E(t) : t ∈ F } -/
-def G : Set (Matrix (Fin 2) (Fin 2) F) := Set.range (E (F := F))
-
-/-- G is a matrix group under multiplication -/
-theorem G_is_matrix_group : True := by sorry
-",5,"### BEGIN THOUGHT
-Step 1: Line-by-line translation of the Lean code
-- import Mathlib; open Matrix: Bring in Mathlib and open Matrix namespace. Fine.
-- variable {F : Type*} [Field F]: Let F be a type with a field structure.
-- def E (t : F) : Matrix (Fin 2) (Fin 2) F := ![![1, t], [0, 1]]!: Defines E(t) as the 2x2 matrix [[1, t], [0, 1]] over F.
-- def G : Set (Matrix (Fin 2) (Fin 2) F) := Set.range (E (F := F)): Defines G as the set {E(t) | t ∈ F} inside the type of 2x2 matrices over F.
-- theorem G_is_matrix_group : True := by sorry: States a theorem named “G is a matrix group under multiplication,” but the actual formal statement is just True, with a placeholder proof (sorry). This conveys no mathematical content about G.
-
-Step 2: Assess faithfulness to the natural language statement
-The natural language statement asks to prove that G is a matrix group under multiplication. Mathematically, this means showing G forms a group under matrix multiplication (typically: contains identity E(0), closed under multiplication E(s)E(t)=E(s+t), and inverses E(t)^{-1}=E(-t)), thus a subgroup of the general linear group. The code does correctly define E and G. However, the final theorem does not assert any group properties of G; it merely states True. Therefore, the core claim is entirely missing and the translation is not faithful.
-
-Step 3: Compare the two statements and point out differences
-- The original requires proving G is a group under multiplication (closure, identity, inverses). The Lean theorem asserts nothing about G; it only claims True.
-- No subgroup structure (e.g., Subgroup (Matrix ... F) or Subgroup (GL (Fin 2) F)) is defined or proved.
-- No statements about identity, closure, or inverses are present.
-- The use of sorry in the theorem further indicates the proof/content is absent; but even ignoring the proof, the proposition itself is vacuous and unrelated to the intended claim.
-
-Conclusion: While the definitions of E and G are correct and non-vacuous, the final theorem is completely vacuous and does not formalize the intended statement. Hence the translation fails.
-### END THOUGHT",0

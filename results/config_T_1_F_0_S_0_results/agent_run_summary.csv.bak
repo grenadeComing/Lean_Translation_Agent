@@ -1,0 +1,116 @@
+name,domain,status,steps,compile_status,io_error,nl_statement,lean4_code
+jirilebl_ca_ca_2353,Complex Analysis,success,3,0,,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+
+/- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 iff f'(z0) ≠ 0. -/
+theorem is_conformal_at_iff_deriv_ne_zero {f : ℂ → ℂ} {z0 : ℂ} (hf : DifferentiableAt ℂ f z0) :
+  IsConformalAt f z0 ↔ deriv f z0 ≠ 0 := by sorry"
+jirilebl_ca_ca_2577,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be an open set and $f \colon U \to \mathbb{C}$ be a holomorphic function. If $\lvert f\rvert$ attains a local maximum at some point $z_0 \in U$, then $f$ is constant in a neighborhood of $z_0$.","import Mathlib
+
+/-- Let U ⊂ ℂ be an open set and f : U → ℂ be a holomorphic function. If |f| attains a local maximum at some point z0 ∈ U, then f is constant in a neighborhood of z0. -/
+theorem max_modulus_local {U : Set ℂ} {f : ℂ → ℂ} {z0 : ℂ}
+  (hU : IsOpen U) (hz0 : z0 ∈ U) (hf : DifferentiableOn ℂ f U)
+  (h : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, |f z| ≤ |f z0|) :
+  ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, f z = f z0 := by sorry"
+jirilebl_ca_ca_1326,Complex Analysis,success,3,1,,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+
+/-- If f : ℂ → ℂ satisfies f(z + w) = f z * f w for all z,w and f 0 = 1,
+then f z ≠ 0 for all z. -/
+theorem multiplicative_function_nonzero {f : Complex → Complex}
+  (h_mul : ∀ z w : Complex, f (z + w) = f z * f w)
+  (h_one : f 0 = 1) :
+  ∀ z : Complex, f z ≠ 0 := by sorry
+
+/-- The exponential is never zero: exp z ≠ 0 for all complex z. -/
+theorem exp_ne_zero (z : Complex) : Complex.exp z ≠ 0 := by sorry"
+jirilebl_ca_ca_5485,Complex Analysis,success,3,0,,"Suppose $f \colon \mathbb{D} \to \mathbb{D}$ is holomorphic and $f(0) = 0$, then $\lvert f'(0)\rvert \leq 1$.","import Mathlib
+
+/-- Suppose f : D → D is holomorphic and f(0) = 0, then |f'(0)| ≤ 1. -/
+theorem schwarz_lemma_deriv_le_one {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
+  (hmap : ∀ z, z ∈ ball (0 : ℂ) 1 → f z ∈ ball (0 : ℂ) 1)
+  (h0 : f 0 = 0) :
+  Complex.abs (deriv f 0) ≤ 1 := by sorry"
+jirilebl_ca_ca_758,Complex Analysis,success,3,0,,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
+
+lemma polarization_identity (z w : ℂ) :
+  4 * z * Complex.conj w =
+    Complex.ofReal ((Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2)
+    + Complex.I * Complex.ofReal ((Complex.abs (z + Complex.I * w)) ^ 2 - (Complex.abs (z - Complex.I * w)) ^ 2) := by sorry"
+jirilebl_ca_ca_997,Complex Analysis,success,3,0,,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+open Complex
+
+theorem matrix_of_complex_has_eigenvalues (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℂ := ![![ (a : ℂ), -(b : ℂ) ], ![ (b : ℂ), (a : ℂ) ]]
+  let v_plus : Fin 2 → ℂ := ![1, -I]
+  let v_minus : Fin 2 → ℂ := ![1, I]
+  let λ_plus := (a : ℂ) + I * (b : ℂ)
+  let λ_minus := (a : ℂ) - I * (b : ℂ)
+  M.mulVec v_plus = λ_plus • v_plus ∧ M.mulVec v_minus = λ_minus • v_minus := by sorry"
+jirilebl_ca_ca_2441,Complex Analysis,success,3,1,,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
+
+/-- Suppose U ⊂ ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U.
+    Then f is locally injective on U: for each z ∈ U there is an open neighborhood V of z
+    contained in U such that f is injective on V. -/
+theorem holomorphic_on_deriv_ne_zero_locally_injective {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (hf : DifferentiableOn ℂ f U) (hder : ∀ z ∈ U, deriv f z ≠ 0) :
+  ∀ z ∈ U, ∃ V : Set ℂ, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ (∀ x y, x ∈ V → y ∈ V → f x = f y → x = y) := by sorry"
+jirilebl_ca_ca_5157,Complex Analysis,success,4,0,,"Suppose $U \subset \mathbb{C}$ is open, and $\psi \colon U \times [0,1] \to \mathbb{C}$ is a continuous function such that for each fixed $t \in [0,1]$, the function $z \mapsto \psi(z,t)$ is holomorphic. Then $h(z) = \int_0^1 \psi(z,t) \, dt$ is a holomorphic function on $U$.","import Mathlib
+
+open Set
+open scoped Topology
+
+/-- Suppose U ⊂ ℂ is open, and ψ : ℂ × ℝ → ℂ is continuous on U ×ˢ Icc (0 : ℝ) 1, and for each t ∈ Icc (0 : ℝ) 1 the function z ↦ ψ (z, t) is holomorphic on U. Then h(z) = ∫_0^1 ψ(z,t) dt is holomorphic on U. -/
+theorem holomorphic_integral {U : Set ℂ} (hU : IsOpen U) {ψ : ℂ × ℝ → ℂ}
+  (hcont : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1))
+  (holo_at : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => ψ (z, t)) U) :
+  IsHolomorphicOn (fun z => ∫ t in 0 .. 1, ψ (z, t)) U := by sorry
+"
+jirilebl_ca_ca_3078,Complex Analysis,success,3,0,,"If $f \colon U \to \mathbb{C}$ is a holomorphic function on a domain $U \subset \mathbb{C}$, then $f$ is analytic. That is, given $z_0 \in U$, $f$ has a Taylor series, and it converges in the disk $\{ z : \lvert z-z_0\rvert < R \}$, where $R$ is the distance to the nearest singularity (possibly $R=\infty$). Furthermore, the sum of the series is $f$.","import Mathlib
+
+/-
+If f : U → ℂ is a holomorphic function on a domain U ⊂ ℂ, then f is analytic.
+That is, given z0 ∈ U, f has a Taylor series, and it converges in the disk
+{ z : |z-z0| < R }, where R is the distance to the nearest singularity
+(possibly R = ∞). Furthermore, the sum of the series is f.
+
+The statement below records this fact: for each z0 ∈ U we set
+R = Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)), and then the Taylor
+series with coefficients iteratedDeriv n f z0 / n! converges to f on the disk
+|z - z0| < R.
+
+(The proof is omitted.)
+-/
+
+open Complex Set
+
+theorem holomorphic_on_is_analytic_at {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (h_dom : U.Nonempty) (h_holo : IsHolomorphicOn f U) :
+  ∀ z0 : ℂ, z0 ∈ U →
+    let R := Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)) in
+    0 ≤ R ∧
+    ∀ z : ℂ, Complex.abs (z - z0) < R →
+      (∑' n : ℕ, (iteratedDeriv n f z0 / (Nat.cast (Nat.factorial n) : ℂ)) * (z - z0) ^ n) = f z :=
+by sorry"
+jirilebl_ca_ca_2718,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be a domain and suppose that a holomorphic function $f \colon U \to \mathbb{C}$ is not constant. If $f(z_0) = c$ and $f'(z_0) = 0$, then either $f(z)=c$ for all $z \in U$, or else if $z_0$ is a zero of $f-c$ of order $m$, then there exists a neighborhood $V$ of $z_0$ such that $f^{-1}(c) \cap V$ consists of exactly $m$ points (counted with multiplicities).","import Mathlib
+
+/-!
+Statement (no proof):
+Let U ⊂ ℂ be a domain (open and connected) and suppose that a holomorphic function f : U → ℂ is not constant.
+If f(z0) = c and f'(z0) = 0, then either f(z) = c for all z ∈ U, or else if z0 is a zero of f - c of order m,
+then there exists a neighborhood V of z0 such that f ⁻¹({c}) ∩ V consists of exactly m points (counted with multiplicities).
+
+The theorem below states a standard local factorization of f - c near z0 (the usual formulation from complex analysis).
+This formal statement purposely expresses the existence of m ≥ 1 and a holomorphic g with g(z0) ≠ 0 such that
+f(z) - c = (z - z0)^m * g(z) on some neighborhood V ⊆ U. From this one deduces the assertion about the number of
+solutions of f(z) = c in that neighborhood (counted with multiplicity).
+-/
+
+theorem local_zero_of_holomorphic {
+  U : Set ℂ
+} (hUopen : IsOpen U) (hUconn : IsConnected U)
+  {f : ℂ → ℂ} (hf : IsHolomorphicOn f U) (z0 : ℂ) (hz0U : z0 ∈ U) (c : ℂ)
+  (hfz0 : f z0 = c) (h_nonconst : ¬ (∀ z ∈ U, f z = c)) :
+  ∃ (m : ℕ) (hm : 1 ≤ m) (V : Set ℂ),
+    IsOpen V ∧ z0 ∈ V ∧ V ⊆ U ∧
+    ∃ (g : ℂ → ℂ), IsHolomorphicOn g V ∧ g z0 ≠ 0 ∧ (∀ z ∈ V, f z - c = (z - z0) ^ m * g z) := by sorry
+"

@@ -41,44 +41,32 @@ def process_entry(
         logging.info(f"Finished processing '{name}' with status: {result['status']} in {result['step']} steps.")
 
         lean4_code = ""
+        io_error = None
+        compile_status = result.get("compile_status", 0)
 
-        try:
-            if output_path.exists():
+        if output_path.exists():
+            try:
                 with open(output_path, "r", encoding="utf-8") as f:
                     lean4_code = f.read()
+            except Exception:
+                logging.error(f"Error reading output file {output_path}.")
+                io_error = "read_error"
+                lean4_code = "Error reading Lean4 code"
+        else:
+            logging.warning(f"Output file {output_path} does not exist.")
+            io_error = "file_missing"
+            lean4_code = "Lean4 code file not found"
 
-                # successful processing
-                return {
-                    "name": name,
-                    "domain": domain,
-                    "status": result["status"],
-                    "steps": result["step"],
-                    "nl_statement": nl,
-                    "lean4_code": lean4_code
-                }
-
-            else:
-                logging.warning(f"Output file {output_path} does not exist.")
-                # output file not found
-                return {
-                    "name": name,
-                    "domain": domain,
-                    "status": "N/A",
-                    "steps": 0,
-                    "nl_statement": nl,
-                    "lean4_code": "Lean4 code file not found"
-                }
-        except Exception:
-            logging.error(f"Error reading output file {output_path}.")
-            # output file read error
-            return {
-                "name": name,
-                "domain": domain,
-                "status": "NA",
-                "steps": "NA",
-                "nl_statement": nl,
-                "lean4_code": "Error reading Lean4 code"
-            }
+        return {
+            "name": name,
+            "domain": domain,
+            "status": result["status"],
+            "steps": result["step"],
+            "compile_status": compile_status,
+            "io_error": io_error,
+            "nl_statement": nl,
+            "lean4_code": lean4_code
+        }
 
     # agent error exception handling
     except Exception as e:
@@ -88,6 +76,7 @@ def process_entry(
             "domain": domain,
             "status": "agent_crashed",
             "steps": 0,
+            "compile_status": 0,
             "nl_statement": nl,
             "lean4_code": ""
         }
@@ -199,16 +188,14 @@ def main(config_name: str = "default") -> None:
         # --- TEMPORARY slice selection (remove when processing all entries again) ---
         selected_entries: List[Dict[str, Any]] = []
         slice_specs = [
-            (0, 5),    # [:5]
-            (53, 58),  # [53:58]
-            (100, 105),# [100:105]
-            (300, 305) # [300:305]
+            (100, 110),# [100:105]
         ]
-        for start, end in slice_specs:
-            if start >= len(entries):
-                continue
-            selected_entries.extend(entries[start:min(end, len(entries))])
-        if selected_entries:
+        if slice_specs:
+            for start, end in slice_specs:
+                if start >= len(entries):
+                    continue
+                selected_entries.extend(entries[start:min(end, len(entries))])
+            
             entries = selected_entries[:20]  # ensure we only keep at most 20 total
             logging.info(f"Limiting processing to {len(entries)} selected entries based on predefined slices.")
         # --- END TEMPORARY slice selection ---
@@ -221,7 +208,7 @@ def main(config_name: str = "default") -> None:
     stats_file = config_results_dir / "agent_run_summary.csv"
     csv_file = open(stats_file, "w", newline="", encoding="utf-8")
     csv_writer = csv.writer(csv_file)
-    csv_writer.writerow(["name", "domain", "status", "passed", "steps", "nl_statement", "lean4_code"])
+    csv_writer.writerow(["name", "domain", "status", "steps", "compile_status", "io_error", "nl_statement", "lean4_code"])
     csv_file.flush()  # Ensure header is written immediately
     
     # Counters for final statistics
@@ -246,13 +233,13 @@ def main(config_name: str = "default") -> None:
                         stat = future.result()
                         if stat:
                             # Write immediately to CSV
-                            passed = (stat["status"] == "success")
                             csv_writer.writerow([
                                 stat["name"], 
                                 stat["domain"], 
                                 stat["status"], 
-                                passed, 
                                 stat["steps"], 
+                                stat.get("compile_status"),
+                                stat.get("io_error"), 
                                 stat["nl_statement"], 
                                 stat["lean4_code"]
                             ])

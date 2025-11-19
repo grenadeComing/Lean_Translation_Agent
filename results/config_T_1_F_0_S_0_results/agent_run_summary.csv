@@ -1,0 +1,309 @@
+name,domain,status,steps,compile_status,io_error,nl_statement,lean4_code,validate_score,validate_reason,equivalent
+jirilebl_ca_ca_2353,Complex Analysis,success,3,0,,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+
+/- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 iff f'(z0) ≠ 0. -/
+theorem is_conformal_at_iff_deriv_ne_zero {f : ℂ → ℂ} {z0 : ℂ} (hf : DifferentiableAt ℂ f z0) :
+  IsConformalAt f z0 ↔ deriv f z0 ≠ 0 := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `import Mathlib`: We are using Mathlib's library.
+- `theorem is_conformal_at_iff_deriv_ne_zero {f : ℂ → ℂ} {z0 : ℂ} (hf : DifferentiableAt ℂ f z0) : IsConformalAt f z0 ↔ deriv f z0 ≠ 0 := by sorry`
+  This declares a theorem for a complex function f and a point z0, assuming f is complex-differentiable at z0. The conclusion is that f is conformal at z0 if and only if the complex derivative of f at z0 is nonzero. There are no auxiliary/vacuous definitions; the proof is omitted but that is acceptable for translation checking.
+
+2) Faithfulness to the natural language statement:
+- The natural language statement: “Suppose f: ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 iff f'(z0) ≠ 0.”
+- The Lean statement assumes `DifferentiableAt ℂ f z0` and proves the equivalence `IsConformalAt f z0 ↔ deriv f z0 ≠ 0`. This matches the mathematical content: holomorphic implies differentiable at every point in its domain, in particular at z0, so the Lean hypothesis is a slight weakening (local differentiability rather than global holomorphic), which is acceptable and mathematically standard for this equivalence. The notions used (IsConformalAt, deriv) are the Mathlib analogs for “conformal at z0” and “f′(z0)”.
+
+3) Final check for differences:
+- The only difference is the strength of the assumption: the natural language states global holomorphic; the Lean theorem assumes only differentiable at z0. This is a slight generalization and does not change the meaning of the targeted equivalence at the point. No vacuous or placeholder definitions are introduced. Therefore, the translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_2577,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be an open set and $f \colon U \to \mathbb{C}$ be a holomorphic function. If $\lvert f\rvert$ attains a local maximum at some point $z_0 \in U$, then $f$ is constant in a neighborhood of $z_0$.","import Mathlib
+
+/-- Let U ⊂ ℂ be an open set and f : U → ℂ be a holomorphic function. If |f| attains a local maximum at some point z0 ∈ U, then f is constant in a neighborhood of z0. -/
+theorem max_modulus_local {U : Set ℂ} {f : ℂ → ℂ} {z0 : ℂ}
+  (hU : IsOpen U) (hz0 : z0 ∈ U) (hf : DifferentiableOn ℂ f U)
+  (h : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, |f z| ≤ |f z0|) :
+  ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, f z = f z0 := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `theorem max_modulus_local {U : Set ℂ} {f : ℂ → ℂ} {z0 : ℂ}`: We fix an open set U ⊂ ℂ, a complex function f: ℂ → ℂ, and a point z0 ∈ ℂ.
+- Hypotheses:
+  - `(hU : IsOpen U)`: U is open.
+  - `(hz0 : z0 ∈ U)`: z0 is in U.
+  - `(hf : DifferentiableOn ℂ f U)`: f is complex differentiable (holomorphic) on U.
+  - `(h : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, |f z| ≤ |f z0|)`: There exists r > 0 such that the open ball around z0 of radius r is contained in U and for all z in that ball, |f(z)| ≤ |f(z0)|. This encodes that |f| attains a local maximum at z0.
+- Conclusion:
+  - `∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, f z = f z0`: There exists r > 0 such that the ball around z0 is contained in U and f is constant on that ball, equal to f(z0). This states that f is constant on a neighborhood of z0.
+
+2) Faithfulness to the natural language statement:
+- The natural statement: U ⊂ ℂ open, f : U → ℂ holomorphic. If |f| has a local maximum at z0 ∈ U, then f is constant in a neighborhood of z0.
+- The Lean formalization matches this: it assumes U open, z0 ∈ U, and f holomorphic on U. The local maximum condition is encoded by the existence of a ball around z0 contained in U on which |f(z)| ≤ |f(z0)|. The conclusion asserts existence of a ball around z0 contained in U on which f is constant, i.e., constant in a neighborhood of z0. The only minor technical difference is that Lean takes f : ℂ → ℂ with differentiability restricted to U rather than f : U → ℂ; this is a standard and faithful formalization and does not change the meaning.
+
+3) Final check for differences:
+- Domain handling (f : ℂ → ℂ vs f : U → ℂ): harmless generalization, faithful.
+- Local maximum condition: correctly encoded via inequality on a ball subset of U.
+- Conclusion: exactly that f is constant on some neighborhood of z0 inside U.
+- No extraneous/vacuous definitions; no auxiliary placeholders. Statement matches the Maximum Modulus Principle local consequence.
+
+Therefore, the Lean statement is a faithful translation of the natural language statement.
+### END THOUGHT",1
+jirilebl_ca_ca_1326,Complex Analysis,success,3,1,,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+
+/-- If f : ℂ → ℂ satisfies f(z + w) = f z * f w for all z,w and f 0 = 1,
+then f z ≠ 0 for all z. -/
+theorem multiplicative_function_nonzero {f : Complex → Complex}
+  (h_mul : ∀ z w : Complex, f (z + w) = f z * f w)
+  (h_one : f 0 = 1) :
+  ∀ z : Complex, f z ≠ 0 := by sorry
+
+/-- The exponential is never zero: exp z ≠ 0 for all complex z. -/
+theorem exp_ne_zero (z : Complex) : Complex.exp z ≠ 0 := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `theorem multiplicative_function_nonzero {f : Complex → Complex} (h_mul : ∀ z w : Complex, f (z + w) = f z * f w) (h_one : f 0 = 1) : ∀ z : Complex, f z ≠ 0 := by sorry`
+  This states: Let f: ℂ → ℂ be a function such that for all complex numbers z,w, f(z + w) = f(z) * f(w), and f(0) = 1. Then for every z ∈ ℂ, f(z) ≠ 0. No auxiliary definitions are introduced; the statement is exactly the multiplicativity-plus-value-at-zero implies nonvanishing conclusion.
+
+- `theorem exp_ne_zero (z : Complex) : Complex.exp z ≠ 0 := by sorry`
+  This states: For every complex number z, exp z ≠ 0. This directly formalizes the statement that the complex exponential never vanishes.
+
+2) Faithfulness to the natural language statement:
+- The natural language asks to use e^{z+w} = e^z e^w and e^0 = 1 ≠ 0 to show e^z ≠ 0 for all z ∈ ℂ, and equivalently the general functional equation conclusion: if f(z+w) = f(z)f(w) and f(0) = 1, then f(z) ≠ 0 for all z. The first theorem is exactly the general statement. The second theorem is the specialization to the complex exponential. Thus the Lean statements capture both parts of the natural language statement precisely.
+
+3) Final check and differences:
+- There are no extraneous or vacuous definitions. The theorems are stated over ℂ as in the problem. The specialization to exponential is present. The code uses standard Mathlib entities (Complex, Complex.exp). There is no mismatch in quantifiers or domains. The use of `sorry` is acceptable for this auditing task since only the statement needs to match.
+
+Conclusion: The Lean code faithfully translates the natural language statement.
+### END THOUGHT",1
+jirilebl_ca_ca_5485,Complex Analysis,success,3,0,,"Suppose $f \colon \mathbb{D} \to \mathbb{D}$ is holomorphic and $f(0) = 0$, then $\lvert f'(0)\rvert \leq 1$.","import Mathlib
+
+/-- Suppose f : D → D is holomorphic and f(0) = 0, then |f'(0)| ≤ 1. -/
+theorem schwarz_lemma_deriv_le_one {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
+  (hmap : ∀ z, z ∈ ball (0 : ℂ) 1 → f z ∈ ball (0 : ℂ) 1)
+  (h0 : f 0 = 0) :
+  Complex.abs (deriv f 0) ≤ 1 := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation:
+- The theorem considers a function f : ℂ → ℂ and assumes:
+  - hf: DifferentiableOn ℂ f (ball 0 1). This means f is holomorphic (complex differentiable) on the open unit disk D = {z : |z| < 1}.
+  - hmap: ∀ z, z ∈ ball 0 1 → f z ∈ ball 0 1. This states that f maps the unit disk into itself, i.e., f(D) ⊆ D.
+  - h0: f 0 = 0. The function fixes the origin.
+- Conclusion: Complex.abs (deriv f 0) ≤ 1, i.e., |f'(0)| ≤ 1.
+
+2) Faithfulness assessment:
+- The natural statement: ""Suppose f : D → D is holomorphic and f(0) = 0, then |f'(0)| ≤ 1."" Here D is the open unit disk. The Lean code assumes f is holomorphic on D (DifferentiableOn on the open ball), f maps D into D (hmap), and f(0) = 0. Though f is defined on ℂ in Lean, only its behavior on D is used, which is a standard and acceptable formalization of ""f : D → D."" The conclusion matches exactly: |f'(0)| ≤ 1.
+
+3) Final check:
+- The mathematical content matches: domain is the open unit disk, codomain constraint is preserved, holomorphicity is correctly encoded, and the derivative bound is exactly the Schwarz lemma derivative inequality at 0. No extraneous or missing assumptions. No vacuous or placeholder definitions are present. Therefore the translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_758,Complex Analysis,success,3,0,,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
+
+lemma polarization_identity (z w : ℂ) :
+  4 * z * Complex.conj w =
+    Complex.ofReal ((Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2)
+    + Complex.I * Complex.ofReal ((Complex.abs (z + Complex.I * w)) ^ 2 - (Complex.abs (z - Complex.I * w)) ^ 2) := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation:
+- `import Mathlib`: bring in Mathlib.
+- `lemma polarization_identity (z w : ℂ) : ... := by sorry`: States a lemma for all complex numbers z, w.
+- Left-hand side: `4 * z * Complex.conj w` means 4·z·w̄.
+- Right-hand side: `Complex.ofReal ((Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2)` is the real number |z+w|^2 - |z-w|^2 embedded into ℂ.
+- `+ Complex.I * Complex.ofReal ((Complex.abs (z + Complex.I * w)) ^ 2 - (Complex.abs (z - Complex.I * w)) ^ 2)` is i times the real number |z+iw|^2 - |z-iw|^2, again embedded into ℂ.
+- `Complex.abs` denotes the usual complex modulus (a real number), and `^ 2` is squaring in ℝ.
+
+2) Faithfulness to the natural language statement:
+The Lean statement precisely matches the polarization identity: 4 z \bar{w} equals (|z+w|^2 - |z-w|^2) + i(|z+iw|^2 - |z-iw|^2). The only difference is the necessary coercion `Complex.ofReal` to view real quantities as complex numbers, which is standard formalization and does not change the mathematical content.
+
+3) Comparison and differences:
+- The Lean version explicitly embeds reals into complexes via `Complex.ofReal`, which is a technical formalization detail.
+- Otherwise, all terms correspond exactly: z, w in ℂ, conjugation, modulus, i, and the exact algebraic arrangement. No auxiliary definitions or placeholders are introduced. Hence the translation is faithful.
+
+Conclusion: The code states exactly the given polarization identity in Lean.
+### END THOUGHT",1
+jirilebl_ca_ca_997,Complex Analysis,success,3,0,,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+open Complex
+
+theorem matrix_of_complex_has_eigenvalues (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℂ := ![![ (a : ℂ), -(b : ℂ) ], ![ (b : ℂ), (a : ℂ) ]]
+  let v_plus : Fin 2 → ℂ := ![1, -I]
+  let v_minus : Fin 2 → ℂ := ![1, I]
+  let λ_plus := (a : ℂ) + I * (b : ℂ)
+  let λ_minus := (a : ℂ) - I * (b : ℂ)
+  M.mulVec v_plus = λ_plus • v_plus ∧ M.mulVec v_minus = λ_minus • v_minus := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- import Mathlib; open Complex: Set up Lean's math library and open Complex for the imaginary unit I, etc.
+- theorem matrix_of_complex_has_eigenvalues (a b : ℝ) : ... := by sorry
+  This states a theorem parameterized by real numbers a and b.
+- let M : Matrix (Fin 2) (Fin 2) ℂ := ![![ (a : ℂ), -(b : ℂ) ], ![ (b : ℂ), (a : ℂ) ]]
+  Define the 2×2 complex matrix M with entries [[a, -b], [b, a]], with a, b viewed as complex numbers. This is exactly the standard 2×2 matrix representing the complex number a + i b under the identification ℂ ≅ ℝ^2.
+- let v_plus : Fin 2 → ℂ := ![1, -I]
+  Define the vector v_plus = [1; -i] in ℂ^2.
+- let v_minus : Fin 2 → ℂ := ![1, I]
+  Define the vector v_minus = [1; i] in ℂ^2.
+- let λ_plus := (a : ℂ) + I * (b : ℂ)
+  Define λ_plus = a + i b as a complex number.
+- let λ_minus := (a : ℂ) - I * (b : ℂ)
+  Define λ_minus = a − i b as a complex number.
+- M.mulVec v_plus = λ_plus • v_plus ∧ M.mulVec v_minus = λ_minus • v_minus
+  The statement asserts both eigenvector relations: M v_plus = λ_plus v_plus and M v_minus = λ_minus v_minus. This is precisely the eigenvector/eigenvalue condition.
+
+2) Faithfulness of the whole translation:
+- The natural-language statement: For the 2×2 matrix M representing a + i b (i.e., M = [[a, −b], [b, a]]), the eigenvalues are a ± i b with corresponding eigenvectors [1; ∓ i].
+- The code fixes M to be exactly [[a, −b], [b, a]] (entries cast into ℂ), and then states the two equalities showing [1; −i] is an eigenvector with eigenvalue a + i b, and [1; i] is an eigenvector with eigenvalue a − i b. The “∓” correspondence is respected: plus eigenvalue goes with minus i in the vector, and minus eigenvalue goes with plus i.
+- The use of ℂ-valued matrices is appropriate (and standard) when discussing complex eigenvalues and eigenvectors; it is fully consistent with the statement.
+- The theorem gives both eigenvector relations explicitly (as a conjunction), which suffices to assert those are eigenvalues with those eigenvectors. It does not claim distinctness (which would fail when b = 0), matching the natural statement.
+
+3) Final comparison:
+- The mathematical content is the same. The Lean code accurately formalizes the matrix representing a + i b and states the exact eigenvalue/eigenvector relations requested. There are no vacuous or placeholder definitions and no extraneous assumptions. Hence the translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_2441,Complex Analysis,success,3,1,,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
+
+/-- Suppose U ⊂ ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U.
+    Then f is locally injective on U: for each z ∈ U there is an open neighborhood V of z
+    contained in U such that f is injective on V. -/
+theorem holomorphic_on_deriv_ne_zero_locally_injective {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (hf : DifferentiableOn ℂ f U) (hder : ∀ z ∈ U, deriv f z ≠ 0) :
+  ∀ z ∈ U, ∃ V : Set ℂ, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ (∀ x y, x ∈ V → y ∈ V → f x = f y → x = y) := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation:
+- `theorem holomorphic_on_deriv_ne_zero_locally_injective {U : Set ℂ} {f : ℂ → ℂ}`: We fix an open set U in ℂ and a function f from ℂ to ℂ (we will only use f on U).
+- `(hU : IsOpen U)`: U is open.
+- `(hf : DifferentiableOn ℂ f U)`: f is complex differentiable (holomorphic) on U.
+- `(hder : ∀ z ∈ U, deriv f z ≠ 0)`: for every z in U, the complex derivative of f at z is nonzero.
+- Conclusion: `∀ z ∈ U, ∃ V : Set ℂ, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ (∀ x y, x ∈ V → y ∈ V → f x = f y → x = y)` meaning: for every z in U, there exists an open set V in ℂ with z ∈ V and V ⊆ U such that f is injective on V.
+
+2) Faithfulness to the natural language statement:
+- The natural statement: U ⊂ ℂ open, f: U → ℂ holomorphic, f'(z) ≠ 0 on U ⇒ f is locally injective on U.
+- The code formalizes holomorphic as `DifferentiableOn ℂ f U` for f : ℂ → ℂ, which is the standard Mathlib way to express a function defined on ℂ but considered on the subset U.
+- Nonvanishing of derivative is expressed as `deriv f z ≠ 0` for all z ∈ U, matching f'(z) ≠ 0.
+- Local injectivity is expressed by existence, for each z ∈ U, of an open neighborhood V with z ∈ V ⊆ U on which f is injective. Since U is assumed open (hU), requiring V to be open in ℂ and contained in U matches the usual notion of an open neighborhood in the subspace topology of U.
+- No auxiliary/vacuous definitions; all terms are standard Mathlib notions.
+
+3) Final check:
+- The Lean statement is neither stronger nor weaker in a problematic way. It matches the intended local injectivity claim precisely (and even uses the stronger ambient-open V, justified by U being open). The use of f : ℂ → ℂ plus DifferentiableOn on U is a conventional formalization of f : U → ℂ holomorphic. There are no discrepancies.
+
+Conclusion: Faithful translation.
+### END THOUGHT",1
+jirilebl_ca_ca_5157,Complex Analysis,success,4,0,,"Suppose $U \subset \mathbb{C}$ is open, and $\psi \colon U \times [0,1] \to \mathbb{C}$ is a continuous function such that for each fixed $t \in [0,1]$, the function $z \mapsto \psi(z,t)$ is holomorphic. Then $h(z) = \int_0^1 \psi(z,t) \, dt$ is a holomorphic function on $U$.","import Mathlib
+
+open Set
+open scoped Topology
+
+/-- Suppose U ⊂ ℂ is open, and ψ : ℂ × ℝ → ℂ is continuous on U ×ˢ Icc (0 : ℝ) 1, and for each t ∈ Icc (0 : ℝ) 1 the function z ↦ ψ (z, t) is holomorphic on U. Then h(z) = ∫_0^1 ψ(z,t) dt is holomorphic on U. -/
+theorem holomorphic_integral {U : Set ℂ} (hU : IsOpen U) {ψ : ℂ × ℝ → ℂ}
+  (hcont : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1))
+  (holo_at : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => ψ (z, t)) U) :
+  IsHolomorphicOn (fun z => ∫ t in 0 .. 1, ψ (z, t)) U := by sorry
+",10,"### BEGIN THOUGHT
+Line-by-line translation:
+- import Mathlib; open Set; open scoped Topology: Bring in Mathlib and relevant namespaces; no mathematical content change.
+- The theorem holomorphic_integral is stated with U : Set ℂ and hU : IsOpen U: U is an open subset of ℂ, matching the hypothesis.
+- ψ : ℂ × ℝ → ℂ with hcont : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1): ψ is a function defined on ℂ × ℝ, but we assume it is continuous on the rectangle U × [0,1]. This captures the hypothesis that ψ is continuous on U × [0,1]. Defining ψ on a larger domain is a harmless generalization.
+- holo_at : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => ψ (z, t)) U: For each fixed t in [0,1], the map z ↦ ψ(z, t) is holomorphic on U. This matches the hypothesis exactly.
+- Conclusion: IsHolomorphicOn (fun z => ∫ t in 0 .. 1, ψ (z, t)) U: The function h(z) = ∫_0^1 ψ(z, t) dt is holomorphic on U. The integral is the standard interval integral over [0,1], consistent with the statement.
+
+Faithfulness check:
+- Domain/codomain and openness of U: Matches.
+- Continuity of ψ on U × [0,1]: Encoded as ContinuousOn ψ on U ×ˢ Icc 0 1, matches.
+- Holomorphic in z for each fixed t ∈ [0,1]: Encoded precisely.
+- Conclusion that z ↦ ∫_0^1 ψ(z,t) dt is holomorphic on U: Encoded precisely.
+- Minor generalization: ψ is defined on all ℂ × ℝ rather than only U × [0,1], but continuity is only assumed on U × [0,1], which is standard and faithful to the intended content.
+- No auxiliary/vacuous definitions; all predicates (IsOpen, ContinuousOn, IsHolomorphicOn) are standard Mathlib notions.
+
+Final check:
+The Lean theorem is the same mathematical statement as the natural language version, up to a harmless generalization of ψ's ambient domain. Therefore, the translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_3078,Complex Analysis,success,3,0,,"If $f \colon U \to \mathbb{C}$ is a holomorphic function on a domain $U \subset \mathbb{C}$, then $f$ is analytic. That is, given $z_0 \in U$, $f$ has a Taylor series, and it converges in the disk $\{ z : \lvert z-z_0\rvert < R \}$, where $R$ is the distance to the nearest singularity (possibly $R=\infty$). Furthermore, the sum of the series is $f$.","import Mathlib
+
+/-
+If f : U → ℂ is a holomorphic function on a domain U ⊂ ℂ, then f is analytic.
+That is, given z0 ∈ U, f has a Taylor series, and it converges in the disk
+{ z : |z-z0| < R }, where R is the distance to the nearest singularity
+(possibly R = ∞). Furthermore, the sum of the series is f.
+
+The statement below records this fact: for each z0 ∈ U we set
+R = Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)), and then the Taylor
+series with coefficients iteratedDeriv n f z0 / n! converges to f on the disk
+|z - z0| < R.
+
+(The proof is omitted.)
+-/
+
+open Complex Set
+
+theorem holomorphic_on_is_analytic_at {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (h_dom : U.Nonempty) (h_holo : IsHolomorphicOn f U) :
+  ∀ z0 : ℂ, z0 ∈ U →
+    let R := Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)) in
+    0 ≤ R ∧
+    ∀ z : ℂ, Complex.abs (z - z0) < R →
+      (∑' n : ℕ, (iteratedDeriv n f z0 / (Nat.cast (Nat.factorial n) : ℂ)) * (z - z0) ^ n) = f z :=
+by sorry",9,"### BEGIN THOUGHT
+Step-by-step translation of the Lean code:
+- Context: U : Set ℂ, f : ℂ → ℂ; assumptions: hU : IsOpen U (U is open), h_dom : U.Nonempty (U is nonempty), h_holo : IsHolomorphicOn f U (f is holomorphic on U).
+- Statement: For every z0 ∈ U, define
+  R := Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)).
+  Then 0 ≤ R and for every z with |z − z0| < R, the series
+  ∑' n : ℕ, (iteratedDeriv n f z0 / (Nat.cast (Nat.factorial n) : ℂ)) * (z − z0)^n
+  equals f z.
+- Interpretation: This asserts that at each z0 ∈ U, the Taylor series of f around z0 (with coefficients f^(n)(z0)/n!) converges and sums to f on the open disk of radius R centered at z0, where R is the distance from z0 to the complement Uᶜ (i.e., the largest radius so that the disk stays inside U). The extra 0 ≤ R is a harmless side fact.
+
+Comparison to the natural language statement:
+- Natural statement: If f is holomorphic on a domain U ⊂ ℂ, then f is analytic. Given z0 ∈ U, f has a Taylor series that converges in the disk {|z − z0| < R}, where R is the distance to the nearest singularity (possibly R = ∞), and the sum of the series is f.
+- Agreement:
+  - Both assert holomorphic implies analytic: a Taylor series exists with coefficients f^(n)(z0)/n! and sums to f on some disk.
+  - The Lean statement correctly uses the classical Taylor series and asserts equality to f on the disk.
+  - The disk radius chosen in Lean is the distance to Uᶜ, which is the standard rigorous bound ensured by holomorphy on an open set.
+  - The requirement that z0 ∈ U and z with |z − z0| < R (which in fact implies z ∈ U) matches the intended domain of validity.
+- Differences:
+  1) Domain vs open: The natural language says domain (open and connected), while the Lean code assumes only open (IsOpen) and nonempty. This is a harmless generalization since connectedness is not needed for analyticity at a point.
+  2) Definition of R: The natural statement says R is the distance to the nearest singularity (possibly ∞). The Lean code takes R to be the distance to the complement Uᶜ, i.e., to the boundary of the given domain. In general, the radius of convergence is at least dist(z0, Uᶜ), and equals the distance to the nearest singularity of the maximal analytic continuation; these notions can differ if f extends across the boundary. Thus the Lean statement gives a guaranteed radius but not the optimal one indicated by “nearest singularity.”
+  3) Infinite radius: The natural statement allows R = ∞ (e.g., entire functions). In the Lean code, R is a real number defined as Inf of a set of real distances; it does not model ∞. In particular, if U = univ, then Uᶜ = ∅ and R is Inf ∅ in ℝ, which cannot be ∞. Depending on mathlib’s convention, this may become 0, making the conclusion vacuous in the entire case rather than capturing the intended global convergence. This is a significant mismatch with the “possibly R = ∞” clause.
+
+Final check:
+- The central content “holomorphic on an open set implies analytic with Taylor series summing to f on the disk determined by the distance to the complement” is captured.
+- However, the phrase “distance to the nearest singularity (possibly ∞)” is not faithfully formalized: the code uses distance to Uᶜ (a lower bound) and cannot represent the ∞ case. This is an almost-correct standard formulation but not strictly faithful to the stated version.
+
+Conclusion: No vacuous placeholders; the statement is mathematically meaningful and close. But due to the R definition (boundary vs singularity) and lack of ∞, it is not fully faithful.
+### END THOUGHT",0
+jirilebl_ca_ca_2718,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be a domain and suppose that a holomorphic function $f \colon U \to \mathbb{C}$ is not constant. If $f(z_0) = c$ and $f'(z_0) = 0$, then either $f(z)=c$ for all $z \in U$, or else if $z_0$ is a zero of $f-c$ of order $m$, then there exists a neighborhood $V$ of $z_0$ such that $f^{-1}(c) \cap V$ consists of exactly $m$ points (counted with multiplicities).","import Mathlib
+
+/-!
+Statement (no proof):
+Let U ⊂ ℂ be a domain (open and connected) and suppose that a holomorphic function f : U → ℂ is not constant.
+If f(z0) = c and f'(z0) = 0, then either f(z) = c for all z ∈ U, or else if z0 is a zero of f - c of order m,
+then there exists a neighborhood V of z0 such that f ⁻¹({c}) ∩ V consists of exactly m points (counted with multiplicities).
+
+The theorem below states a standard local factorization of f - c near z0 (the usual formulation from complex analysis).
+This formal statement purposely expresses the existence of m ≥ 1 and a holomorphic g with g(z0) ≠ 0 such that
+f(z) - c = (z - z0)^m * g(z) on some neighborhood V ⊆ U. From this one deduces the assertion about the number of
+solutions of f(z) = c in that neighborhood (counted with multiplicity).
+-/
+
+theorem local_zero_of_holomorphic {
+  U : Set ℂ
+} (hUopen : IsOpen U) (hUconn : IsConnected U)
+  {f : ℂ → ℂ} (hf : IsHolomorphicOn f U) (z0 : ℂ) (hz0U : z0 ∈ U) (c : ℂ)
+  (hfz0 : f z0 = c) (h_nonconst : ¬ (∀ z ∈ U, f z = c)) :
+  ∃ (m : ℕ) (hm : 1 ≤ m) (V : Set ℂ),
+    IsOpen V ∧ z0 ∈ V ∧ V ⊆ U ∧
+    ∃ (g : ℂ → ℂ), IsHolomorphicOn g V ∧ g z0 ≠ 0 ∧ (∀ z ∈ V, f z - c = (z - z0) ^ m * g z) := by sorry
+",9,"### BEGIN THOUGHT
+Step 1: Translate the Lean code to natural language.
+- Context: U ⊂ ℂ, with hUopen : IsOpen U and hUconn : IsConnected U, i.e., U is a domain (open and connected).
+- f : ℂ → ℂ with hf : IsHolomorphicOn f U, i.e., f is holomorphic on U.
+- z0 ∈ U, a point, and c ∈ ℂ.
+- hfz0 : f z0 = c, i.e., z0 is a zero of f − c.
+- h_nonconst : ¬ (∀ z ∈ U, f z = c), i.e., f is not identically equal to c on U (this, together with f z0 = c, is equivalent to “f is not constant” in this context).
+- Conclusion: There exist an integer m ≥ 1, an open neighborhood V of z0 with V ⊆ U, and a holomorphic function g on V, with g(z0) ≠ 0, such that for all z ∈ V, f z − c = (z − z0)^m * g z.
+
+This is the standard local factorization statement: z0 is a zero of order m of f − c, and f − c factors as (z − z0)^m times a holomorphic function g that is nonvanishing at z0.
+
+Step 2: Compare with the natural language statement.
+- Original statement: Let U be a domain and f holomorphic and not constant. If f(z0) = c and f'(z0) = 0, then either f ≡ c on U, or else if z0 is a zero of f − c of order m, there is a neighborhood V of z0 such that f^{-1}(c) ∩ V consists of exactly m points (counted with multiplicities).
+
+Key points of comparison:
+- Domain assumptions: Match (U open and connected, f holomorphic).
+- Non-constancy: The Lean code assumes ¬(∀ z ∈ U, f z = c), i.e., f is not identically equal to c on U. Given hfz0 : f z0 = c, this is equivalent to “f is not constant.” So this is aligned.
+- Derivative condition f'(z0) = 0: The Lean code does not assume this. This is a generalization. In the analytic picture, the factorization exists for any zero (with m ≥ 1). The f'(z0) = 0 condition would force m ≥ 2, but the target conclusion about the number of solutions counted with multiplicity holds regardless of whether m = 1 or m ≥ 2. So the code omits an unnecessary restriction.
+- Conclusion: The natural language statement is phrased in terms of counting preimages of c in a neighborhood (with multiplicity), while the Lean code states the equivalent local factorization characterization of a zero of order m. From this factorization and continuity of g with g(z0) ≠ 0, one can shrink V so that g has no zeros on V, and then all zeros of f − c in V occur at z0 with total multiplicity m, yielding exactly m solutions counted with multiplicity. The code selects this standard equivalent formulation. Although it doesn’t explicitly state the counting result, it is an immediate consequence of the stated factorization.
+- A minor technical nuance: The code only requires g z0 ≠ 0 (not nonvanishing on V), but since the statement is existential in V, one may choose V small enough so that g has no zeros on V. The factorization equality then continues to hold on the smaller V, so this is not an issue.
+
+Step 3: Final check
+- Differences: (i) The code omits the derivative hypothesis f'(z0) = 0; this slightly generalizes the result. (ii) The code expresses the conclusion via local factorization rather than directly as a counting statement, but it is standard and essentially equivalent in meaning for the intended local result. (iii) The code builds in the “not identically c” case by hypothesis rather than presenting a dichotomy. Given the natural language already assumes f is not constant and we have f z0 = c, this is consistent.
+- Verdict: The Lean statement is an accurate and standard reformulation capturing the essence of the natural language claim (and slightly stronger by dropping the derivative condition). No vacuous definitions or placeholders are used; it’s a clean statement. Hence it is essentially faithful, with only minor generalization/reshaping.
+### END THOUGHT",1
