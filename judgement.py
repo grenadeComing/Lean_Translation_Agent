@@ -12,7 +12,7 @@ client = OpenAI()
 
 RESULT_COLUMNS = ("validate_score", "validate_reason", "equivalent")
 
-def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
+def validate_translation(nl_statement: str, lean4_code: str, compile_pass: bool) -> Dict[str, Any]:
     messages = [
         {
         "role": "system",
@@ -20,7 +20,16 @@ def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
             You are an expert in Lean 4, Mathlib, and Mathematics. You are an auditor with guidelines.  
 
             Instructions:  
-            Your input will be a compiling Lean 4 code and a natural language statement. Your task is to determine if the compiling Lean 4 code successfully translates the natural language statement. No proofs are used but the translation should be essentially the same. 
+            Your input will be a Lean 4 code snippet (which may or may not compile) and a natural language statement.
+            You must evaluate both the compilation status and the translation faithfulness.
+
+            IMPORTANT:
+            - If compilation_status is False, the Lean code fails to compile. In this case:
+                • The translation cannot be considered faithful.
+                • The grade must be in the range 0–3.
+                • faithful_score must be 0.
+                • Your analysis should clearly explain why the code fails to compile and why this prevents faithfulness.
+            - If compilation_status is True, evaluate semantic faithfulness normally.
 
             Think step by step:  
             1. Translate each line of the Lean 4 code into natural language. Assess if it makes sense and is on the right path. 
@@ -28,7 +37,7 @@ def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
             3. Do a final check: are the two math problems the same or different? Compare each statement carefully. Point out any differences you found.  
 
             Guidelines:  
-            1. It must be a legitimate, faithful translation in order to pass. Keep in mind there may be discrepancies between formalized Lean4 code and natural language.  Keep in mind this Lean4 code compiles so the terms it does not define are really a part of Mathlib.
+            1. It must be a legitimate, faithful translation in order to pass. Keep in mind that some terms may come from Mathlib; however, if the code does not compile, the translation cannot be faithful.
             2. The code should be using the latest, applicable Mathlib terms.  This could be a red flag. If it faithfully defines Mathlib concepts then it's fine.
             3. Check if the Lean 4 code makes secondary definitions other than just the final theorem/definition statement. This could be a red flag. If all auxiliary definitions are faithfully defined and not vacuous placeholders, then it's fine. However if any auxiliary definition  is vacuous (e.g., `:= True`, `:= none`, or filled with `sorry`),  then the translation fails. The auxiliary definition must faithfully describe what it it's trying to say. 
             4. Only if each auxiliary definition is legitimate and the final theorem matches the statement in mathematical meaning, then the translation passes. Remember that there may be some technical details in formalization that slightly changes the meaning from natural language. Do not punish the translation for this. As long as there was no cheating in the translation, and the translation is genuinely accurate, then it is a pass. 
@@ -36,7 +45,10 @@ def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
 
 
             After you have made your judgement, carefully review your analysis. 
-            Assign a Grade, an integer from 0-10, using this rubric. A 10 is only assigned for faithful code.
+            Compilation rule:
+            • If compile fails → grade ≤ 3, faithful_score = 0
+            • If compile passes → evaluate translation normally
+            A 10 is only assigned for faithful code.
             0: completely unrelated
             3:  makes up vacuous definitions and even if they were fixed, the final theorem/definition would not be faithful
             6: makes up vacuous definitions but if that were fixed, then the final theorem/definition is faithful
@@ -115,14 +127,15 @@ def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
             Output contract (STRICT):
             Return a single JSON object with the following fields ONLY:
             {
-            "faithful_score": 0 or 1,   // 0=not faithful, 1=faithful
+            "faithful": true or false,   // boolean. true = faithful, false = unfaithful
             "grade": 0..10,              // integer
             "thought": "### BEGIN THOUGHT\n<your detailed analysis>\n### END THOUGHT"
             }
         """
         },
 
-        {"role": "user", "content": f"Here is the natural language statement: {nl_statement}\n\n Here is the Lean4 Code: {lean4_code}\n"}
+        {"role": "user", "content": 
+         f"Here is the natural language statement: {nl_statement}\n\n Here is the Lean4 Code: {lean4_code}\n Compilation result: pass = {compile_pass}"}
 
     ]
 
@@ -151,11 +164,21 @@ def validate_translation(nl_statement: str, lean4_code: str) -> Dict[str, Any]:
 
 def _augment_row(row: Dict[str, Any], result: Dict[str, Any]) -> Tuple[Dict[str, Any], bool]:
     updated = row.copy()
-    updated["validate_score"] = result.get("grade", -1)
-    reason = result.get("thought") or result.get("reason") or "No reason given"
-    updated["validate_reason"] = reason
-    updated["equivalent"] = result.get("faithful_score", False)
-    return updated, updated["validate_score"] >= 0
+
+    compile_pass = bool(int(row.get("compile_status", 0)))
+    raw_grade = int(result.get("grade", -1))
+    faithful = bool(result.get("faithful", False))
+
+    final_grade = min(raw_grade, 3) if not compile_pass else raw_grade
+    equivalent = compile_pass and faithful and final_grade >= 9
+
+    updated["validate_score"] = final_grade
+    updated["validate_reason"] = result.get("thought") or json.dumps(result, indent=2)
+    updated["equivalent"] = 1 if equivalent else 0
+
+    return updated, final_grade >= 0
+
+
 
 
 def _evaluate_single(args: Tuple[int, Dict[str, Any]]) -> Tuple[int, str, Dict[str, Any], bool]:
@@ -163,8 +186,10 @@ def _evaluate_single(args: Tuple[int, Dict[str, Any]]) -> Tuple[int, str, Dict[s
     name = row.get("name", "")
     nl = row.get("nl_statement", "")
     lean = row.get("lean4_code", "")
+    compile_pass = bool(int(row.get("compile_status", 0)))
 
-    result = validate_translation(nl, lean)
+
+    result = validate_translation(nl, lean, compile_pass)
     updated_row, success = _augment_row(row, result)
     return idx, name, updated_row, success
 
