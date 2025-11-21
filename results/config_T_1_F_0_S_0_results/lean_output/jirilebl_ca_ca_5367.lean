@@ -1,0 +1,7 @@
+import Mathlib
+
+/-- Suppose U ⊂ ℂ is open, p ∈ U, and f : U → ℂ is holomorphic, and f'(p) ≠ 0. Then there
+is an open neighborhood V of p such that f restricted to V is injective. -/
+theorem exists_open_neighbourhood_on_holomorphic_injective {U : Set ℂ} {f : ℂ → ℂ} {p : ℂ}
+  (hU : IsOpen U) (hp : p ∈ U) (h_hol : AnalyticOn ℂ f U) (hder : deriv f p ≠ 0) :
+  ∃ V : Set ℂ, IsOpen V ∧ p ∈ V ∧ V ⊆ U ∧ InjOn f V := by sorry

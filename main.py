@@ -185,7 +185,7 @@ def main(config_name: str = "default") -> None:
     try:
         with open(INPUT_FILE, "r", encoding="utf-8") as f:
             entries = [json.loads(line) for line in f]
-        # --- TEMPORARY slice selection (remove when processing all entries again) ---
+        """# --- TEMPORARY slice selection (remove when processing all entries again) ---
         selected_entries: List[Dict[str, Any]] = []
         slice_specs = [
             (100, 110),# [100:105]
@@ -198,7 +198,7 @@ def main(config_name: str = "default") -> None:
             
             entries = selected_entries[:20]  # ensure we only keep at most 20 total
             logging.info(f"Limiting processing to {len(entries)} selected entries based on predefined slices.")
-        # --- END TEMPORARY slice selection ---
+        # --- END TEMPORARY slice selection ---"""
         logging.info(f"Loaded {len(entries)} entries to process.")
     except Exception as e:
         logging.error(f"Failed to load input data: {e}")

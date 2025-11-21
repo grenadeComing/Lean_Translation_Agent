@@ -1,17 +1,18 @@
 import Mathlib
+open Complex
 
-/-- If the 2×2 real matrix M represents the complex number a + i b via
-    M = [[a, -b], [b, a]], then M (viewed as a complex matrix) has two
-    eigenpairs: eigenvalue a + i b with eigenvector [1; -i], and
-    eigenvalue a - i b with eigenvector [1; i]. -/
-theorem matrix_repr_complex_eigenpairs (a b : ℝ) :
-  let M : Matrix (Fin 2) (Fin 2) ℝ := fun i j =>
-    match i, j with
-    | 0, 0 => a
-    | 0, 1 => -b
-    | 1, 0 => b
-    | 1, 1 => a
-  let Mc := M.map (algebraMap ℝ ℂ)
-  let v1 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else -Complex.I
-  let v2 : Fin 2 → ℂ := fun i => if i = 0 then (1 : ℂ) else Complex.I
-  Mc.mulVec v1 = (a + b * Complex.I) • v1 ∧ Mc.mulVec v2 = (a - b * Complex.I) • v2 := by sorry
+/-- The 2x2 real matrix representing the complex number a + i b is
+    [[a, -b], [b, a]]. -/
+def matrix_of_complex (a b : ℝ) : Matrix (Fin 2) (Fin 2) ℂ :=
+  fun (i j : Fin 2) => if i = 0 then if j = 0 then (a : ℂ) else - (b : ℂ) else if j = 0 then (b : ℂ) else (a : ℂ)
+
+/-- Candidate eigenvector corresponding to a + i b. -/
+def eigvec1 : Fin 2 → ℂ := fun k => if k = 0 then (1 : ℂ) else - Complex.I
+
+/-- Candidate eigenvector corresponding to a - i b. -/
+def eigvec2 : Fin 2 → ℂ := fun k => if k = 0 then (1 : ℂ) else Complex.I
+
+/-- If M represents a + i b then M has eigenvalues a ± i b with eigenvectors [1; ∓ i]. -/
+theorem matrix_eigenvalues (a b : ℝ) :
+  Matrix.mulVec (matrix_of_complex a b) eigvec1 = ((a : ℂ) + (b : ℂ) * Complex.I) • eigvec1 ∧
+  Matrix.mulVec (matrix_of_complex a b) eigvec2 = ((a : ℂ) - (b : ℂ) * Complex.I) • eigvec2 := by sorry

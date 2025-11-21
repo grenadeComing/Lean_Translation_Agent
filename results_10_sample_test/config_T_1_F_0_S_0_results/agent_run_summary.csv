@@ -1,0 +1,362 @@
+name,domain,status,steps,compile_status,io_error,nl_statement,lean4_code,validate_score,validate_reason,equivalent
+jirilebl_ca_ca_2353,Complex Analysis,success,3,0,,Suppose $f \colon \mathbb{C} \to \mathbb{C}$ is holomorphic. Show that $f$ is conformal at a point $z_0$ if and only if $f'(z_0) \not= 0$.,"import Mathlib
+
+/- Suppose f : ℂ → ℂ is holomorphic. Show that f is conformal at a point z0 iff f'(z0) ≠ 0. -/
+theorem is_conformal_at_iff_deriv_ne_zero {f : ℂ → ℂ} {z0 : ℂ} (hf : DifferentiableAt ℂ f z0) :
+  IsConformalAt f z0 ↔ deriv f z0 ≠ 0 := by sorry",3,"### BEGIN THOUGHT
+Step 1: Line-by-line translation of the Lean code
+- `import Mathlib`: Load the whole Mathlib library.
+- Comment: States the goal: for a holomorphic (complex-differentiable) f: ℂ → ℂ, show f is conformal at z0 iff f'(z0) ≠ 0.
+- `theorem is_conformal_at_iff_deriv_ne_zero {f : ℂ → ℂ} {z0 : ℂ} (hf : DifferentiableAt ℂ f z0) : IsConformalAt f z0 ↔ deriv f z0 ≠ 0 := by sorry`
+  • This declares a theorem for functions f: ℂ → ℂ and a point z0: ℂ.
+  • Assumption `hf : DifferentiableAt ℂ f z0` means f is complex-differentiable at z0 (a local holomorphicity hypothesis).
+  • Goal: `IsConformalAt f z0 ↔ deriv f z0 ≠ 0` claims f is conformal at z0 if and only if the complex derivative at z0 is nonzero.
+  • `by sorry` indicates the proof is omitted.
+
+Step 2: Does this match the natural language statement?
+- The natural language statement says: if f: ℂ → ℂ is holomorphic, then f is conformal at z0 iff f'(z0) ≠ 0.
+- The code assumes only `DifferentiableAt ℂ f z0` (pointwise) rather than globally holomorphic. This is a mild generalization (the equivalence is a local property), so this is acceptable in spirit.
+- However, the predicate used `IsConformalAt` is not the Mathlib name; Mathlib uses `ConformalAt` (with additional ambient structure parameters), not `IsConformalAt`. So the identifier is likely undefined.
+
+Step 3: Compilation status and why it fails
+- Given the reported compilation result `pass = False`, the code fails to compile. The most direct reason is that `IsConformalAt` is not a symbol in Mathlib; the correct predicate is `ConformalAt` (with some extra arguments/instances), or one needs to use the real-derivative-based definition. Additionally, the presence of `sorry` leaves the proof unfinished. In many setups `sorry` can be allowed with a warning, but in this environment it likely contributes to failing the compilation check.
+- Because the code fails to compile, per the guidelines the translation cannot be considered faithful.
+
+Step 4: Are the two math problems the same?
+- Intended mathematics: f is holomorphic on ℂ; f is conformal at z0 iff f'(z0) ≠ 0.
+- Code’s intended statement: if f is complex-differentiable at z0, then f is conformal at z0 iff `deriv f z0 ≠ 0`. This is essentially the same local equivalence (slight generalization in hypothesis), so mathematically they align.
+- Nevertheless, due to non-compilation (wrong constant name and an unfinished proof), the formalization is not valid, hence not a faithful formal translation according to the rules.
+
+Conclusion
+- The code does not compile (undefined identifier `IsConformalAt` and unfinished proof `sorry`). By the auditing rules, a non-compiling snippet cannot be faithful. No auxiliary vacuous definitions are present, and the intended statement matches the math, but compilation failure forces a failing grade.
+### END THOUGHT",0
+jirilebl_ca_ca_2577,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be an open set and $f \colon U \to \mathbb{C}$ be a holomorphic function. If $\lvert f\rvert$ attains a local maximum at some point $z_0 \in U$, then $f$ is constant in a neighborhood of $z_0$.","import Mathlib
+
+/-- Let U ⊂ ℂ be an open set and f : U → ℂ be a holomorphic function. If |f| attains a local maximum at some point z0 ∈ U, then f is constant in a neighborhood of z0. -/
+theorem max_modulus_local {U : Set ℂ} {f : ℂ → ℂ} {z0 : ℂ}
+  (hU : IsOpen U) (hz0 : z0 ∈ U) (hf : DifferentiableOn ℂ f U)
+  (h : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, |f z| ≤ |f z0|) :
+  ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, f z = f z0 := by sorry",3,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- import Mathlib: Brings in Mathlib.
+- Docstring: States the maximum modulus principle (local version): if |f| attains a local maximum at z0, then f is constant near z0.
+- theorem max_modulus_local {U : Set ℂ} {f : ℂ → ℂ} {z0 : ℂ} (hU : IsOpen U) (hz0 : z0 ∈ U) (hf : DifferentiableOn ℂ f U) (h : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, |f z| ≤ |f z0|) : ∃ r > 0, Ball z0 r ⊆ U ∧ ∀ z ∈ Ball z0 r, f z = f z0 := by sorry
+  • U is an open subset of ℂ; z0 ∈ U.
+  • f : ℂ → ℂ is holomorphic on U (expressed as DifferentiableOn ℂ f U).
+  • Hypothesis h: there exists r > 0 with Ball z0 r ⊆ U and for all z in that ball, |f z| ≤ |f z0| (a local maximum of the modulus at z0).
+  • Conclusion: there exists (possibly smaller) r > 0 with Ball z0 r ⊆ U such that f is constant on that ball.
+  • The proof is omitted with `sorry`.
+
+2) Does this make sense and is it on the right path?
+- Mathematically, yes: it is a standard local form of the maximum modulus principle, and using f : ℂ → ℂ with DifferentiableOn on U is a standard formalization of “holomorphic on U.” The local maximum is encoded by an existential quantifier over a ball contained in U with the modulus inequality. The conclusion exactly captures “constant in a neighborhood.”
+
+3) Do the two problems match?
+- Natural language statement: “Let U ⊂ ℂ be open and f : U → ℂ holomorphic. If |f| attains a local maximum at z0 ∈ U, then f is constant in a neighborhood of z0.”
+- Lean statement: Same hypotheses (U open, z0 ∈ U, f holomorphic on U) and the local maximum described via an open ball within U; same conclusion (existence of a ball on which f is constant). The only difference in form is that Lean takes f : ℂ → ℂ and restricts via DifferentiableOn on U, which is a standard and faithful formalization of f : U → ℂ.
+
+Why compilation fails and why this prevents faithfulness:
+- The code ends with `by sorry`, which makes the theorem unproven. In many settings (including mathlib CI), `sorry` causes a compilation failure/error; the user explicitly reports pass = False. Thus the code does not compile.
+- Additionally, there is likely a notation error: for complex numbers in mathlib, the modulus is typically written as ‖f z‖ (norm) or Complex.abs (not the single-bar absolute value |f z|). Using |f z| on ℂ generally does not typecheck. This is another likely source of compilation failure.
+- Per the auditing rules, if the code does not compile, the translation cannot be considered faithful, regardless of the apparent semantic match.
+
+Summary: The intended mathematical content matches the natural language statement very well, but the presence of `sorry` (and likely the |·| notation) means the code fails to compile. Therefore, it cannot pass the faithfulness check.
+### END THOUGHT",0
+jirilebl_ca_ca_1326,Complex Analysis,success,3,1,,"Use $e^{z+w} = e^z e^w$ and $e^0 = 1 \not= 0$ to show that $e^z \not=0$ for all $z \in \mathbb{C}$. In other words, show that if a function $f$ satisfies $f(z+w)=f(z)f(w)$ and $f(0) = 1$, then $f(z) \not= 0$ for all $z$.","import Mathlib
+
+/-- If f : ℂ → ℂ satisfies f(z + w) = f z * f w for all z,w and f 0 = 1,
+then f z ≠ 0 for all z. -/
+theorem multiplicative_function_nonzero {f : Complex → Complex}
+  (h_mul : ∀ z w : Complex, f (z + w) = f z * f w)
+  (h_one : f 0 = 1) :
+  ∀ z : Complex, f z ≠ 0 := by sorry
+
+/-- The exponential is never zero: exp z ≠ 0 for all complex z. -/
+theorem exp_ne_zero (z : Complex) : Complex.exp z ≠ 0 := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation and assessment:
+- `import Mathlib`: Use Mathlib's complex analysis and algebra.
+- `theorem multiplicative_function_nonzero {f : Complex → Complex} (h_mul : ∀ z w : Complex, f (z + w) = f z * f w) (h_one : f 0 = 1) : ∀ z : Complex, f z ≠ 0 := by sorry`
+  This states: For a function f: ℂ → ℂ with the multiplicative Cauchy equation f(z+w)=f(z)f(w) for all z,w and f(0)=1, then f(z)≠0 for all z. This exactly matches the general abstract statement in the prompt. The intended proof is standard: f(z)f(−z)=f(0)=1, hence f(z) has a multiplicative inverse f(−z), so f(z)≠0.
+- `theorem exp_ne_zero (z : Complex) : Complex.exp z ≠ 0 := by sorry`
+  This asserts: exp z ≠ 0 for all complex z, which is the desired application using exp(z+w)=exp z · exp w and exp 0 = 1.
+There are no placeholder/vacuous definitions; only theorem statements with proofs omitted via `sorry`. The statements themselves are mathematically meaningful and standard.
+
+2) Faithfulness to the original statement:
+- The natural language asks to use e^{z+w} = e^z e^w and e^0 = 1 ≠ 0 to show e^z ≠ 0, and equivalently to prove the general statement for any f with f(z+w)=f(z)f(w) and f(0)=1. The Lean code contains precisely that general lemma on ℂ and then the specialization to the exponential function. The domain and codomain are ℂ in both the general lemma and the application, matching the prompt. The key property 1 ≠ 0 holds in ℂ and is implicitly used.
+- While the proofs are `sorry`, the compilation status is True, and there are no fake definitions; thus we judge faithfulness by the statements, which are accurate and directly correspond to the problem.
+
+3) Comparison of math problems:
+- The two problems (natural language and Lean statements) are the same. The first theorem captures the general multiplicative functional equation implication f(z) ≠ 0, and the second theorem states exp z ≠ 0 for all z ∈ ℂ. No extraneous hypotheses or missing conditions. No change in generality beyond what the prompt suggests.
+
+Conclusion: The Lean statements are a faithful formalization of the given natural language statements.
+### END THOUGHT",1
+jirilebl_ca_ca_5485,Complex Analysis,success,3,0,,"Suppose $f \colon \mathbb{D} \to \mathbb{D}$ is holomorphic and $f(0) = 0$, then $\lvert f'(0)\rvert \leq 1$.","import Mathlib
+
+/-- Suppose f : D → D is holomorphic and f(0) = 0, then |f'(0)| ≤ 1. -/
+theorem schwarz_lemma_deriv_le_one {f : ℂ → ℂ}
+  (hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1))
+  (hmap : ∀ z, z ∈ ball (0 : ℂ) 1 → f z ∈ ball (0 : ℂ) 1)
+  (h0 : f 0 = 0) :
+  Complex.abs (deriv f 0) ≤ 1 := by sorry",3,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `import Mathlib`: Uses Mathlib, so standard complex analysis notions are available.
+- The theorem `schwarz_lemma_deriv_le_one` states: For a function `f : ℂ → ℂ`, if
+  • `hf : DifferentiableOn ℂ f (ball (0 : ℂ) 1)` (f is holomorphic on the open unit disk),
+  • `hmap : ∀ z, z ∈ ball (0 : ℂ) 1 → f z ∈ ball (0 : ℂ) 1` (f maps the open unit disk into itself),
+  • `h0 : f 0 = 0` (f fixes 0),
+  then the conclusion is `Complex.abs (deriv f 0) ≤ 1` (|f'(0)| ≤ 1).
+There are no auxiliary placeholder definitions; the hypotheses use standard Mathlib notions: open unit disk as `ball 0 1`, complex differentiability on that open set, and `deriv` at 0.
+
+2) Assessment of semantic faithfulness:
+- The natural language statement: “Suppose f : 𝔻 → 𝔻 is holomorphic and f(0)=0, then |f'(0)| ≤ 1.” Here 𝔻 denotes the open unit disk. The Lean hypotheses precisely encode: holomorphic (complex differentiable) on the open unit disk, maps the disk into itself, and fixes 0. The conclusion matches exactly. This is a faithful formalization of the Schwarz lemma derivative bound at 0.
+
+3) Compilation status and its impact:
+- The provided compilation result is `pass = False`. The proof ends with `by sorry`, which causes non-compilation under the stated setting. Per the auditing rules, if the code fails to compile, the translation cannot be considered faithful regardless of how well the statement matches, because the theorem is not actually established in Lean.
+
+Final check:
+- Mathematically, the Lean theorem statement matches the natural language statement (same domain/codomain, open disk, holomorphic on the disk, maps disk to disk, f(0)=0, and the bound on |f'(0)|). There is no spurious weakening/strengthening. However, due to the failed compilation (presence of `sorry`), the translation must be deemed unfaithful by the rubric.
+
+Why this prevents faithfulness:
+- The theorem is unproven in Lean; thus the code does not validate the claim. The rules mandate grade ≤ 3 in this case.
+
+If it compiled:
+- With a completed proof (no `sorry`), this would be a legitimate and faithful formalization of the given statement.
+### END THOUGHT",0
+jirilebl_ca_ca_758,Complex Analysis,success,3,0,,Prove the \emph{polarization identity} $4 z\bar{w} = {\lvert z+w\rvert}^2-{\lvert z-w\rvert}^2 +i \bigl( {\lvert z+iw\rvert}^2 - {\lvert z-iw\rvert}^2 \bigr)$.,"import Mathlib
+
+lemma polarization_identity (z w : ℂ) :
+  4 * z * Complex.conj w =
+    Complex.ofReal ((Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2)
+    + Complex.I * Complex.ofReal ((Complex.abs (z + Complex.I * w)) ^ 2 - (Complex.abs (z - Complex.I * w)) ^ 2) := by sorry",3,"### BEGIN THOUGHT
+Step 1: Line-by-line translation and sanity check
+- `import Mathlib`: Load Mathlib.
+- `lemma polarization_identity (z w : ℂ) : ... := by sorry`
+  States that for complex numbers z, w, the following equality holds:
+  Left-hand side: `4 * z * Complex.conj w` which is 4·z·conj(w).
+  Right-hand side: `Complex.ofReal ((Complex.abs (z + w)) ^ 2 - (Complex.abs (z - w)) ^ 2) + Complex.I * Complex.ofReal ((Complex.abs (z + Complex.I * w)) ^ 2 - (Complex.abs (z - Complex.I * w)) ^ 2)`.
+  Here `Complex.abs` is the modulus |·|: ℂ → ℝ, `^ 2` squares this real number, differences are in ℝ, then `Complex.ofReal` embeds ℝ into ℂ; `Complex.I` is i. So the RHS is |z+w|^2 − |z−w|^2 + i(|z+iw|^2 − |z−iw|^2), all viewed in ℂ. This matches the polarization identity’s statement.
+  Types are consistent: LHS is ℂ, RHS is ℂ (sum of a real-embedded complex term and i times another real-embedded term). The use of `Complex.conj` corresponds to the bar over w.
+
+Step 2: Faithfulness assessment
+- Semantically, the lemma statement is a faithful formalization of the given natural language polarization identity. No auxiliary fake definitions; all constants and functions are standard Mathlib objects. No domain mismatch: modulus is ℝ, embedded into ℂ as needed.
+
+Step 3: Final check: same or different problems?
+- They are the same: prove the identity 4 z \bar{w} = |z+w|^2 − |z−w|^2 + i(|z+iw|^2 − |z−iw|^2). The Lean statement matches exactly, using Mathlib notation.
+
+Why compilation fails and why this prevents faithfulness
+- The code ends with `by sorry`, i.e., the proof is omitted. In many Lean configurations, `sorry` inserts a placeholder and still allows compilation with a warning; however, the provided compilation result states `pass = False`, so in this environment `sorry` is disallowed and causes failure. Since the code does not compile, per the auditing rules the translation cannot be considered faithful irrespective of the statement’s correctness, because there is no verified proof term and the environment rejects the file.
+
+Conclusion
+- Although the lemma statement is an accurate formalization of the natural language claim, the file fails to compile due to the `sorry`. Therefore, it is unfaithful by the rubric and must receive a low grade.
+### END THOUGHT",0
+jirilebl_ca_ca_997,Complex Analysis,success,3,0,,"Prove that if the $2 \times 2$ matrix $M$ represents a complex number $a+ib$, then $M$ has two eigenvalues: $a \pm i b$ with the corresponding eigenvectors $\left[ \begin{smallmatrix} 1 \\ \mp i \end{smallmatrix} \right]$.","import Mathlib
+open Complex
+
+theorem matrix_of_complex_has_eigenvalues (a b : ℝ) :
+  let M : Matrix (Fin 2) (Fin 2) ℂ := ![![ (a : ℂ), -(b : ℂ) ], ![ (b : ℂ), (a : ℂ) ]]
+  let v_plus : Fin 2 → ℂ := ![1, -I]
+  let v_minus : Fin 2 → ℂ := ![1, I]
+  let λ_plus := (a : ℂ) + I * (b : ℂ)
+  let λ_minus := (a : ℂ) - I * (b : ℂ)
+  M.mulVec v_plus = λ_plus • v_plus ∧ M.mulVec v_minus = λ_minus • v_minus := by sorry",3,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- import Mathlib; open Complex: Bring Mathlib into scope and open Complex notation (so I is the imaginary unit of ℂ).
+- theorem matrix_of_complex_has_eigenvalues (a b : ℝ) : ... := by sorry: States a theorem for real a, b, with proof omitted (sorry).
+- let M : Matrix (Fin 2) (Fin 2) ℂ := ![![ (a : ℂ), -(b : ℂ) ], ![ (b : ℂ), (a : ℂ) ]]: Define the 2×2 complex matrix M = [[a, -b], [b, a]], the standard real-matrix representation of the complex number a + i b.
+- let v_plus : Fin 2 → ℂ := ![1, -I]: Define v_plus = [1, -i].
+- let v_minus : Fin 2 → ℂ := ![1, I]: Define v_minus = [1, i].
+- let λ_plus := (a : ℂ) + I * (b : ℂ): Define λ_plus = a + i b.
+- let λ_minus := (a : ℂ) - I * (b : ℂ): Define λ_minus = a − i b.
+- M.mulVec v_plus = λ_plus • v_plus ∧ M.mulVec v_minus = λ_minus • v_minus: Claim that v_plus and v_minus are eigenvectors of M with eigenvalues λ_plus and λ_minus respectively (i.e., M v = λ v), packaged as a conjunction.
+
+2) Does it make mathematical sense and is it on the right path?
+- Yes. This is the standard identification of ℂ with real 2×2 matrices via a + i b ↦ [[a, −b], [b, a]]. The vectors [1, −i] and [1, i] are indeed eigenvectors with eigenvalues a + i b and a − i b respectively. Writing the eigenvector property as M.mulVec v = λ • v is the standard way to express eigenpairs in Lean without invoking the formal eigenvalue API.
+
+3) Compare with the natural language statement:
+- Natural language: If the 2×2 matrix M represents a complex number a+ib, then M has eigenvalues a ± i b with corresponding eigenvectors [1; ∓ i].
+- Lean: Exactly constructs that M, and asserts both eigenpair equalities for v_plus = [1, −i] with λ_plus = a + i b, and v_minus = [1, i] with λ_minus = a − i b. This matches perfectly.
+
+However, the code fails to compile (Compilation result: pass = False). Likely reasons include:
+- The use of the identifier names λ_plus and λ_minus: the character λ is a reserved token for lambda in Lean and cannot be used as the start of an identifier, which typically causes a parse error.
+- The proof body is `by sorry`. In some environments, sorrys are disallowed (treated as errors), which would also cause compilation failure.
+
+Why compilation failure prevents faithfulness:
+- Per the auditing rules, if the Lean code does not compile, the translation cannot be certified as faithful. Even though the intended statement matches the mathematics, non-compiling code may hide type, scoping, or definitional mismatches that could alter the meaning. Therefore it must be marked unfaithful with a low grade.
+
+Final check: The mathematical content intended by the code matches the natural language statement exactly (no generalization or specialization). If the compile issues (identifier names and the sorry) were fixed, this would be a faithful formalization. But because the code fails to compile, it does not pass under the rules.
+### END THOUGHT",0
+jirilebl_ca_ca_2441,Complex Analysis,success,3,1,,"Suppose $U \subset \mathbb{C}$ is open, $f \colon U \to \mathbb{C}$ is holomorphic, and $f'(z) \not= 0$ for every $z \in U$. Show that $f$ is locally injective on $U$.","import Mathlib
+
+/-- Suppose U ⊂ ℂ is open, f : U → ℂ is holomorphic, and f'(z) ≠ 0 for every z ∈ U.
+    Then f is locally injective on U: for each z ∈ U there is an open neighborhood V of z
+    contained in U such that f is injective on V. -/
+theorem holomorphic_on_deriv_ne_zero_locally_injective {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (hf : DifferentiableOn ℂ f U) (hder : ∀ z ∈ U, deriv f z ≠ 0) :
+  ∀ z ∈ U, ∃ V : Set ℂ, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ (∀ x y, x ∈ V → y ∈ V → f x = f y → x = y) := by sorry",10,"### BEGIN THOUGHT
+1) Line-by-line translation of the Lean code:
+- `import Mathlib`: uses mathlib.
+- The theorem `holomorphic_on_deriv_ne_zero_locally_injective` is stated for `U : Set ℂ` and `f : ℂ → ℂ`.
+- Hypotheses:
+  • `hU : IsOpen U`: U is open in ℂ.
+  • `hf : DifferentiableOn ℂ f U`: f is complex-differentiable (holomorphic) on U.
+  • `hder : ∀ z ∈ U, deriv f z ≠ 0`: the complex derivative of f at each point z ∈ U is nonzero.
+- Conclusion:
+  • `∀ z ∈ U, ∃ V : Set ℂ, IsOpen V ∧ z ∈ V ∧ V ⊆ U ∧ (∀ x y, x ∈ V → y ∈ V → f x = f y → x = y)`.
+    This says: for every z in U, there exists an open set V containing z and contained in U such that f is injective on V.
+
+2) Does it make sense and is it on the right path?
+Yes. The hypotheses capture: U open, f holomorphic on U, and f' ≠ 0 on U. The conclusion is exactly local injectivity: around each z ∈ U, there is an open neighborhood V ⊆ U where f is injective. The quantification and predicates (`IsOpen V`, `z ∈ V`, `V ⊆ U`, and injectivity on V) are standard and correct.
+
+3) Compare with the natural language statement:
+- Natural statement: U open in ℂ, f : U → ℂ holomorphic, f'(z) ≠ 0 for all z ∈ U ⇒ f is locally injective on U.
+- Lean statement: Uses `f : ℂ → ℂ` with differentiability only on U and nonvanishing derivative on U, and concludes local injectivity on neighborhoods V ⊆ U. This is a standard formalization choice in mathlib (domain restriction via `DifferentiableOn` rather than `f : U → ℂ`). The meaning is the same.
+
+No auxiliary vacuous definitions; all terms are standard mathlib notions. The compilation is reported as passing (even though the proof is `sorry`, the statement itself is well-formed). The theorem statement faithfully matches the natural language claim, with only the usual ambient-domain formalization difference, which is mathematically equivalent.
+
+Conclusion: The translation is faithful.
+### END THOUGHT",1
+jirilebl_ca_ca_5157,Complex Analysis,success,4,0,,"Suppose $U \subset \mathbb{C}$ is open, and $\psi \colon U \times [0,1] \to \mathbb{C}$ is a continuous function such that for each fixed $t \in [0,1]$, the function $z \mapsto \psi(z,t)$ is holomorphic. Then $h(z) = \int_0^1 \psi(z,t) \, dt$ is a holomorphic function on $U$.","import Mathlib
+
+open Set
+open scoped Topology
+
+/-- Suppose U ⊂ ℂ is open, and ψ : ℂ × ℝ → ℂ is continuous on U ×ˢ Icc (0 : ℝ) 1, and for each t ∈ Icc (0 : ℝ) 1 the function z ↦ ψ (z, t) is holomorphic on U. Then h(z) = ∫_0^1 ψ(z,t) dt is holomorphic on U. -/
+theorem holomorphic_integral {U : Set ℂ} (hU : IsOpen U) {ψ : ℂ × ℝ → ℂ}
+  (hcont : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1))
+  (holo_at : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => ψ (z, t)) U) :
+  IsHolomorphicOn (fun z => ∫ t in 0 .. 1, ψ (z, t)) U := by sorry
+",3,"### BEGIN THOUGHT
+Natural language statement:
+- U is an open subset of ℂ, ψ : U × [0,1] → ℂ is continuous, and for each fixed t ∈ [0,1], z ↦ ψ(z,t) is holomorphic. Then h(z) = ∫_0^1 ψ(z,t) dt is holomorphic on U.
+
+Lean code, line-by-line translation and assessment:
+- import Mathlib; open Set; open scoped Topology: standard imports.
+- The theorem holomorphic_integral is stated for U : Set ℂ with hU : IsOpen U. ψ is a function ℂ × ℝ → ℂ (global domain), but continuity is only assumed on the restricted set U ×ˢ Icc 0 1, matching the natural statement (continuity on U × [0,1]).
+- hcont : ContinuousOn ψ (U ×ˢ Icc (0 : ℝ) 1): ψ is continuous on U × [0,1]. This is faithful.
+- holo_at : ∀ t ∈ Icc (0 : ℝ) 1, IsHolomorphicOn (fun z => ψ (z, t)) U: for each t ∈ [0,1], the function z ↦ ψ(z,t) is holomorphic on U. This matches the natural language intent, modulo naming.
+- Conclusion: IsHolomorphicOn (fun z => ∫ t in 0 .. 1, ψ (z, t)) U: the function z ↦ ∫_0^1 ψ(z,t) dt is holomorphic on U. This matches the intended conclusion.
+
+Why the code fails to compile:
+- The predicate IsHolomorphicOn is not a Mathlib identifier. The standard name is HolomorphicOn (similarly HolomorphicAt/HolomorphicWithinAt exist, but not with the ""Is"" prefix). Thus Lean will not find IsHolomorphicOn and compilation fails.
+- The proof is also ""by sorry"". Even if sorry were allowed in some environments, the reported compilation result is False, and the missing identifier alone suffices to cause failure.
+
+Effect on faithfulness:
+- Per the auditing rules, if the code fails to compile, the translation cannot be considered faithful. Hence it must be marked unfaithful and graded ≤ 3.
+
+Are the two math problems the same?
+- Aside from the non-existent predicate name, the mathematical content mirrors the natural statement well:
+  - U open in ℂ: matches.
+  - ψ continuous on U × [0,1]: matches (the function’s global domain is ℂ × ℝ but continuity is only required on U × [0,1], which is fine).
+  - For each fixed t ∈ [0,1], z ↦ ψ(z,t) holomorphic on U: matches.
+  - Conclusion: z ↦ ∫_0^1 ψ(z,t) dt holomorphic on U: matches.
+- So, semantically, if the naming were corrected (HolomorphicOn instead of IsHolomorphicOn) and the proof provided, this would be a good formalization route (e.g., via Morera’s theorem and Fubini). However, since it does not compile, it fails the strict criteria.
+
+Notes on how to fix (for context):
+- Replace IsHolomorphicOn with HolomorphicOn throughout.
+- Ensure the necessary imports for complex holomorphy (e.g., analysis/complex) and interval integrals are present.
+- Supply a proof (e.g., using Morera’s theorem: continuity in (z,t) allows Fubini to swap integrals over triangle boundaries; inner integral vanishes since each ψ(·,t) is holomorphic).
+
+Conclusion:
+- Compilation failed due to nonexistent identifiers, so by the rules the translation is unfaithful even though the intended statement aligns closely with the natural language theorem.
+### END THOUGHT",0
+jirilebl_ca_ca_3078,Complex Analysis,success,3,0,,"If $f \colon U \to \mathbb{C}$ is a holomorphic function on a domain $U \subset \mathbb{C}$, then $f$ is analytic. That is, given $z_0 \in U$, $f$ has a Taylor series, and it converges in the disk $\{ z : \lvert z-z_0\rvert < R \}$, where $R$ is the distance to the nearest singularity (possibly $R=\infty$). Furthermore, the sum of the series is $f$.","import Mathlib
+
+/-
+If f : U → ℂ is a holomorphic function on a domain U ⊂ ℂ, then f is analytic.
+That is, given z0 ∈ U, f has a Taylor series, and it converges in the disk
+{ z : |z-z0| < R }, where R is the distance to the nearest singularity
+(possibly R = ∞). Furthermore, the sum of the series is f.
+
+The statement below records this fact: for each z0 ∈ U we set
+R = Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)), and then the Taylor
+series with coefficients iteratedDeriv n f z0 / n! converges to f on the disk
+|z - z0| < R.
+
+(The proof is omitted.)
+-/
+
+open Complex Set
+
+theorem holomorphic_on_is_analytic_at {U : Set ℂ} {f : ℂ → ℂ}
+  (hU : IsOpen U) (h_dom : U.Nonempty) (h_holo : IsHolomorphicOn f U) :
+  ∀ z0 : ℂ, z0 ∈ U →
+    let R := Inf (Set.image (fun w => Complex.abs (w - z0)) (Uᶜ)) in
+    0 ≤ R ∧
+    ∀ z : ℂ, Complex.abs (z - z0) < R →
+      (∑' n : ℕ, (iteratedDeriv n f z0 / (Nat.cast (Nat.factorial n) : ℂ)) * (z - z0) ^ n) = f z :=
+by sorry",3,"### BEGIN THOUGHT
+Step-by-step translation of the Lean code:
+- import Mathlib: Use Mathlib.
+- open Complex Set: Open namespaces Complex and Set.
+- theorem holomorphic_on_is_analytic_at {U : Set ℂ} {f : ℂ → ℂ} (hU : IsOpen U) (h_dom : U.Nonempty) (h_holo : IsHolomorphicOn f U) : ... := by sorry
+  • Intended meaning: If U is open, nonempty, and f is holomorphic on U, then for every z0 ∈ U, define R = Inf (image of w ↦ |w − z0| over the complement Uᶜ). Then 0 ≤ R and for every z with |z − z0| < R, the Taylor series with coefficients iteratedDeriv n f z0 / n! converges to f z. The series is expressed as ∑' n : ℕ, (iteratedDeriv n f z0 / (Nat.cast (Nat.factorial n) : ℂ)) * (z − z0)^n.
+
+Why the code fails to compile:
+1) IsHolomorphicOn is not a Mathlib name. The standard predicate is HolomorphicOn f U (or AnalyticOnNhd ℂ f U for analyticity). Using a non-existent identifier causes a compilation error.
+2) Inf on ℝ-sets: For ℝ (conditionally complete lattice), Mathlib uses sInf for the infimum of a set. Inf is for complete lattices. Writing Inf (Set.image ...) over ℝ will not typecheck. One should use sInf, or better the distance-to-complement expressed via infEdist/infDist or extended nonnegative reals.
+3) Coercion of factorial: (Nat.cast (Nat.factorial n) : ℂ) is not correct Lean syntax. The standard way is (Nat.factorial n : ℂ) or (n! : ℂ).
+4) Even if the above were fixed, there is a further environment issue: the proof is omitted with by sorry. In Mathlib proper, sorry is allowed only in development; depending on the checker settings, this may also prevent a successful build.
+Given the reported compilation result pass = False, the code does not compile, so by the rules, the translation cannot be considered faithful.
+
+Faithfulness analysis (conceptual mismatches, even if it compiled):
+- Radius R: The natural language says R is the distance to the nearest singularity (possibly R = ∞). The code defines R as the infimum of distances to Uᶜ, i.e., the distance to the complement of the given domain U. These need not coincide if f extends holomorphically past ∂U; the nearest singularity might lie outside Uᶜ, giving a larger true radius. So the code picks a potentially smaller R than the statement intends.
+- Infinite radius: The natural statement allows R = ∞ (e.g., entire functions). The code’s R is a real number via Inf over a real set; it does not model ∞ and even runs into definitional issues when U = ℂ (Uᶜ = ∅), making the infimum ill-posed in ℝ without extra conventions.
+- Domain vs connectedness: The natural statement says U is a domain (open and connected). The code assumes IsOpen U and Nonempty U, but not connected. This is not harmful for the analyticity claim (a local property), but it is a deviation from the stated hypotheses.
+- Series expression: The summand uses iteratedDeriv n f z0 / n! · (z − z0)^n as expected for a Taylor series, which matches the standard formula, modulo the coercion issue above.
+
+Final comparison:
+- The mathematical intent is close: holomorphic implies analytic with a Taylor series converging at least up to the distance to the boundary. But the code (a) does not compile due to incorrect identifiers and constructs, and (b) diverges from the exact radius description (nearest singularity and possibly ∞) in the natural language statement. Since compilation fails, the translation cannot be accepted as faithful.
+### END THOUGHT",0
+jirilebl_ca_ca_2718,Complex Analysis,success,3,0,,"Let $U \subset \mathbb{C}$ be a domain and suppose that a holomorphic function $f \colon U \to \mathbb{C}$ is not constant. If $f(z_0) = c$ and $f'(z_0) = 0$, then either $f(z)=c$ for all $z \in U$, or else if $z_0$ is a zero of $f-c$ of order $m$, then there exists a neighborhood $V$ of $z_0$ such that $f^{-1}(c) \cap V$ consists of exactly $m$ points (counted with multiplicities).","import Mathlib
+
+/-!
+Statement (no proof):
+Let U ⊂ ℂ be a domain (open and connected) and suppose that a holomorphic function f : U → ℂ is not constant.
+If f(z0) = c and f'(z0) = 0, then either f(z) = c for all z ∈ U, or else if z0 is a zero of f - c of order m,
+then there exists a neighborhood V of z0 such that f ⁻¹({c}) ∩ V consists of exactly m points (counted with multiplicities).
+
+The theorem below states a standard local factorization of f - c near z0 (the usual formulation from complex analysis).
+This formal statement purposely expresses the existence of m ≥ 1 and a holomorphic g with g(z0) ≠ 0 such that
+f(z) - c = (z - z0)^m * g(z) on some neighborhood V ⊆ U. From this one deduces the assertion about the number of
+solutions of f(z) = c in that neighborhood (counted with multiplicity).
+-/
+
+theorem local_zero_of_holomorphic {
+  U : Set ℂ
+} (hUopen : IsOpen U) (hUconn : IsConnected U)
+  {f : ℂ → ℂ} (hf : IsHolomorphicOn f U) (z0 : ℂ) (hz0U : z0 ∈ U) (c : ℂ)
+  (hfz0 : f z0 = c) (h_nonconst : ¬ (∀ z ∈ U, f z = c)) :
+  ∃ (m : ℕ) (hm : 1 ≤ m) (V : Set ℂ),
+    IsOpen V ∧ z0 ∈ V ∧ V ⊆ U ∧
+    ∃ (g : ℂ → ℂ), IsHolomorphicOn g V ∧ g z0 ≠ 0 ∧ (∀ z ∈ V, f z - c = (z - z0) ^ m * g z) := by sorry
+",2,"### BEGIN THOUGHT
+Step 1: Line-by-line translation of the Lean code
+- import Mathlib: Use Mathlib libraries.
+- Docstring: Explains the intended mathematical statement and that the theorem provided is a local factorization result from which the counting assertion would follow.
+- theorem local_zero_of_holomorphic {U : Set ℂ} (hUopen : IsOpen U) (hUconn : IsConnected U) {f : ℂ → ℂ} (hf : IsHolomorphicOn f U) (z0 : ℂ) (hz0U : z0 ∈ U) (c : ℂ) (hfz0 : f z0 = c) (h_nonconst : ¬ (∀ z ∈ U, f z = c)) : ... := by sorry
+  • Hypotheses:
+    - U is an open, connected subset of ℂ.
+    - f : ℂ → ℂ is holomorphic on U (spelled here as IsHolomorphicOn f U).
+    - z0 ∈ U, and f z0 = c.
+    - f is not identically equal to c on U.
+  • Conclusion: There exist a natural number m ≥ 1, an open neighborhood V of z0 with V ⊆ U, and a holomorphic function g on V with g z0 ≠ 0 such that for all z ∈ V, f z − c = (z − z0)^m * g z.
+  This is the standard local factorization of f − c at a zero z0 with positive multiplicity m.
+
+Step 2: Compilation status and consequences
+- The user reports: Compilation result: pass = False.
+- Reason: The code uses identifiers not present in Mathlib, notably IsHolomorphicOn (Mathlib uses HolomorphicOn/AnalyticOn or differentiable/analytic predicates). Thus the code does not compile.
+- Per the instructions, if the code does not compile, the translation cannot be considered faithful, and the grade must be ≤ 3 with faithful = false.
+
+Step 3: Semantic faithfulness (even if it compiled)
+- Original statement: Let U be a domain, f holomorphic and not constant. If f(z0) = c and f'(z0) = 0, then either f ≡ c on U, or else if z0 is a zero of f − c of order m, there exists a neighborhood V of z0 such that f^{-1}(c) ∩ V consists of exactly m points (counted with multiplicities).
+- Code’s theorem (intended meaning): Under the hypotheses that U is a domain, f is holomorphic on U, z0 ∈ U, f z0 = c, and f is not identically equal to c, there exist m ≥ 1, V, and g holomorphic with g(z0) ≠ 0 such that f(z) − c = (z − z0)^m g(z) on V.
+- Differences:
+  • Missing assumption: The code does not assume f'(z0) = 0. The local factorization holds for any zero, including simple zeros (m = 1). The original includes f'(z0) = 0, which forces m ≥ 2 unless f ≡ c.
+  • Different logical structure: The original states a disjunction “either f ≡ c on U, or else …”; the code assumes not (∀ z ∈ U, f z = c), i.e., it precludes the ‘f ≡ c’ case and only proves the ‘else’ case.
+  • Different conclusion: The original conclusion is about the cardinality of f^{-1}(c) ∩ V counted with multiplicity; the code concludes only the factorization. While the counting statement can be deduced from the factorization, the code does not state (or prove) it.
+  • Predicate naming: Uses IsHolomorphicOn which is likely not a Mathlib identifier. This contributes to compile failure and suggests the formalization is not aligned with Mathlib.
+- Therefore, even disregarding compilation, the formal statement is a related but different (and more general in some aspects, weaker in others) theorem; it does not faithfully formalize the precise natural language claim.
+
+Conclusion
+- The code fails to compile, so by the given rules the translation cannot be considered faithful.
+- Additionally, semantically it omits the derivative assumption, removes the disjunction by assuming not identically c, and does not express the counting-with-multiplicity conclusion. Hence even a fixed version would not be a fully faithful translation without further work.
+### END THOUGHT",0
